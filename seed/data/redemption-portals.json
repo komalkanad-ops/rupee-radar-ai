@@ -1,0 +1,91 @@
+{
+  "portals": [
+    {
+      "name": "HDFC SmartBuy",
+      "url": "https://smartbuy.hdfcbank.com/",
+      "notes": "HDFC Bank's shopping/travel portal offering 5X-10X accelerated reward points on flights, hotels, gift vouchers and select online shopping when booked/purchased through the portal instead of directly. Applies to HDFC Infinia, Diners Club Black, Regalia Gold and other HDFC reward cards. Known trick: book flights/hotels via SmartBuy rather than airline/OTA site directly to multiply points, and redeem accumulated points against SmartBuy vouchers (Amazon, Apple, Tanishq etc.) at up to 1 point = INR 1 for top-tier cards like Infinia, versus roughly INR 0.30-0.50 on statement credit/cashback redemption.",
+      "applicable_banks": ["HDFC Bank"]
+    },
+    {
+      "name": "Axis Bank Grab Deals / Travel Edge",
+      "url": "https://grabdeals.axis.bank.in/",
+      "notes": "Axis Bank's equivalent of SmartBuy — offers accelerated eDGE Reward points and cashback deals on travel bookings (Travel Edge) and online shopping (Grab Deals). Applies to Axis Magnus, Atlas, Vistara Signature/Infinite and other Axis reward cards. Known trick: Axis Magnus historically allowed uncapped point transfers to airline/hotel partners at strong ratios during promos, making Travel Edge/point-transfer combos one of the highest per-point values in the Indian market; always check current transfer ratios as Axis periodically nerfs them.",
+      "applicable_banks": ["Axis Bank"]
+    },
+    {
+      "name": "Axis Bank EDGE Rewards (Gyftr voucher catalogue)",
+      "url": "https://www.gyftr.com/edgerewards",
+      "notes": "Voucher redemption catalogue for Axis Bank eDGE Reward points — redeem for e-gift cards/vouchers from major retail and dining brands. Applies to all Axis Bank credit cards that earn eDGE Reward Points.",
+      "applicable_banks": ["Axis Bank"]
+    },
+    {
+      "name": "ICICI Bank iShop Rewards",
+      "url": "https://www.icicibank.com/ishop",
+      "notes": "ICICI's shopping rewards portal, offering accelerated PAYback/reward points on purchases made through the portal. Applies to ICICI credit cards, though accelerated multipliers are most valuable on premium cards (Emeralde Private, Sapphiro, Times Black). For most mass-market ICICI cards, direct cashback cards may offer better effective value than iShop point accumulation.",
+      "applicable_banks": ["ICICI Bank"]
+    },
+    {
+      "name": "SBI Card Rewardz",
+      "url": "https://rewardz.sbi.bank.in/",
+      "notes": "SBI Card's official redemption portal (also accessible via SBI Card app and YONO). Redeem SBI reward points for flights, hotels, shopping vouchers (Amazon, Flipkart, Myntra), electronics, dining coupons, cashback and bill payments. Points typically valued at INR 0.25-0.50 depending on redemption category; travel and select voucher redemptions usually yield the best value versus cash/statement credit.",
+      "applicable_banks": ["SBI Card"]
+    },
+    {
+      "name": "American Express Membership Rewards Catalogue",
+      "url": "https://www.americanexpress.com/in/benefits/membership-rewards/",
+      "notes": "Amex's in-house redemption catalogue with 500+ options spanning travel, hotels, electronics, luxury retail and 'Pay With Points' at select checkout partners. Applies to all Amex India Membership Rewards-earning cards (Platinum Travel, Platinum Reserve, Gold Charge, Membership Rewards Card, SmartEarn). Known trick: Amex offers 1:1 point transfer to several airline/hotel partners (including Marriott Bonvoy at a full 1:1 ratio — notably better than most Indian bank transfer ratios which run 2:1 or worse) — transferring to airline miles or Marriott Bonvoy generally beats catalogue/voucher redemption or 'Pay With Points' in per-point value. MR points never expire while the account stays active/in good standing.",
+      "applicable_banks": ["American Express"]
+    },
+    {
+      "name": "CRED",
+      "url": "https://cred.club/",
+      "notes": "Independent fintech app (not bank-owned) that rewards on-time credit card bill payment with 'CRED coins' (1 coin per INR 1 paid), redeemable across a rotating marketplace of brand offers, cashback and CRED Store discounts. Works across most major Indian bank-issued credit cards (requires CIBIL score typically 750+ to sign up). Known trick: stacking CRED coin offers with a card's own bill-payment/statement-credit process can yield extra value at effectively zero cost since you were paying the bill anyway; CRED's 'Kill the Bill' and merchant-specific coin multipliers periodically offer outsized value versus the bank's own portal.",
+      "applicable_banks": ["Multi-bank / issuer-agnostic (any Indian bank credit card)"]
+    },
+    {
+      "name": "PointsMax",
+      "url": "https://www.pointsmax.in/",
+      "notes": "Independent third-party tool that calculates the real INR value of Indian credit card reward points and compares 25+ cards along with their airline/hotel transfer partners and ratios. Useful as a reference for 'where is my point worth the most' decisions rather than a redemption portal itself.",
+      "applicable_banks": ["Multi-bank / independent comparison tool"]
+    },
+    {
+      "name": "CardExpert",
+      "url": "https://www.cardexpert.in/",
+      "notes": "One of India's longest-running independent credit card blogs; publishes detailed card reviews, reward-rate breakdowns, transfer-partner guides and real-world redemption-value analysis (e.g. calling out when a card's advertised reward rate differs from its effective/best-case rate). Not a redemption portal — used as a research/verification source for reward value and card comparisons.",
+      "applicable_banks": ["Multi-bank / independent editorial site"]
+    },
+    {
+      "name": "Cardinsider",
+      "url": "https://cardinsider.com/",
+      "notes": "Independent Indian credit card comparison and review aggregator covering issuer-by-issuer card catalogues, fees, rewards and eligibility. Used as a cross-check/research source for card data and occasionally publishes reward-point redemption value guides (e.g. 'HDFC reward points value in rupees').",
+      "applicable_banks": ["Multi-bank / independent comparison site"]
+    },
+    {
+      "name": "HDFC / Marriott Bonvoy Transfer",
+      "url": "https://www.hdfcbank.com/personal/pay/cards/credit-cards/rewards-marriott-bonvoy",
+      "notes": "Point-transfer partnership allowing HDFC Infinia, Diners Club Black and Regalia Gold cardholders to move HDFC reward points into Marriott Bonvoy points. Transfer ratio is 2 HDFC points : 1 Bonvoy point for Infinia/Diners Black, and 3:1 for Regalia Gold — both weaker than Amex's 1:1 Bonvoy transfer. Known trick: an indirect route via ITC Green Points (HDFC points -> ITC Green Points -> Marriott Bonvoy at roughly a 4:3 effective ratio, subject to a 15,000-point quarterly transfer cap into ITC) can beat the direct HDFC-to-Bonvoy ratio.",
+      "applicable_banks": ["HDFC Bank"]
+    },
+    {
+      "name": "Airline/Hotel Loyalty Transfer Partners (general)",
+      "url": "https://www.marriott.com/loyalty/redeem/transferPartners.mi",
+      "notes": "Most premium Indian credit cards (HDFC Infinia/Diners Black, Axis Magnus/Atlas, Amex Platinum Reserve/Travel, ICICI Emeralde) allow transferring reward points to airline frequent-flyer programs (Air India, InterMiles, Etihad, Singapore KrisFlyer, British Airways Executive Club) and hotel loyalty programs (Marriott Bonvoy, ITC/EIH properties). Transfer ratios and periodic transfer bonuses (e.g. 20-30% bonus during promo windows) are the single biggest lever for maximizing point value on premium travel cards — always check the issuing bank's live transfer-partner page for current ratios before redeeming.",
+      "applicable_banks": ["HDFC Bank", "Axis Bank", "American Express", "ICICI Bank", "HSBC"]
+    }
+  ],
+  "general_tips": [
+    "Redeem for travel bookings or airline/hotel loyalty transfers wherever possible — most Indian bank reward points are worth roughly INR 0.20-0.50 as cashback/statement credit or generic vouchers, but the same points can be worth INR 0.75-1.50+ when transferred to an airline/hotel partner or booked via the bank's own travel portal (SmartBuy, Travel Edge, etc.), especially during periodic transfer bonus promotions.",
+    "To get an annual fee waived, hit the bank's stated spend threshold in the 12 months before your renewal date, not after — most PSU and mid-tier cards (Canara, PNB, BoB Select/Premier, SC Rewards/Platinum Rewards) waive the fee automatically once the prior-year spend threshold is crossed, so track your card anniversary date and front-load big planned purchases (insurance premiums, electronics, travel) before it.",
+    "Route bill payments through CRED (or the bank's own app) even on cards you'd pay anyway — it costs nothing extra and stacks a second layer of rewards (CRED coins, cashback, brand deals) on top of whatever the card itself earns.",
+    "Use the issuing bank's own shopping/travel portal (SmartBuy, Grab Deals/Travel Edge, iShop) instead of booking directly with an airline, hotel, or e-commerce site when a 5X-10X accelerated-points offer is running — the portal price is usually identical to the direct price, so the extra points are close to free value.",
+    "For pure-cashback/no-annual-fee cards (Slice, OneCard, LazyPay, HSBC Live+/RuPay Cashback), the flat/tiered percentage cashback is usually a better real-world deal than a rewards-point card unless you are disciplined about redeeming points for travel — points that get redeemed as generic vouchers or 'statement credit' often land at a materially lower per-point value than the headline reward-rate implies.",
+    "Watch for point expiry and devaluations — SBI, PNB and several PSU-bank programs expire points within about 2 years, and issuers (HDFC, Axis, Amex) periodically cut transfer ratios or catalogue values with little notice, so redeem or transfer accumulated points rather than letting large balances sit idle for years."
+  ],
+  "top_cashback_cards": [
+    "HSBC - HSBC Live+ Credit Card",
+    "HSBC - HSBC RuPay Cashback Credit Card",
+    "Slice - Slice Super Card (Slice UPI Credit Card)",
+    "LazyPay - LazyPay Credit Card (LazyCard)",
+    "American Express - American Express SmartEarn Credit Card"
+  ]
+}

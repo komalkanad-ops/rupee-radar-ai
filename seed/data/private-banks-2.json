@@ -1,0 +1,1093 @@
+[
+  {
+    "bank": "IndusInd Bank",
+    "bank_type": "private",
+    "card_name": "IndusInd Bank Pinnacle World Credit Card",
+    "network": "Mastercard",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 15000,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "No renewal fee at all (effectively lifetime free after joining fee); some customers reported LTF/joining-fee-waived upgrade offers",
+    "reward_rate": "2.5 Reward Points per Rs.100 on online/e-commerce spends; 1.5 RP per Rs.100 on online travel & airline bookings; 1 RP per Rs.100 on POS/MOTO/IVR/standing instructions; select categories at ~0.7 RP per Rs.100",
+    "reward_point_value_est_inr": 0.75,
+    "welcome_benefits": [
+      "Welcome gift voucher (Gyftr e-gift voucher) up to Rs.15,000 value, choice of brands including Oberoi Hotels, Montblanc, Postcard Hotels, Ola, Uber, Apollo Pharmacy, Zee5, Flipkart, Amazon"
+    ],
+    "milestone_benefits": [
+      "2 complimentary golf games and 2 golf lessons monthly (subject to ~Rs.25,000 prior spend condition per some sources)"
+    ],
+    "lounge_access": "Domestic: 1 complimentary visit per quarter via Mastercard; International: 2 per quarter via Priority Pass membership",
+    "fuel_surcharge_waiver": "1% surcharge waiver on fuel transactions between Rs.400-Rs.4,000 at all fuel stations in India",
+    "merchant_bonus_categories": [
+      "BookMyShow (Buy 1 Get 1 free movie tickets, up to Rs.200/ticket, max 3 tickets/month)",
+      "Online/e-commerce spends (2.5X)",
+      "Online travel & airline bookings (1.5X)"
+    ],
+    "eligibility_notes": "Salaried: min. annual income Rs.10 lakh; Self-employed: min. annual income Rs.12 lakh (per CardInsider; not independently confirmed on official IndusInd page)",
+    "source_urls": [
+      "https://www.indusind.bank.in/in/en/personal/cards/credit-card/pinnacle-world-credit-card.html",
+      "https://www.bankbazaar.com/credit-card/indusind-bank-pinnacle-world-credit-card.html",
+      "https://www.cardexpert.in/indusind-pinnacle-credit-card/"
+    ],
+    "last_verified_note": "Verified via indusind.com, bankbazaar.com, and cardexpert.in, Aug 2026. Note: sources disagree on exact redemption cap (7,500 pts/statement cycle per CardExpert) and whether joining fee is ever waived — treat joining fee as the reliable figure."
+  },
+  {
+    "bank": "IndusInd Bank",
+    "bank_type": "private",
+    "card_name": "IndusInd Bank Legend Credit Card",
+    "network": "Visa Signature",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free — no spend condition required",
+    "reward_rate": "1 Reward Point per Rs.100 spent on weekdays; 2 RP per Rs.100 on weekends; 1 RP per Rs.100 (all days) on medical/automobile/telecom spends; no rewards on fuel, utilities, rent, education, government, insurance",
+    "reward_point_value_est_inr": 0.5,
+    "welcome_benefits": [],
+    "milestone_benefits": [
+      "3,000 bonus Reward Points on spending Rs.5,00,000 or more within one year of card issuance"
+    ],
+    "lounge_access": "Not currently offered — earlier lounge access benefit reportedly discontinued on this card per recent aggregator reviews (unable to independently confirm current status on official page)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on all fuel transactions at authorized fuel stations",
+    "merchant_bonus_categories": [
+      "BookMyShow (Buy 1 Get 1 movie tickets, up to Rs.200, once a month)",
+      "Weekend spends (2X rewards)"
+    ],
+    "eligibility_notes": "Age 21-65 (one source says 21-60); minimum monthly income Rs.20,000 per official IndusInd Bank blog — note: some aggregators claim much higher income requirements (Rs.12 lakh/year or Rs.1 lakh/month) for this 'premium-positioned' lifetime-free card; this is a genuine discrepancy across sources and could not be fully resolved. Good credit score (750+) typically expected.",
+    "source_urls": [
+      "https://www.indusind.bank.in/in/en/personal/cards/credit-card/legend-credit-card.html",
+      "https://cardinsider.com/indusind-bank/indusind-legend-credit-card/",
+      "https://www.indusind.bank.in/iblogs/credit-card/what-is-the-minimum-salary-required-for-the-indusind-bank-legend-credit-card/"
+    ],
+    "last_verified_note": "Verified via indusind.com and cardinsider.com, Aug 2026. Income eligibility figures conflict across sources — flagged above, not fully resolved."
+  },
+  {
+    "bank": "IndusInd Bank",
+    "bank_type": "private",
+    "card_name": "IndusInd Bank Tiger Credit Card",
+    "network": "Visa Signature",
+    "category": "co_brand",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free, no conditions — co-branded with Tiger Fintech (a Bajaj Capital Group company)",
+    "reward_rate": "Tiered by annual spend, resets yearly: 1 RP/Rs.100 up to Rs.1L annual spend; 2 RP/Rs.100 for Rs.1L-2.5L; 4 RP/Rs.100 for Rs.2.5L-5L; 6 RP/Rs.100 above Rs.5L. No rewards on fuel, utilities, insurance, government, education, real estate/rent.",
+    "reward_point_value_est_inr": 0.4,
+    "welcome_benefits": [],
+    "milestone_benefits": [
+      "None specifically named beyond the tiered spend-based earning rate acceleration"
+    ],
+    "lounge_access": "8 complimentary domestic lounge visits per year (2 per quarter via Visa), no spend criteria required; 2 complimentary international visits per year via Priority Pass",
+    "fuel_surcharge_waiver": "1% surcharge waiver on fuel transactions between Rs.400-Rs.4,000 across all fuel stations in India",
+    "merchant_bonus_categories": [
+      "BookMyShow (1 complimentary movie ticket up to Rs.500, once every 6 months)",
+      "4 complimentary golf games/lessons yearly",
+      "Since ~June 2026: reward points transferable to Air India Maharaja Club (1:1) and Singapore Airlines KrisFlyer (4 RP : 1 mile)"
+    ],
+    "eligibility_notes": "Indian resident, minimum age 18, stable monthly income and decent credit score required (exact income threshold not disclosed by sources checked)",
+    "source_urls": [
+      "https://cardinsider.com/fintech-cards/indusind-bank-tiger-credit-card/",
+      "https://www.cardexpert.in/indusind-bank-tiger-credit-card-review/",
+      "https://www.indusind.bank.in/content/dam/indusind-corporate/Other/welcomekit/Bajaj-Tiger-CC-MITC-new.pdf"
+    ],
+    "last_verified_note": "Verified via cardinsider.com and cardexpert.in (cross-checked against each other, both dated 2026), Aug 2026. This is a co-brand card with Tiger Fintech/Bajaj Capital Group, not a pure IndusInd-branded card."
+  },
+  {
+    "bank": "IndusInd Bank",
+    "bank_type": "private",
+    "card_name": "IndusInd Bank Avios Visa Infinite Credit Card",
+    "network": "Visa Infinite",
+    "category": "co_brand",
+    "is_cashback_card": false,
+    "joining_fee_inr": 10000,
+    "annual_fee_inr": 5000,
+    "fee_waiver_condition": "No documented spend-based waiver found; annual fee of Rs.5,000+taxes charged after 12 months",
+    "reward_rate": "Base: 3 Avios per Rs.200 spent (some sources say 6 Avios per Rs.200 on international POS transactions); accelerated to 5 Avios per Rs.200 on British Airways flight spends. Co-brand with British Airways Executive Club (Avios) and also linked to Qatar Airways Privilege Club per some sources.",
+    "reward_point_value_est_inr": 0.65,
+    "welcome_benefits": [
+      "20,000 bonus Avios on sign-up (per some sources)",
+      "Qatar Airways Privilege Club Gold tier membership + 20,000 bonus Avios (per one source; could not confirm this is current — may be an older or conflated offer)",
+      "5,000 Avios on renewal"
+    ],
+    "milestone_benefits": [
+      "18,000-25,000 Avios on reaching Rs.8 lakh annual spend (figures vary by source — 18,000 per one aggregator, 25,000 per another)",
+      "Further bonus Avios on a second Rs.8 lakh spend tier, max ~36,000-50,000 Avios/year depending on source"
+    ],
+    "lounge_access": "8 domestic and 8 international lounge visits annually per one source (via Priority Pass); another source found no lounge access mentioned — this is unresolved/conflicting across sources",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between Rs.400-Rs.4,000 at any petrol pump",
+    "merchant_bonus_categories": [
+      "British Airways flight bookings (accelerated Avios rate)",
+      "International spends"
+    ],
+    "eligibility_notes": "Age 18-75; income requirement varies by source and not clearly disclosed (this is IndusInd's super-premium travel co-brand card, so likely high income threshold, but could not confirm exact figure)",
+    "source_urls": [
+      "https://www.indusind.bank.in/in/en/personal/cards/credit-card/avios-visa-infinite-credit-card.html",
+      "https://www.bankbazaar.com/credit-card/indusind-bank-avios-visa-infinite-credit-card.html",
+      "https://cardinsider.com/indusind-bank/indusind-bank-avios-visa-infinite-credit-card/",
+      "https://www.paisabazaar.com/indusind-bank/avios-visa-infinite-credit-card/"
+    ],
+    "last_verified_note": "PARTIALLY VERIFIED, Aug 2026 — this card had the most source disagreement of all cards researched (fees, milestone Avios amounts, and lounge access all varied meaningfully between bankbazaar.com and paisabazaar.com search snippets). Numbers here reflect best-judgment reconciliation; treat joining/annual fee (10,000/5,000) as more confident than the milestone and lounge figures."
+  },
+  {
+    "bank": "IndusInd Bank",
+    "bank_type": "private",
+    "card_name": "EazyDiner IndusInd Bank Platinum Credit Card",
+    "network": "Visa/RuPay",
+    "category": "lifestyle",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free, no conditions",
+    "reward_rate": "2 Reward Points per Rs.100 on general spends; 2X EazyPoints on dining spends; reduced 0.7 RP per Rs.100 on insurance, rent, utilities, government payments",
+    "reward_point_value_est_inr": 0.4,
+    "welcome_benefits": [
+      "3-month EazyDiner Prime membership (worth ~Rs.1,095)",
+      "500 bonus EazyPoints on joining"
+    ],
+    "milestone_benefits": [
+      "3-month EazyDiner Prime membership renewed each quarter on spending Rs.30,000+ in that quarter",
+      "2,000 Reward Points on spending Rs.30,000 every 90 days"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver (standard Rs.400-Rs.4,000 transaction band, per typical IndusInd terms; exact band not independently confirmed for this specific card)",
+    "merchant_bonus_categories": [
+      "Dining via EazyDiner app: up to 25% discount at 2,000+ restaurants",
+      "Additional 20% instant off (up to Rs.500) when paying via EazyDiner app's PayEazy feature"
+    ],
+    "eligibility_notes": "Age 18-65; minimum income Rs.20,000/month; good credit score required",
+    "source_urls": [
+      "https://www.indusind.bank.in/in/en/personal/cards/credit-card/eazydiner-platinum-credit-card.html",
+      "https://cardinsider.com/indusind-bank/eazydiner-indusind-bank-platinum-credit-card/",
+      "https://www.bankbazaar.com/credit-card/eazydiner-indusind-platinum-credit-card.html"
+    ],
+    "last_verified_note": "Verified via cardinsider.com and bankbazaar.com search results, Aug 2026. Official PDF benefit guide could not be parsed (binary/corrupted when fetched). Network (Visa/RuPay) reported by only one aggregator search snippet — not independently cross-checked."
+  },
+  {
+    "bank": "IndusInd Bank",
+    "bank_type": "private",
+    "card_name": "IndusInd Bank Platinum Aura Edge Credit Card",
+    "network": null,
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free per most sources (one conflicting source mentions a small Rs.500+GST joining fee option) — replaces the now-discontinued Platinum Aura Visa/Mastercard card for new applicants",
+    "reward_rate": "Choice of 4 selectable reward plans (Shop/Home/Travel/Party), each giving 4 points per Rs.100 in the plan's top category, tapering to 2-2.5 points on secondary categories and 0.5-1.5 on others. E.g., Shop Plan: 4 RP/Rs.100 on department stores & groceries; Travel Plan: 4 RP/Rs.100 on hotel bookings, 2.5 on flights/car rentals; Party Plan: 4 RP/Rs.100 on dining, 2.5 on movies, 2 on bars/pubs; Home Plan: 4 RP/Rs.100 on electricity/mobile bills, 2.5 on insurance/medical",
+    "reward_point_value_est_inr": 0.4,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between Rs.400-Rs.4,000",
+    "merchant_bonus_categories": [
+      "Selectable plan-based categories: department stores/groceries, utility bills, hotels/flights/car rentals, or dining/movies/bars — cardholder picks one active plan"
+    ],
+    "eligibility_notes": "Minimum monthly income Rs.25,000 (per one aggregator; not independently confirmed via official page)",
+    "source_urls": [
+      "https://www.indusind.bank.in/in/en/personal/cards/credit-card/platinum-aura-visa-and-mastercard-credit-card.html",
+      "https://cardinsider.com/indusind-bank/indusind-platinum-aura-edge-credit-card/",
+      "https://www.bankbazaar.com/credit-card/indusind-bank-platinum-aura-credit-card.html"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026. Card network could not be confirmed (Visa/Mastercard/RuPay not clearly stated in any fetched source) — left null rather than guessed. Note the older 'Platinum Aura Visa and Mastercard Credit Card' is confirmed discontinued for new applicants as of this research; Platinum Aura Edge is its current replacement."
+  },
+  {
+    "bank": "RBL Bank",
+    "bank_type": "private",
+    "card_name": "RBL Bank World Safari Credit Card",
+    "network": "Mastercard (Visa also issued to some customers)",
+    "category": "travel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 3000,
+    "annual_fee_inr": 3000,
+    "fee_waiver_condition": null,
+    "reward_rate": "5 Reward Points per INR 100 on travel spends (~1.25%); 2 Reward Points per INR 100 on all other domestic retail spends (~0.5%); no reward points on international spends (card instead offers 0% forex markup)",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "MakeMyTrip voucher worth INR 3,000 on first transaction within 30 days of issuance plus annual fee payment (voucher valid 120 days)"
+    ],
+    "milestone_benefits": [
+      "10,000 bonus points on INR 2.5 lakh annual spend",
+      "15,000 bonus points on INR 5 lakh annual spend",
+      "INR 10,000 voucher (partner brands) on INR 7.5 lakh annual spend"
+    ],
+    "lounge_access": "2 complimentary domestic lounge visits per quarter (requires INR 35,000+ spend in preceding quarter); 2 complimentary international visits/year via Priority Pass, extra visit on INR 50,000+ quarterly spend",
+    "fuel_surcharge_waiver": "1% waiver at all fuel stations on transactions INR 500-4,000, capped at INR 250/month",
+    "merchant_bonus_categories": ["Travel bookings (general, 5x rate)"],
+    "eligibility_notes": "General RBL Bank credit card eligibility: age 21-65 (add-on 18+), minimum income typically ~INR 25,000/month, though this varies by card and was not stated explicitly for this card on official page",
+    "source_urls": [
+      "https://www.rbl.bank.in/personal-banking/cards/credit-cards/world-safari-credit-card",
+      "https://www.paisabazaar.com/rbl-bank/world-safari-credit-card/",
+      "https://cardinsider.com/rbl-bank/rbl-world-safari-credit-card/"
+    ],
+    "last_verified_note": "Verified via rblbank.com (personal-banking/cards) and paisabazaar.com/cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "RBL Bank",
+    "bank_type": "private",
+    "card_name": "RBL Bank Apex Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 1000,
+    "annual_fee_inr": 1000,
+    "fee_waiver_condition": "Reported waived for customers who open a new RBL Bank savings account (per aggregator; not confirmed on official page — treat with caution)",
+    "reward_rate": "2% unlimited cashback on Flights, Hotels, Shop & Vouchers booked via RBL Bank Rewards Portal; 1% cashback on all other eligible purchases, capped at INR 500 cashback per billing month",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [
+      "Welcome vouchers worth over INR 1,000 (dining/travel) on first transaction within 30 days of issuance and fee payment in first billing cycle"
+    ],
+    "milestone_benefits": [
+      "INR 1,000 cashback on INR 2 lakh annual spend",
+      "Additional INR 2,000 cashback on INR 4 lakh annual spend"
+    ],
+    "lounge_access": "1 complimentary domestic lounge visit per calendar quarter (requires INR 35,000+ spend in that quarter)",
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": ["Flights", "Hotels", "Shop & Vouchers (RBL Rewards Portal)"],
+    "eligibility_notes": "Not stated on official page; general RBL minimum income ~INR 25,000/month, age 21-65 applies",
+    "source_urls": [
+      "https://www.rbl.bank.in/personal-banking/cards/credit-cards/apex-credit-card",
+      "https://www.cardswala.com/card/rbl-bank-apex-credit-card"
+    ],
+    "last_verified_note": "Cashback structure and fee confirmed on rblbank.com; fee-waiver condition only found on a secondary aggregator (cardswala.com), not corroborated on official page — flagged as lower confidence"
+  },
+  {
+    "bank": "RBL Bank",
+    "bank_type": "private",
+    "card_name": "IndianOil RBL Bank XTRA Credit Card",
+    "network": "Mastercard, RuPay",
+    "category": "fuel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 1500,
+    "annual_fee_inr": 1500,
+    "fee_waiver_condition": "Annual fee (from 2nd year) waived on annual spend of INR 2,75,000+",
+    "reward_rate": "15 Fuel Points per INR 100 spent at IndianOil fuel stations (capped at 2,000 points/month); 2 Fuel Points per INR 100 on other spends; 1 Fuel Point = INR 0.5, giving effective ~7.5% value-back on fuel spend up to the cap",
+    "reward_point_value_est_inr": 0.5,
+    "welcome_benefits": [
+      "3,000 Fuel Points (worth ~INR 1,500) on spending INR 500+ within 30 days of issuance and fee payment",
+      "1,000 bonus Fuel Points on crossing INR 75,000 quarterly spend"
+    ],
+    "milestone_benefits": [
+      "Up to 250 litres of free fuel per year via accumulated Fuel Points (vs 100 litres on the standard, non-XTRA IndianOil RBL card)"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% waiver at all fuel stations, capped at INR 200/month",
+    "merchant_bonus_categories": ["IndianOil fuel stations"],
+    "eligibility_notes": "Not stated on official page; general RBL minimum income ~INR 25,000/month, age 21-65 applies",
+    "source_urls": [
+      "https://www.rbl.bank.in/personal-banking/cards/credit-cards/indianoil-rbl-bank-xtra-credit-card",
+      "https://www.paisabazaar.com/rbl-bank/indianoil-rbl-xtra-credit-card/",
+      "https://cardmaven.in/indianoil-rbl-bank-xtra-credit-card-review/"
+    ],
+    "last_verified_note": "Verified via rblbank.com official page and paisabazaar.com/cardmaven.in, Aug 2026"
+  },
+  {
+    "bank": "RBL Bank",
+    "bank_type": "private",
+    "card_name": "RBL Bank Insignia Preferred Banking Credit Card",
+    "network": "Mastercard (Visa variant also referenced by some aggregators)",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 7000,
+    "annual_fee_inr": 7000,
+    "fee_waiver_condition": "Subsequent-year fee waived on INR 10 lakh spend in the membership year; no fee at all for existing RBL Insignia Preferred Banking customers",
+    "reward_rate": "5 Reward Points per INR 100 on domestic spends (~1.25% at estimated point value); 10 Reward Points per INR 100 on international spends (2X domestic rate)",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "28,000 bonus Reward Points on first transaction within 30 days of issuance and fee payment (excludes existing Insignia Banking customers), credited within 60 days"
+    ],
+    "milestone_benefits": [
+      "Vouchers worth INR 8,000 (Amazon, Myntra, Croma, MakeMyTrip, Taj Experiences) on INR 8 lakh annual spend"
+    ],
+    "lounge_access": "2 complimentary domestic lounge visits per quarter; 6 complimentary international visits/year via Priority Pass (1,400+ lounges); extra visit if monthly spend exceeds INR 1,00,000",
+    "fuel_surcharge_waiver": "1% waiver on transactions INR 500-4,000, capped at INR 500/month",
+    "merchant_bonus_categories": ["International spends (2X points)", "Dining via EazyDiner Prime (25-50% off)", "Golf (4 complimentary rounds/year, Mastercard only)"],
+    "eligibility_notes": "Positioned for RBL Preferred Banking / affluent customers; specific income/age threshold not disclosed on official page",
+    "source_urls": [
+      "https://www.rbl.bank.in/personal-banking/cards/credit-cards/insignia-preferred-banking-credit-card",
+      "https://www.paisabazaar.com/rbl-bank/rbl-insignia-preferred-banking-world-credit-cards/",
+      "https://cardinsider.com/rbl-bank/rbl-bank-insignia-prefered-banking-world-card/"
+    ],
+    "last_verified_note": "Verified via rblbank.com official page and paisabazaar.com/cardinsider.com, Aug 2026. Note: RBL has since launched even higher-tier LUMIÈRE (₹50,000 fee, metal card, invite-only) and NOVA cards above this tier — mentioned for context but not included as a separate entry since eligibility appears highly restricted/invite-only."
+  },
+  {
+    "bank": "RBL Bank",
+    "bank_type": "private",
+    "card_name": "RBL Bank Platinum Maxima Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 2000,
+    "annual_fee_inr": 2000,
+    "fee_waiver_condition": null,
+    "reward_rate": "10 Reward Points per INR 100 on Dining, Grocery, Entertainment and International spends (capped at 1,000 points/month); 2 Reward Points per INR 100 on all other spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "8,000 bonus Reward Points on card usage within 30 days of issuance and annual fee payment by due date"
+    ],
+    "milestone_benefits": [
+      "10,000 bonus points on INR 2.5 lakh annual spend",
+      "Additional 10,000 bonus points on INR 4 lakh annual spend"
+    ],
+    "lounge_access": "1 complimentary domestic lounge visit per quarter (requires INR 35,000+ spend in preceding quarter)",
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": ["Dining", "Grocery", "Entertainment", "International spends"],
+    "eligibility_notes": "Note: RBL also offers a related 'Platinum Maxima Plus' variant with different terms per Paisabazaar/CardInsider — confirm which variant before publishing, as sources sometimes conflate the two. Income/age not stated on official page.",
+    "source_urls": [
+      "https://www.rbl.bank.in/personal-banking/cards/credit-cards/platinum-maxima-credit-card",
+      "https://www.paisabazaar.com/rbl-bank/platinum-maxima-plus-credit-card/",
+      "https://cardinsider.com/rbl-bank/rbl-bank-platinum-maxima-card/",
+      "https://www.bankbazaar.com/credit-card/rbl-platinum-maxima-card.html"
+    ],
+    "last_verified_note": "Verified via rblbank.com official page and paisabazaar.com/cardinsider.com/bankbazaar.com, Aug 2026"
+  },
+  {
+    "bank": "RBL Bank",
+    "bank_type": "private",
+    "card_name": "IRCTC RBL Bank Credit Card",
+    "network": "RuPay (with UPI/NCMC-enabled variant)",
+    "category": "co_brand",
+    "is_cashback_card": false,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": null,
+    "reward_rate": "5 Reward Points per INR 200 on IRCTC train ticket bookings (all classes, via IRCTC website/app); 3 Reward Points per INR 200 on FASTag recharge/NCMC reload/UTS local train tickets; 2 Reward Points per INR 200 on IRCTC flight & hotel bookings (capped 1,000 points/month); 1 Reward Point per INR 200 on other spends. 1 Reward Point = INR 1 when redeemed on IRCTC platform",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [
+      "500 Reward Points on spending INR 500+ within 30 days of card issuance"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": "8 complimentary railway lounge visits per year (2 per quarter)",
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": ["IRCTC train ticket bookings", "IRCTC flight & hotel bookings", "FASTag/UTS/NCMC recharge"],
+    "eligibility_notes": "Not stated on official page; general RBL minimum income ~INR 25,000/month, age 21-65 applies",
+    "source_urls": [
+      "https://www.rbl.bank.in/personal-banking/cards/credit-cards/irctc-rbl-bank-credit-card",
+      "https://www.paisabazaar.com/rbl-bank/irctc-rbl-credit-card/",
+      "https://cardinsider.com/rbl-bank/irctc-rbl-bank-credit-card/"
+    ],
+    "last_verified_note": "Verified via rblbank.com official page and paisabazaar.com/cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "SBI Card",
+    "bank_type": "private",
+    "card_name": "SBI Card ELITE",
+    "network": "Visa",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 4999,
+    "annual_fee_inr": 4999,
+    "fee_waiver_condition": "Waived from following year if annual spend is Rs 10 lakh or more in the preceding year",
+    "reward_rate": "Base rate: 2 Reward Points per Rs 100 spent (other/retail spends). Accelerated: 10 Reward Points per Rs 100 (5X) on dining, departmental stores and grocery spends. International spends: 2 points per Rs 100. Points can also be earned as milestone bonuses.",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "E-gift voucher worth Rs 5,000 from partner brands (e.g., Yatra, Pantaloons, Aditya Birla Fashion, Shoppers Stop, Hush Puppies/Bata) on payment of joining fee",
+      "Free movie tickets worth up to Rs 6,000 annually (Rs 500 off, 2 tickets per month via BookMyShow)"
+    ],
+    "milestone_benefits": [
+      "10,000 bonus Reward Points on annual spend of Rs 3-4 lakh",
+      "15,000 bonus Reward Points on annual spend of Rs 5-8 lakh (tiers vary by source)",
+      "Renewal fee reversed on annual spend of Rs 10 lakh or more"
+    ],
+    "lounge_access": "6 complimentary international lounge visits per year via Priority Pass (2-year membership worth $99 also offered), plus 2 complimentary domestic lounge visits per quarter (8/year)",
+    "fuel_surcharge_waiver": "1% surcharge waiver on fuel transactions between Rs 500 and Rs 4,000, capped at Rs 250 per statement cycle",
+    "merchant_bonus_categories": ["Dining", "Departmental stores", "Grocery"],
+    "eligibility_notes": "Age typically 21-70 for primary cardholder (18+ for add-on); salaried or self-employed; specific minimum income figure not published on aggregator pages reviewed — likely income-tier gated at application (not independently confirmed).",
+    "source_urls": [
+      "https://www.paisabazaar.com/sbi-bank/sbi-elite-credit-card/",
+      "https://www.bankbazaar.com/credit-card/sbi-card-elite.html",
+      "https://cardinsider.com/sbi-card/sbi-elite-credit-card/",
+      "https://cardmaven.in/sbi-elite-credit-card/",
+      "https://www.sbicard.com/en/personal/credit-cards/sbi-card-elite.html"
+    ],
+    "last_verified_note": "Verified via BankBazaar and PaisaBazaar (cross-checked), Aug 2026; sbicard.com official page located but JS-rendered content could not be scraped directly."
+  },
+  {
+    "bank": "SBI Card",
+    "bank_type": "private",
+    "card_name": "SBI Card PRIME",
+    "network": "Visa",
+    "category": "lifestyle",
+    "is_cashback_card": false,
+    "joining_fee_inr": 2999,
+    "annual_fee_inr": 2999,
+    "fee_waiver_condition": "Waived on annual spend of Rs 3 lakh or more",
+    "reward_rate": "Base rate: 2 Reward Points per Rs 100 (other retail spends). 10 points per Rs 100 (5X) on dining, grocery, department stores and movies. 20 points per Rs 100 (10X) on utility bill payments and on birthday-month spends (birthday bonus capped at 2,000 points/year).",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "E-gift voucher worth Rs 3,000 from partner brands on payment of joining fee"
+    ],
+    "milestone_benefits": [
+      "Pizza Hut e-voucher worth Rs 1,000 on quarterly spend of Rs 50,000",
+      "Rs 7,000 worth of vouchers (Yatra.com or Pantaloons) on annual spend of Rs 5 lakh"
+    ],
+    "lounge_access": "8 complimentary domestic lounge visits per year (max 2/quarter) and 4 complimentary international lounge visits per year via Priority Pass (max 2/quarter)",
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions between Rs 500 and Rs 4,000, capped at Rs 250 per statement cycle",
+    "merchant_bonus_categories": ["Dining", "Grocery", "Department stores", "Movies", "Utility bill payments"],
+    "eligibility_notes": "Age 18-80 per one aggregator; salaried/self-employed; specific minimum income figure not confirmed from sources reviewed.",
+    "source_urls": [
+      "https://www.paisabazaar.com/sbi-bank/sbi-prime-credit-card/",
+      "https://www.bankbazaar.com/credit-card/sbi-card-prime.html",
+      "https://cardinsider.com/sbi-card/sbi-prime-credit-card/",
+      "https://cardtrail.in/cards/sbi-prime/",
+      "https://upstox.com/news/personal-finance/latest-updates/sbi-card-lounge-access-programme-2026-full-list-of-lounges-eligible-cards-and-fees-explained/article-186003/"
+    ],
+    "last_verified_note": "Verified via BankBazaar and PaisaBazaar (cross-checked), Aug 2026."
+  },
+  {
+    "bank": "SBI Card",
+    "bank_type": "private",
+    "card_name": "SimplySAVE SBI Card",
+    "network": "Visa",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 499,
+    "annual_fee_inr": 499,
+    "fee_waiver_condition": "Waived from year 2 onward if annual spend is Rs 1 lakh or more (roughly Rs 8,334/month average)",
+    "reward_rate": "1 Reward Point per Rs 100 on general/other spends. 10X Reward Points (10 points per Rs 150, i.e. accelerated rate) on dining, movies, grocery and department store spends.",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "2,000 bonus Reward Points on spending Rs 2,000 within 60 days of card issuance",
+      "Amazon Pay/Swiggy/Zomato voucher up to Rs 750 on card activation with minimum Rs 300 transaction (Visa offer, terms apply)"
+    ],
+    "milestone_benefits": [
+      "No major spend-tier milestone benefits beyond the annual-fee reversal at Rs 1 lakh spend"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions between Rs 500 and Rs 3,000, capped at Rs 100 per statement cycle",
+    "merchant_bonus_categories": ["Dining", "Movies", "Grocery", "Department stores"],
+    "eligibility_notes": "Age 21-70 for primary cardholder; salaried or self-employed with regular income; add-on cards available for family members 18+.",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/sbi-simply-save-card.html",
+      "https://www.paisabazaar.com/sbi-bank/sbi-simply-save-credit-card/",
+      "https://www.sbicard.com/en/personal/credit-cards/simplysave-sbi-card.html",
+      "https://www.investmentcover.com/sbi-credit-cards/simplysave-sbi-card"
+    ],
+    "last_verified_note": "Verified via BankBazaar (fetched directly) and PaisaBazaar search snippet, Aug 2026."
+  },
+  {
+    "bank": "SBI Card",
+    "bank_type": "private",
+    "card_name": "Cashback SBI Card",
+    "network": "Visa",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 999,
+    "annual_fee_inr": 999,
+    "fee_waiver_condition": "Waived from year 2 onward if annual spend is Rs 2 lakh or more in the preceding year",
+    "reward_rate": "5% cashback on all online spends (no merchant restriction), capped at Rs 2,000-5,000 per statement cycle depending on source (aggregators disagree on exact cap — see note). 1% cashback on offline/other eligible spends.",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [
+      "No prominent welcome bonus/voucher identified from sources reviewed (card monetizes via ongoing cashback rate rather than a signup bonus)"
+    ],
+    "milestone_benefits": [
+      "Renewal fee reversed on annual spend of Rs 2 lakh or more"
+    ],
+    "lounge_access": "Disputed between sources: one source (MyMoneyMantra) states 4 complimentary domestic lounge visits/year (1 per quarter); another (CardInsider) states no lounge access. Not independently resolved — treat as unconfirmed / likely no or very limited domestic lounge access.",
+    "fuel_surcharge_waiver": "1% surcharge waiver on transactions between Rs 500 and Rs 3,000 at petrol pumps, capped at Rs 100 per statement cycle",
+    "merchant_bonus_categories": ["All online spends (unrestricted, i.e., no fixed merchant list)"],
+    "eligibility_notes": "Age 21-70 (per MyMoneyMantra); salaried/self-employed; suggested credit score 750+ per one aggregator (not an official published threshold).",
+    "source_urls": [
+      "https://cardinsider.com/sbi-card/cashback-sbi-credit-card/",
+      "https://www.mymoneymantra.com/credit-cards/sbi-card/cashback-credit-card",
+      "https://www.bankbazaar.com/credit-card/cashback-sbi-card.html",
+      "https://1finance.co.in/blog/sbi-cashback-credit-card-review-2026/",
+      "https://www.sbicard.com/en/personal/credit-cards/cashback-sbi-card.html"
+    ],
+    "last_verified_note": "Verified via CardInsider and MyMoneyMantra (cross-checked), Aug 2026 — monthly cashback cap figure conflicts between sources (Rs 2,000 vs Rs 5,000 online cap; total Rs 4,000-5,000/cycle); flagged as unresolved discrepancy, and 1finance.co.in explicitly references an 'April devaluation' to this card in 2026 that may explain the conflicting cap figures across sources of different vintage."
+  },
+  {
+    "bank": "SBI Card",
+    "bank_type": "private",
+    "card_name": "BPCL SBI Card OCTANE",
+    "network": "Visa/RuPay",
+    "category": "fuel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 1499,
+    "annual_fee_inr": 1499,
+    "fee_waiver_condition": "Waived from year 2 onward if annual spend is Rs 2 lakh or more",
+    "reward_rate": "25 Reward Points per Rs 100 (25X) on fuel and MAK lubricant spends at BPCL outlets, equating to ~7.25% value back including the 1% surcharge waiver (capped, monthly cap cited around 2,500 points). 10X Reward Points on groceries, departmental stores, movies and dining. 1 Reward Point per Rs 100 on other/general spends.",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "6,000 bonus Reward Points (worth approx Rs 1,500) on payment of joining fee"
+    ],
+    "milestone_benefits": [
+      "Gift voucher worth Rs 2,000 (from brands such as Aditya Birla Fashion, Hush Puppies, Yatra or Urban Ladder) on annual spend of Rs 3 lakh",
+      "Renewal fee reversed on annual spend of Rs 2 lakh"
+    ],
+    "lounge_access": "None identified in sources reviewed",
+    "fuel_surcharge_waiver": "1% surcharge waiver on all fuel transactions between Rs 500 and Rs 4,000, capped at Rs 100 per statement cycle (BPCL outlets); waiver does not apply to fuel spends via UPI",
+    "merchant_bonus_categories": ["BPCL fuel and MAK lubricants", "Bharat Gas (LPG)", "BPCL 'In & Out' convenience stores", "Grocery", "Departmental stores", "Movies", "Dining"],
+    "eligibility_notes": "Available across ~17,000+ BPCL fuel stations nationally; specific minimum income/age not confirmed from sources reviewed. Note: one source (CardInsider) cited a materially lower joining/annual fee of Rs 499 and a lower 13X reward rate — this conflicts with the majority of sources (PaisaBazaar, BankBazaar, Airtel Finance, RewardMatrix, CardMaven, Finology) which consistently state Rs 1,499 fee and 25X rate; the Rs 1,499 / 25X figures are treated as correct based on majority consensus, but flagged as a discrepancy.",
+    "source_urls": [
+      "https://www.paisabazaar.com/sbi-bank/sbi-bpcl-credit-card-octane/",
+      "https://www.bankbazaar.com/credit-card/bpcl-sbi-card-octane.html",
+      "https://cardinsider.com/sbi-card/bpcl-sbi-credit-card/",
+      "https://tradebrains.in/money/sbi-bpcl-octane-credit-card-is-this-fuel-card-worth-it-in-2026-how-much-can-you-actually-save/",
+      "https://select.finology.in/credit-card/sbi-bpcl-credit-card-octane",
+      "https://www.sbicard.com/en/personal/credit-cards/bpcl-sbi-card-octane.html"
+    ],
+    "last_verified_note": "Verified via BankBazaar and PaisaBazaar (cross-checked and consistent), Aug 2026; CardInsider figures for fee/rate treated as outlier and not used."
+  },
+  {
+    "bank": "SBI Card",
+    "bank_type": "private",
+    "card_name": "Tata Neu Infinity SBI Card",
+    "network": "RuPay/Visa",
+    "category": "co_brand",
+    "is_cashback_card": false,
+    "joining_fee_inr": 1499,
+    "annual_fee_inr": 1499,
+    "fee_waiver_condition": "Waived on annual spend of Rs 3 lakh or more",
+    "reward_rate": "Assured 5% NeuCoins on spends made via Tata Neu app and on partner Tata brands (Air India, Air India Express, BigBasket, Tata Cliq, Taj Hotels, Tata 1MG, Titan, Tanishq, Croma, Westside, Qmin); up to 10% NeuCoins cited by some sources for select/promotional Tata Neu spends. 1.5% NeuCoins on all other eligible spends, including UPI transactions (RuPay variant).",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [
+      "1,499 bonus NeuCoins (worth Rs 1,499) on payment of joining fee, effectively offsetting the first-year fee"
+    ],
+    "milestone_benefits": [
+      "No additional spend-tier milestone benefits identified beyond the annual fee waiver at Rs 3 lakh spend"
+    ],
+    "lounge_access": "4 complimentary international lounge visits per year via Priority Pass (worth $99, no spend requirement); domestic lounge access requires Rs 75,000 spend in the previous quarter (2 visits per qualifying quarter)",
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions between Rs 500 and Rs 4,000",
+    "merchant_bonus_categories": ["Tata Neu app (all categories)", "Air India/Air India Express", "BigBasket", "Tata Cliq", "Taj Hotels", "Tata 1MG", "Titan/Tanishq", "Croma", "Westside", "Qmin"],
+    "eligibility_notes": "Available on RuPay Select and Visa Signature card variants; specific minimum income/age not confirmed from sources reviewed. Applicable via SBI Card website or Croma store kiosks.",
+    "source_urls": [
+      "https://cardinsider.com/sbi-card/tata-neu-infinity-sbi-credit-card/",
+      "https://www.paisabazaar.com/sbi-bank/tata-neu-infinity-sbi-credit-card/",
+      "https://www.sbicard.com/en/personal/credit-cards/tata-neu-infinity-sbi-card.html",
+      "https://ri8lane.com/cards/tata-neu-infinity-sbi-credit-card"
+    ],
+    "last_verified_note": "Verified via CardInsider (fetched directly) and PaisaBazaar search snippet, Aug 2026; note this is a fairly new co-brand card (launched ~April 2025 per SBI Card press materials), so terms may still be evolving."
+  },
+  {
+    "bank": "AU Small Finance Bank",
+    "bank_type": "private",
+    "card_name": "AU Zenith+ Credit Card",
+    "network": "Visa Infinite (RuPay variant also reported)",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 4999,
+    "annual_fee_inr": 4999,
+    "fee_waiver_condition": null,
+    "reward_rate": "2 Reward Points per ₹100 on dining, travel & international spends; 1 Reward Point per ₹100 on all other retail spends; 1,000 bonus Reward Points on minimum retail spend of ₹75,000 per statement cycle",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "₹5,000 welcome benefit on card activation, redeemable as luxury brand vouchers (Taj Hotels, Tata Cliq, Michael Kors, etc.) or equivalent Reward Points"
+    ],
+    "milestone_benefits": [
+      "Complimentary Taj Epicure Membership on annual net retail spend of ₹12 lakh or more",
+      "Up to 16 BOGO movie tickets/year via BookMyShow (max 4 per calendar quarter)"
+    ],
+    "lounge_access": "16 complimentary international airport lounge visits/year via Priority Pass (max 4/quarter) + 16 complimentary domestic airport lounge visits/year; 4 complimentary Meet & Assist airport concierge services/year",
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": ["Dining", "Travel", "International spends"],
+    "eligibility_notes": "Minimum net income ₹2.5 lakh/month; age 21-60 (25-65 for self-employed)",
+    "source_urls": [
+      "https://www.paisabazaar.com/au-small-finance-bank/zenith-plus-credit-card/",
+      "https://cardinsider.com/au-bank/zenith-plus-credit-card/",
+      "https://www.au.bank.in/premium-banking/credit-cards/zenith-plus-credit-card"
+    ],
+    "last_verified_note": "Verified via WebSearch snippets from paisabazaar.com and cardinsider.com, Aug 2026; official au.bank.in page blocked (403) so not independently fetched"
+  },
+  {
+    "bank": "AU Small Finance Bank",
+    "bank_type": "private",
+    "card_name": "AU Altura Credit Card",
+    "network": "Visa (not independently confirmed from official source)",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 199,
+    "fee_waiver_condition": "Spend ₹10,000 within 90 days of card setup for joining fee waiver; ₹40,000+ annual retail spend for renewal fee waiver",
+    "reward_rate": "2% cashback on groceries, departmental stores & utility bills (capped ₹50/statement cycle); 1% cashback on all other retail spend (capped ₹50/cycle); no rewards on fuel, rent, cash, wallet transactions",
+    "reward_point_value_est_inr": null,
+    "welcome_benefits": [],
+    "milestone_benefits": ["₹50 bonus cashback per statement cycle on retail spend of ₹10,000+"],
+    "lounge_access": "2 complimentary railway lounge visits per quarter at select stations (Kolkata Sealdah, Ahmedabad, Jaipur, Agra, Madurai); no airport lounge access reported",
+    "fuel_surcharge_waiver": "1% surcharge waiver on fuel transactions ₹400-₹5,000, capped ₹100/cycle",
+    "merchant_bonus_categories": ["Groceries", "Departmental stores", "Utility bill payments"],
+    "eligibility_notes": "Age 21-60 (primary), 18+ (add-on); Indian resident; CIBIL 750+ recommended; income requirement not specified",
+    "source_urls": [
+      "https://cardinsider.com/au-bank/altura-credit-card/",
+      "https://www.bankbazaar.com/credit-card/au-bank-altura-credit-card.html"
+    ],
+    "last_verified_note": "Verified via cardinsider.com and bankbazaar.com (WebFetch), Aug 2026. CAVEAT: a separate WebSearch snippet described a different-sounding version (RuPay/UPI-linked, lifetime-free, 1.5% offline cashback + 2X online points, 8 railway lounge visits) — likely an older description, a regional variant, or aggregator error. Could not reconcile with an official source since au.bank.in blocked fetching."
+  },
+  {
+    "bank": "AU Small Finance Bank",
+    "bank_type": "private",
+    "card_name": "AU Altura Plus Credit Card",
+    "network": "Visa (assumed consistent with base Altura; not independently confirmed)",
+    "category": "rewards",
+    "is_cashback_card": true,
+    "joining_fee_inr": 499,
+    "annual_fee_inr": 499,
+    "fee_waiver_condition": "1st year: ₹20,000 retail spend within 90 days of card setup; 2nd year onwards: ₹80,000 retail spend in previous card anniversary year",
+    "reward_rate": "1.5% cashback on POS/offline retail spend (capped ₹100/cycle, ~₹6,700 spend); 2 Reward Points per ₹100 on online spend; 500 bonus points on ₹20,000+ monthly retail spend",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": ["Brand vouchers worth ₹500 on retail spend of ₹10,000+ within 60 days of card setup"],
+    "milestone_benefits": ["500 bonus Reward Points every month on qualifying spend milestone"],
+    "lounge_access": "2 complimentary railway lounge visits per quarter at select stations (New Delhi, Kolkata Sealdah, Ahmedabad, Jaipur, Agra)",
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions ₹400-₹5,000, capped ₹150 per statement cycle",
+    "merchant_bonus_categories": ["Online spends (2X points)", "POS/offline retail (1.5% cashback)"],
+    "eligibility_notes": "Age 21-60 (primary), 18+ (add-on); Indian resident; income not explicitly disclosed (one aggregator suggests ₹3-6 lakh/year as indicative fit)",
+    "source_urls": [
+      "https://www.paisabazaar.com/au-small-finance-bank/altura-plus-credit-card/",
+      "https://cardinsider.com/au-bank/altura-plus-credit-card/",
+      "https://www.mybankingtips.com/credit-cards/au-bank-altura-plus-credit-card"
+    ],
+    "last_verified_note": "Verified via WebSearch snippets from paisabazaar.com, cardinsider.com, mybankingtips.com, Aug 2026; not independently WebFetched"
+  },
+  {
+    "bank": "AU Small Finance Bank",
+    "bank_type": "private",
+    "card_name": "AU Vetta Credit Card",
+    "network": "Visa",
+    "category": "lifestyle",
+    "is_cashback_card": false,
+    "joining_fee_inr": 2999,
+    "annual_fee_inr": 2999,
+    "fee_waiver_condition": "1st year: ₹40,000 retail spend within 90 days of card setup; 2nd year onwards: ₹1,50,000 retail spend in previous card anniversary year",
+    "reward_rate": "4 Reward Points per ₹100 on groceries & departmental store spend; 2 RP per ₹100 on other retail spend; 1 RP per ₹100 on utility/telecom bills. Effective 10 Apr 2026: transportation MCC no longer earns points; cash, rent, government, education, EMI, fuel, quasi-cash, BBPS remain excluded",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": ["Vouchers worth ₹2,000 on retail spend of ₹30,000 within 60 days of card setup"],
+    "milestone_benefits": [
+      "500 bonus Reward Points on ₹50,000 quarterly retail spend",
+      "Additional 1,000 bonus Reward Points on ₹1 lakh quarterly retail spend",
+      "₹1,000 brand vouchers on ₹2.5 lakh annual spend",
+      "1,000 bonus Reward Points on birthday transaction"
+    ],
+    "lounge_access": "1 domestic airport lounge visit/quarter (requires ₹20,000 quarterly spend) + 1 international lounge visit/quarter via Priority Pass + 2 IRCTC railway lounge visits/quarter",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at all fuel stations, capped ₹250/month",
+    "merchant_bonus_categories": ["Groceries", "Departmental stores"],
+    "eligibility_notes": "Not disclosed in sources checked",
+    "source_urls": [
+      "https://cardinsider.com/au-bank/vetta-credit-card/",
+      "https://www.paisabazaar.com/au-small-finance-bank/vetta-credit-card/"
+    ],
+    "last_verified_note": "Verified via cardinsider.com (WebFetch) and paisabazaar.com (WebSearch snippet), Aug 2026. 1 RP = ₹0.25 explicitly confirmed for AU Rewardz portal redemptions on this card."
+  },
+  {
+    "bank": "AU Small Finance Bank",
+    "bank_type": "private",
+    "card_name": "AU LIT Credit Card",
+    "network": "Visa/RuPay (reported network options vary by source; one community thread notes a shift from Visa to RuPay)",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": null,
+    "reward_rate": "Base: 1 Reward Point per ₹100 spent (~0.2% value). Optional quarterly 'Feature Packs' (₹49-₹499/90 days) unlock up to 10X reward points and 5% cashback on selected day-to-day categories (groceries, apparel); max 10,000 Reward Points/month",
+    "reward_point_value_est_inr": 0.22,
+    "welcome_benefits": ["Complimentary ZEE5 and Amazon Prime memberships (via optional feature packs)"],
+    "milestone_benefits": [],
+    "lounge_access": "No complimentary lounge access on base card; optional add-on: 1 domestic airport lounge visit per 90 days for ₹399 (paid feature pack)",
+    "fuel_surcharge_waiver": "Optional 1% fuel surcharge waiver (₹400-₹5,000 transactions) available for ₹49/quarter, capped ₹1,500 per 90 days",
+    "merchant_bonus_categories": ["Groceries", "Apparel (via optional feature packs)"],
+    "eligibility_notes": "Stable source of income required; specific income threshold not disclosed in sources checked",
+    "source_urls": [
+      "https://www.paisabazaar.com/au-small-finance-bank/au-small-finance-bank-lit-credit-card-lifetime-free-card/",
+      "https://select.finology.in/credit-card/au-bank-lit-credit-card",
+      "https://cardinsider.com/au-bank/lit-credit-card/",
+      "https://www.au.bank.in/personal-banking/credit-cards/lit-credit-card"
+    ],
+    "last_verified_note": "Verified via WebSearch snippets from paisabazaar.com, select.finology.in, cardinsider.com, Aug 2026; a ₹99+GST reward-redemption fee was also reported by one source but not cross-checked"
+  },
+  {
+    "bank": "AU Small Finance Bank",
+    "bank_type": "private",
+    "card_name": "ixigo AU Credit Card",
+    "network": "Visa and RuPay variants",
+    "category": "co_brand",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": null,
+    "reward_rate": "5 Reward Points per ₹200 on online, offline & UPI spends (~1.25% effective rate), capped at 10,000 points/statement cycle; no points on fuel, rent, insurance, jewellery, wallets; international transactions excluded from rewards effective April 2026",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": ["1,000 Reward Points + ₹1,000 in ixigo money vouchers on first transaction within 30 days of card issuance"],
+    "milestone_benefits": ["5,000 bonus Reward Points on ₹75,000+ quarterly spend"],
+    "lounge_access": "2 domestic lounge visits/quarter (requires ₹50,000 spend in previous quarter) + 1 complimentary international lounge visit/year via Priority Pass",
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions ₹400-₹5,000",
+    "merchant_bonus_categories": ["ixigo flight/bus/hotel bookings — 10% discount, monthly redemption limits apply"],
+    "eligibility_notes": "Age 21-60 (primary), 18+ (add-on); Indian resident; must be registered on the ixigo platform",
+    "source_urls": [
+      "https://cardinsider.com/au-bank/ixigo-au-credit-card/",
+      "https://www.paisabazaar.com/au-small-finance-bank/ixigo-au-credit-card/",
+      "https://wise.com/in/blog/au-ixigo-credit-card-review",
+      "https://www.ixigo.com/travel-credit-card"
+    ],
+    "last_verified_note": "Verified via cardinsider.com (WebFetch) and paisabazaar.com/wise.com (WebSearch snippets), Aug 2026; zero forex markup claim not independently re-verified"
+  },
+  {
+    "bank": "AU Small Finance Bank",
+    "bank_type": "private",
+    "card_name": "AU Business Cashback RuPay Credit Card",
+    "network": "Visa/RuPay",
+    "category": "business",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Monthly fee of ₹99+GST waived on retail spend of ₹10,000+ within the statement cycle",
+    "reward_rate": "1% cashback on repayment of Total Amount Due on the credit card bill, capped at ₹1,000 per statement cycle; excludes e-wallet reloads, rent, fuel, insurance premiums, cash withdrawals",
+    "reward_point_value_est_inr": null,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": "8 complimentary railway lounge visits/year (max 2 per quarter)",
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions ₹400-₹5,000, capped ₹200 per statement cycle",
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "Age 21-60 (primary), 18+ (add-on); Indian resident; self-employed individuals and MSMEs; stable income source required, no fixed minimum disclosed",
+    "source_urls": [
+      "https://cardinsider.com/business-cards/au-bank-business-cashback-rupay-credit-card/",
+      "https://www.bankbazaar.com/credit-card/au-bank-business-cashback-credit-card.html",
+      "https://www.au.bank.in/personal-banking/commercial-credit-cards/business-cashback-credit-card"
+    ],
+    "last_verified_note": "Verified via cardinsider.com and bankbazaar.com (both WebFetch), Aug 2026; interest rate reported inconsistently across sources (3.59%/month vs 3.75%/month) — not resolved"
+  },
+  {
+    "bank": "Yes Bank",
+    "bank_type": "private",
+    "card_name": "YES MARQUÉE Credit Card",
+    "network": "Visa (Infinite)",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 9999,
+    "annual_fee_inr": 4999,
+    "fee_waiver_condition": "Annual fee waived on retail spends of Rs 10 lakh or more in the preceding year",
+    "reward_rate": "36 YES Rewardz points per Rs 200 spent online (selected categories, ~4.5% value back); 18 points per Rs 200 offline; 10 points per Rs 200 on restricted categories (utilities, insurance, rent, etc.); capped at 1 lakh points per statement cycle",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "40,000 YES Rewardz Points on card approval / joining fee payment",
+      "Complimentary ET Prime subscription (~Rs 3,199 value)"
+    ],
+    "milestone_benefits": [
+      "20,000 YES Rewardz Points on payment of renewal fee each year"
+    ],
+    "lounge_access": "Unlimited international lounge access for primary and add-on cardholders (plus 4 complimentary guest visits/year); domestic lounge access reported as up to 6 visits/quarter (24/year) by some sources, conditional on prior-quarter spend of Rs 1 lakh per CardInsider — exact domestic cap not consistently confirmed across sources",
+    "fuel_surcharge_waiver": "1% surcharge waiver on fuel transactions between Rs 400-5,000, capped around Rs 1,000/month",
+    "merchant_bonus_categories": [
+      "No named merchant partnerships found; accelerated rate applies broadly to online vs offline spend, not specific merchants",
+      "Minimum 15% off dining at select restaurants under the Dining Fiesta program"
+    ],
+    "eligibility_notes": "Age 21-60; salaried or self-employed; minimum monthly income cited as Rs 1.5-3 lakh or annual ITR Rs 24-36 lakh depending on source (figures not fully consistent across aggregators); not available to existing holders of the same product",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/yes-bank-marquee-credit-card.html",
+      "https://cardinsider.com/yes-bank/yes-bank-marquee-credit-card/",
+      "https://www.mobikwik.com/blog/yes-bank-marquee-credit-card-review/",
+      "https://www.paisabazaar.com/yes-bank/marquee-credit-card/"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com and cardinsider.com, Aug 2026; official yesbank.in Marquee page found in search results but repeatedly timed out via fetch tool"
+  },
+  {
+    "bank": "Yes Bank",
+    "bank_type": "private",
+    "card_name": "YES RESERV Credit Card",
+    "network": "Visa Signature / Mastercard / RuPay (variant depends on issuance/renewal choice)",
+    "category": "travel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 2499,
+    "annual_fee_inr": 2499,
+    "fee_waiver_condition": "Joining fee waived on Rs 40,000 spend within 30 days of card issuance; annual/renewal fee waived on Rs 3,00,000 annual retail spend (excludes rent and wallet loads) in the preceding year",
+    "reward_rate": "24 YES Rewardz points per Rs 200 online (selected categories, ~3% value back); 12 points per Rs 200 offline (~1.5%); 6 points per Rs 200 on restricted categories",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "Rs 500 Amazon voucher on spending Rs 1,000 within first 30 days (per BankBazaar; not independently confirmed on a second source)"
+    ],
+    "milestone_benefits": [
+      "8,000 YES Rewardz points on payment of renewal fee from year 2 onward"
+    ],
+    "lounge_access": "Domestic: up to 3 complimentary visits per quarter (12/year); International: 6 visits per year — some sources note conditionality on Rs 1 lakh spend in the preceding quarter",
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions between Rs 400-5,000",
+    "merchant_bonus_categories": [
+      "No named merchant partnerships found; accelerated online-vs-offline rate structure only",
+      "Complimentary golf lessons and green-fee waivers"
+    ],
+    "eligibility_notes": "Age 21-60; salaried or self-employed; resident route: minimum monthly income ~Rs 2 lakh or annual income Rs 18 lakh+; separate NRI route available via NRE/NRO fixed deposit of Rs 10 lakh+ with Yes Bank",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/yes-bank-reserv-credit-card.html",
+      "https://cardinsider.com/yes-bank/yes-bank-first-exclusive-credit-card/",
+      "https://www.cardexpert.in/yes-bank-reserv-credit-card-review/",
+      "https://technofino.in/community/threads/yesbank-reserv-renewal-option-mastercard-visa-rupay.34114/",
+      "https://www.paisabazaar.com/yes-bank/yes-first-exclusive-credit-card/"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com, cardinsider.com and cardexpert.in, Aug 2026. NOTE: CardInsider and PaisaBazaar still host this content under legacy 'yes-first-exclusive' URL slugs — strong evidence that RESERV is a rename/successor of the discontinued YES First Exclusive card rather than a wholly new product"
+  },
+  {
+    "bank": "Yes Bank",
+    "bank_type": "private",
+    "card_name": "YES ELITE+ Credit Card",
+    "network": "Mastercard (primary, per BankBazaar); Visa referenced in some listings but not confirmed as a separate variant",
+    "category": "lifestyle",
+    "is_cashback_card": false,
+    "joining_fee_inr": 999,
+    "annual_fee_inr": 999,
+    "fee_waiver_condition": "Joining fee waived on Rs 20,000 retail spend within 30 days; annual fee waived on Rs 2,00,000 spend in the preceding year",
+    "reward_rate": "12 YES Rewardz points per Rs 200 online (selected categories); 6 points per Rs 200 offline; 4 points per Rs 200 on restricted categories; capped at 12,000 points per statement cycle",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": "2 complimentary domestic airport lounge visits per calendar quarter; international lounge access referenced for the Mastercard variant but terms/count not detailed in sources checked",
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions between Rs 400-5,000, capped at Rs 500 per billing cycle",
+    "merchant_bonus_categories": [
+      "25% discount on movie tickets via BookMyShow"
+    ],
+    "eligibility_notes": "Age 21-60; salaried or self-employed; minimum net monthly salary Rs 1 lakh or annual ITR Rs 9 lakh+",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/yes-bank-elite-plus-credit-card.html",
+      "https://tradebrains.in/money/yes-bank-elite-credit-card-a-combination-of-everyday-rewards-and-travel-benefits-at-999-annual-fee/",
+      "https://www.ourmoneyguide.com/credit-cards-in-india/yes-bank-elite-credit-card/",
+      "https://www.paisabazaar.com/yes-bank/yes-premia-credit-card/"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com and tradebrains.in, Aug 2026. No welcome/milestone benefits could be confirmed from sources checked — left empty rather than fabricated. Note: PaisaBazaar's ELITE+ search result resolves to a 'yes-premia' URL slug, suggesting ELITE+ may be a rebrand/successor of the older YES Premia card — not independently confirmed"
+  },
+  {
+    "bank": "Yes Bank",
+    "bank_type": "private",
+    "card_name": "YES ACE Credit Card",
+    "network": "Visa (some listings mention a RuPay variant; not independently confirmed)",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 499,
+    "annual_fee_inr": 499,
+    "fee_waiver_condition": "Joining fee reversed on Rs 5,000 spend within 30 days of card setup; renewal fee reversed on Rs 50,000 spend in the 12 months prior to renewal",
+    "reward_rate": "8 YES Rewardz points per Rs 200 online (selected categories); 4 points per Rs 200 offline; 2 points per Rs 200 on utility/insurance/restricted categories; capped at 5,000 points per statement cycle",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions between Rs 400-5,000, capped around Rs 125/month benefit",
+    "merchant_bonus_categories": [
+      "Curated city-specific lifestyle offers across travel, food, shopping, wellness and entertainment via partner merchants (specific merchant names not disclosed in sources checked)"
+    ],
+    "eligibility_notes": "Age 21-60; salaried or self-employed; minimum net monthly income Rs 25,000 or annual ITR Rs 7.5 lakh+",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/yes-bank-ace-credit-card.html",
+      "https://www.mymoneymantra.com/credit-cards/yes-bank/ace-credit-card",
+      "https://www.loansjagat.com/credit-card/yes-bank-ace-credit-card",
+      "https://www.paisabazaar.com/yes-bank/prosperity-reward-plus-credit-card/"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com and mymoneymantra.com, Aug 2026; official yesbank.in ACE page located in search results but timed out via fetch tool. Note: PaisaBazaar's ACE result resolves to a 'prosperity-reward-plus' slug, suggesting ACE may be positioned as successor to the older Prosperity Rewards Plus card — not independently confirmed"
+  },
+  {
+    "bank": "Yes Bank",
+    "bank_type": "private",
+    "card_name": "Kiwi (YES Bank) RuPay Credit Card",
+    "network": "RuPay",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": null,
+    "reward_rate": "1.5% cashback on UPI scan-and-pay transactions (upgradeable to 2% base with paid Kiwi Neon membership, ~Rs 999+GST/year); 0.5% cashback on online transactions routed through the Kiwi app; milestone cashback reported up to 5% on UPI spends after crossing Rs 1.5 lakh annual spend for Neon members",
+    "reward_point_value_est_inr": null,
+    "welcome_benefits": [],
+    "milestone_benefits": [
+      "Milestone cashback up to 5% on UPI spends after Rs 1.5 lakh annual spend (Kiwi Neon paid-membership members only, per GoKiwi)"
+    ],
+    "lounge_access": "3 lounge visits/year with paid Kiwi Neon membership only; none on the free base card",
+    "fuel_surcharge_waiver": "Referenced by aggregators as included; exact terms/cap not detailed in sources checked",
+    "merchant_bonus_categories": [
+      "UPI Scan & Pay via RuPay (core accelerated-earn use case, not tied to specific merchants)"
+    ],
+    "eligibility_notes": "Not clearly stated in sources checked; card is issued digitally via the Kiwi fintech app on Yes Bank's RuPay license, appears aimed at UPI-first/digital-native users; income/age criteria not confirmed",
+    "source_urls": [
+      "https://gokiwi.in/blog/yes-bank-credit-card-is-it-worth-applying/",
+      "https://gokiwi.in/blog/yes-bank-credit-cards/",
+      "https://cardmaven.in/kiwi-rupay-credit-card-review/",
+      "https://www.bajajfinservmarkets.in/credit-card/kiwi-credit-card"
+    ],
+    "last_verified_note": "Verified via gokiwi.in (Kiwi's own partner blog, not neutral) and cardmaven.in, Aug 2026; paisabazaar.com/credit-card/kiwi-credit-card/ blocked fetch with HTTP 403 so only its search snippet was used. Naming inconsistency between 'Kiwi' and 'Klick' across sources could not be fully resolved — treat product naming as tentative until confirmed on yesbank.in"
+  },
+  {
+    "bank": "IDFC FIRST Bank",
+    "bank_type": "private",
+    "card_name": "IDFC FIRST Millennia Credit Card",
+    "network": null,
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": null,
+    "reward_rate": "1 reward point per Rs.100 base; 6X points on online spends and 3X on offline spends, combined up to Rs.20,000/month; 10X points on incremental monthly spend above Rs.20,000 and on birthday spends. Education, wallet-load and government-service spends earn up to 3X but don't count toward the 10X threshold. Fuel, EMI and cash withdrawals earn no points. (One search snippet described the base tier as a flat '3X up to Rs.20k' rather than 6X online/3X offline — BankBazaar's more granular breakdown was used; minor discrepancy across sources.)",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "Rs. 500 gift voucher on spending Rs. 15,000 within 90 days of card issuance",
+      "5% cashback (via reward points) on first EMI transaction within 90 days"
+    ],
+    "milestone_benefits": [
+      "10X reward points on monthly spend above Rs. 20,000",
+      "10X reward points on birthday spends"
+    ],
+    "lounge_access": "4 complimentary railway lounge visits per quarter; no airport lounge access reported for this card",
+    "fuel_surcharge_waiver": "1% waiver, capped at Rs.200-300/month depending on source (figures conflict between aggregators)",
+    "merchant_bonus_categories": ["Online shopping (accelerated points)", "Dining - up to 20% off at 1,500+ restaurants", "Movies - 25% off up to Rs.100/month", "Wellness - 15% off at 3,000+ outlets"],
+    "eligibility_notes": "Minimum annual income roughly Rs. 3 lakh (or ~Rs.25,000/month) per most aggregators; age range cited inconsistently as 18-65 or 21-65 across sources",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/idfc-first-bank-millennia-credit-card.html",
+      "https://www.idfcfirst.bank.in/credit-card/millennia",
+      "https://www.paisabazaar.com/idfc-first-bank/idfc-first-millennia-credit-card/"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com (full fetch) and web-search snippets of paisabazaar.com/mymoneymantra.com/airtel.in, Aug 2026. Official idfcfirst.bank.in page did not render fee/reward detail table via fetch tool (JS-rendered)."
+  },
+  {
+    "bank": "IDFC FIRST Bank",
+    "bank_type": "private",
+    "card_name": "IDFC FIRST Select Credit Card",
+    "network": "Visa (per aggregator sources; not independently confirmed from official card art)",
+    "category": "lifestyle",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": null,
+    "reward_rate": "1 point/Rs.100 base; 3X points on retail spends up to Rs.20,000/month; 10X points on incremental spend above Rs.20,000/month and on birthday spends; 3X on education/rent/wallet-loads/government payments (excluded from 10X calc); 1X on utility & insurance; fuel/EMI/cash withdrawal earn no points",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "Rs. 500 gift voucher on spending Rs. 5,000 within 30 days of card issuance",
+      "5% cashback (up to Rs.1,000) on first EMI conversion within 30 days"
+    ],
+    "milestone_benefits": [
+      "10X reward points on monthly spend above Rs. 20,000",
+      "10X reward points on birthday spends"
+    ],
+    "lounge_access": "2 complimentary visits per quarter to participating domestic airport lounges (subject to minimum prior-month spend)",
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": ["Dining - up to 20% off at 1,500+ restaurants", "Movies - Buy 1 Get 1 free tickets, twice/month", "300+ merchant offers across shopping/wellness/travel"],
+    "eligibility_notes": "Minimum age 18; minimum annual income ~Rs.12 lakh per BankBazaar; resident Indian with good credit score",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/idfc-first-bank-select-credit-card.html",
+      "https://www.idfcfirst.bank.in/credit-card/select",
+      "https://www.mymoneymantra.com/credit-cards/idfc-first-bank/select-credit-card"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com (full fetch, includes 1.99% forex markup detail) and web-search aggregation of mymoneymantra.com/paisabazaar.com, Aug 2026."
+  },
+  {
+    "bank": "IDFC FIRST Bank",
+    "bank_type": "private",
+    "card_name": "IDFC FIRST Wealth Credit Card",
+    "network": "Visa Infinite (metal card)",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": null,
+    "reward_rate": "1 point/Rs.100 base; 3X points on spends up to Rs.20,000 in a statement cycle; 10X points on spends above Rs.20,000/month and on birthday spends; fuel purchases excluded from rewards",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "Rs.500 gift voucher on spending Rs.5,000 within 30 days of activation",
+      "Up to Rs.1,000 cashback on first EMI transaction within 30 days"
+    ],
+    "milestone_benefits": [
+      "10X points on monthly spend above Rs.20,000",
+      "10X points on birthday spends"
+    ],
+    "lounge_access": "4 complimentary domestic + international airport lounge visits per quarter, plus 4 railway lounge visits/quarter and 4 spa visits/quarter",
+    "fuel_surcharge_waiver": "1% waiver, up to Rs.300/month, at all fuel stations",
+    "merchant_bonus_categories": ["Dining - 20% off at 1,500+ restaurants", "Movies - Buy1Get1 up to Rs.250, twice/month", "Comprehensive travel insurance ~$1,200 cover", "Air accident cover Rs.1 crore", "Personal accident cover Rs.10 lakh"],
+    "eligibility_notes": "Minimum age 21; minimum annual income cited around Rs.36 lakh by aggregators (positioned for HNI/high-income customers); 1.5% forex markup",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/idfc-first-bank-wealth-credit-card.html",
+      "https://www.idfcfirst.bank.in/credit-card/wealth",
+      "https://www.paisabazaar.com/idfc-first-bank/idfc-first-wealth-credit-card/",
+      "https://www.airtel.in/finance/credit-card/idfc-first-wealth-credit-card"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com (full fetch) and web-search aggregation of paisabazaar.com/cardinsider.com/airtel.in, Aug 2026. Zero-annual-fee status corroborated by 3+ independent aggregators though official site page did not render fee table via fetch."
+  },
+  {
+    "bank": "IDFC FIRST Bank",
+    "bank_type": "private",
+    "card_name": "IDFC FIRST Mayura Credit Card",
+    "network": "Visa Infinite / Mastercard World (variant choice at application)",
+    "category": "travel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 5999,
+    "annual_fee_inr": 5999,
+    "fee_waiver_condition": null,
+    "reward_rate": "5X points on monthly spends below Rs.20,000; 10X points on spends above Rs.20,000/month or on birthday; a substantially higher rate (reported as up to 40X / ~13% value back, unverified precise mechanics) applies to travel bookings made via the bank's travel portal. Education, government, rent, utilities, insurance, EMI, cash withdrawal and fuel are excluded from the 10X calculation.",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "5,000 reward points credited on payment of joining fee",
+      "Up to Rs.4,000 cashback across first 4 transactions of Rs.1,000+ within 60 days of card issuance"
+    ],
+    "milestone_benefits": [
+      "10X points on monthly spend above Rs.20,000 or on birthday",
+      "Lounge/spa access for the following month unlocked by spending Rs.20,000+ in the current calendar month"
+    ],
+    "lounge_access": "4 international + 4 domestic airport lounge visits per quarter, plus 4 railway/train-terminal lounge visits per quarter",
+    "fuel_surcharge_waiver": "1%, up to Rs.500/month",
+    "merchant_bonus_categories": ["Travel bookings via bank portal (accelerated points, marketed as up to ~13% value back)", "Movies - Buy1Get1 up to Rs.500, twice/month", "'Cancel for any reason' trip protection up to Rs.50,000, twice a year", "Zero forex markup"],
+    "eligibility_notes": "Age 21-65; income eligibility figures CONFLICT across sources: one cites Rs.25 lakh/year, another cites ~Rs.12 lakh/year or Rs.1 lakh+/month; CIBIL 750+ preferred; one source states NRIs are not eligible. Not reconciled to a single authoritative figure.",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/idfc-first-bank-mayura-credit-card.html",
+      "https://www.idfcfirst.bank.in/credit-card/metal-credit-card/mayura",
+      "https://www.paisabazaar.com/idfc-first-bank/mayura-credit-card/",
+      "https://www.knowyourfinance.org/cards/card/idfc-mayura"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com (full fetch) and web-search aggregation of paisabazaar.com/cardexpert.in/knowyourfinance.org, Aug 2026. Income-eligibility and exact travel-multiplier figures are inconsistent across sources and could not be fully reconciled."
+  },
+  {
+    "bank": "IDFC FIRST Bank",
+    "bank_type": "private",
+    "card_name": "IDFC FIRST Power+ Credit Card (HPCL co-brand)",
+    "network": "RuPay",
+    "category": "fuel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 499,
+    "annual_fee_inr": 499,
+    "fee_waiver_condition": "Waived if spending exceeds Rs.1.5 lakh in the previous card-anniversary year",
+    "reward_rate": "24 reward points per Rs.150 spent on HPCL fuel & LPG (~4% cashback-equivalent, capped Rs.1,000/month); 30 points per Rs.150 on grocery & utility bill payments and on IDFC FIRST FASTag recharge (capped, ~5%); 3X points per Rs.100 on other retail spends; additional ~1.5% via Payback rewards on fuel purchases made through the HP Pay app (capped Rs.5,000/month fuel spend). Bank markets a combined ~6.5% total fuel savings potential.",
+    "reward_point_value_est_inr": null,
+    "welcome_benefits": [
+      "Rs.500 gift voucher on first HPCL fuel transaction of Rs.500+ within 60 days of card setup",
+      "5% cashback (up to Rs.1,000) on first EMI conversion",
+      "Total welcome benefits valued at approx. Rs.1,650 per one aggregator"
+    ],
+    "milestone_benefits": [
+      "Referral program can earn up to Rs.10,000 in rewards (per BankBazaar); no other distinct spend-milestone tier reported"
+    ],
+    "lounge_access": "1 complimentary domestic airport lounge visit per calendar quarter, conditional on minimum monthly spend - threshold conflicts between sources (Rs.5,000/month per BankBazaar vs Rs.20,000/month per Paisabazaar)",
+    "fuel_surcharge_waiver": "1% waiver on fuel transactions, up to Rs.10,000 spend/month",
+    "merchant_bonus_categories": ["HPCL fuel & LPG (accelerated points + effective cashback)", "Grocery & utility bill payments", "IDFC FIRST FASTag recharge", "Swiggy - Rs.150 off orders above Rs.500", "ZoomCar - Rs.500 off; Eco Rent-a-Car/Europcar - 50% off", "Movies - 25% off up to Rs.100/month"],
+    "eligibility_notes": "Age 21+; minimum annual income Rs.3 lakh; Indian citizen. FIRST Power (base) variant requires no existing IDFC FIRST Bank card; FIRST Power+ variant is open to existing IDFC FIRST cardholders (shares credit limit with other IDFC FIRST cards).",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/idfc-first-hpcl-power-plus-credit-card.html",
+      "https://www.idfcfirst.bank.in/credit-card/hpcl-power-fuel-credit-card",
+      "https://www.paisabazaar.com/idfc-first-bank/idfc-first-hpcl-power-plus-credit-card/",
+      "https://www.hindustanpetroleum.com/NewsroomDetails/395"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com (full fetch) and hindustanpetroleum.com official press release confirming RuPay migration, plus paisabazaar.com/cashlesstime.com search snippets, Aug 2026. Lounge-access spend threshold and exact reward-point INR value could not be reconciled/confirmed."
+  },
+  {
+    "bank": "IDFC FIRST Bank",
+    "bank_type": "private",
+    "card_name": "IDFC FIRST SWYP Credit Card",
+    "network": "Mastercard",
+    "category": "co_brand",
+    "is_cashback_card": false,
+    "joining_fee_inr": 499,
+    "annual_fee_inr": 499,
+    "fee_waiver_condition": "Waived after 1 successful referral (per referral-program terms found)",
+    "reward_rate": "Milestone-based monthly spend rewards rather than per-transaction points: 200 points at Rs.5,000/month spend, 500 points at Rs.10,000/month, 1,000 points at Rs.15,000/month, plus 400 points on Rs.20,000+ rental spend. A separate UPI reward gives 100 points on UPI spends exceeding Rs.5,000/month (requires a Rs.199+GST annual RuPay/UPI add-on fee). 1 point = Rs.0.25.",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "Rs.2,100 worth of EaseMyTrip travel discount coupons on payment of joining fee",
+      "2,000 reward points (worth Rs.500) on spending Rs.5,000 within 30 days of issuance",
+      "Complimentary 1-year Lenskart Gold membership",
+      "1,000 reward points on first EMI conversion within 30 days",
+      "1-year Times Prime membership on Rs.30,000+ spend within 90 days"
+    ],
+    "milestone_benefits": [
+      "Referral program: 1 referral = fee waiver, 3 = 4,000 points, 5 = EMI-fee waiver up to Rs.1,500, 7 = Rs.2,000 movie voucher, 9 = Rs.2,500 cashback, 10 = 4 complimentary domestic lounge visits"
+    ],
+    "lounge_access": "4 complimentary railway lounge visits per quarter (16/year); domestic airport lounge access is earned only via the 10-referral milestone (4 visits)",
+    "fuel_surcharge_waiver": "1% waiver, up to Rs.200/month",
+    "merchant_bonus_categories": ["300+ merchant offers", "Domino's - 20% off up to Rs.80, twice/month", "Zomato - 10% off up to Rs.100, twice/month", "Tata CLiQ - 10% off up to Rs.100/month", "EaseMyTrip - 10% off up to Rs.500/quarter", "Nykaa, MakeMyTrip, Myntra discounts up to 20% (per one source, not independently reconfirmed)"],
+    "eligibility_notes": "Specific minimum income/age not found in sources checked; card is positioned/marketed for Gen Z and young, EMI-focused spenders",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/idfc-first-swyp-emi-credit-card.html",
+      "https://www.idfcfirst.bank.in/credit-card/swyp-emi-credit-card",
+      "https://www.paisabazaar.com/idfc-first-bank/swyp-credit-card/",
+      "https://affairscloud.com/idfc-first-bank-mastercard-unveiled-the-first-swyp-credit-card/",
+      "https://tradebrains.in/money/idfc-first-swyp-credit-card-entry-level-lifestyle-card-that-earns-11000-in-referral-benefits-see-how/"
+    ],
+    "last_verified_note": "Verified via bankbazaar.com (full fetch) and web-search aggregation of paisabazaar.com/affairscloud.com/tradebrains.in, Aug 2026. Network-variant details and eligibility income/age were not confirmed."
+  }
+]
