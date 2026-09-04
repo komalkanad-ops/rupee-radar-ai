@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-slate-50 text-slate-900;
+}
+
+/* Dark theme: global overrides on the small, consistent Tailwind utility vocabulary this app
+   actually uses (surveyed across every page) rather than touching each of the ~20 page files
+   individually — the sidebar is unaffected since it's already a fixed dark brand color regardless
+   of theme. */
+.dark body {
+  @apply bg-slate-900 text-slate-100;
+}
+.dark .bg-white {
+  @apply bg-slate-800;
+}
+.dark .bg-slate-50 {
+  @apply bg-slate-900;
+}
+.dark .bg-slate-100 {
+  @apply bg-slate-700;
+}
+.dark .bg-slate-200,
+.dark .bg-slate-300 {
+  @apply bg-slate-600;
+}
+.dark .text-slate-900,
+.dark .text-slate-800 {
+  @apply text-slate-100;
+}
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  @apply text-slate-300;
+}
+.dark .text-slate-500 {
+  color: #94a3b8; /* slate-400 */
+}
+.dark .text-slate-400 {
+  color: #64748b; /* slate-500 */
+}
+.dark .text-brand-dark {
+  @apply text-brand-light;
+}
+.dark .border-slate-300,
+.dark .border-slate-200 {
+  @apply border-slate-600;
+}
+.dark .border-slate-100 {
+  @apply border-slate-700;
+}
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  @apply border-slate-700;
+}
+.dark .bg-amber-100 {
+  @apply bg-amber-900/40;
+}
+.dark .text-amber-700,
+.dark .text-amber-600 {
+  @apply text-amber-300;
+}
+.dark .bg-red-100 {
+  @apply bg-red-900/40;
+}
+.dark .text-red-700,
+.dark .text-red-600,
+.dark .text-red-500 {
+  @apply text-red-300;
+}
+.dark .bg-green-100 {
+  @apply bg-green-900/40;
+}
+.dark .text-green-700,
+.dark .text-green-600 {
+  @apply text-green-300;
+}
+.dark .bg-blue-100 {
+  @apply bg-blue-900/40;
+}
+/* Plain <input>/<select>/<textarea> in this app rely on the browser's default white background
+   (most forms don't set an explicit bg-* class), so dark mode needs an explicit override here. */
+.dark input,
+.dark select,
+.dark textarea {
+  @apply bg-slate-800 text-slate-100 border-slate-600;
+}
+.dark ::placeholder {
+  color: #64748b; /* slate-500 */
+}

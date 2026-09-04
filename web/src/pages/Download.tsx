@@ -1,0 +1,238 @@
+import { useEffect, useState } from "react";
+import { api } from "../lib/api";
+import { trackEvent } from "../lib/analytics";
+import { useSeo } from "../lib/useSeo";
+
+// Versioned filename dodges Hostinger's ~1h CDN cache on static assets — always resolves to the
+// current build once its /app-version row exists. Falls back to the stable name before that loads.
+const STABLE_APK_URL = "/rupee-radar-ai.apk";
+const apkUrlFor = (versionName?: string) =>
+  versionName ? `/rupee-radar-ai-${versionName}.apk` : STABLE_APK_URL;
+
+interface LatestVersion {
+  latestStable: { versionName: string; versionCode: number; releaseNotes: string; createdAt: string } | null;
+  latestBeta: { versionName: string; versionCode: number; releaseNotes: string; createdAt: string } | null;
+}
+
+type Brand =
+  | "samsung"
+  | "xiaomi"
+  | "oneplus"
+  | "vivo"
+  | "pixel"
+  | "motorola"
+  | "other";
+
+const BRAND_LABELS: Record<Brand, string> = {
+  samsung: "Samsung (One UI)",
+  xiaomi: "Xiaomi / Redmi / POCO (MIUI / HyperOS)",
+  oneplus: "OnePlus / Oppo / Realme (OxygenOS / ColorOS)",
+  vivo: "Vivo / iQOO (Funtouch OS / OriginOS)",
+  pixel: "Google Pixel (stock Android)",
+  motorola: "Motorola / Nothing / Lava / others",
+  other: "I'm not sure",
+};
+
+/** Manufacturer-specific extra steps, on top of the common flow. */
+const BRAND_STEPS: Record<Brand, { title: string; steps: string[] }> = {
+  samsung: {
+    title: "On Samsung (One UI)",
+    steps: [
+      "When you open the downloaded file, a box appears: “For your security, your phone isn't allowed to install unknown apps from this source.” Tap **Settings**.",
+      "Turn on **Allow from this source** for the app you downloaded with (usually **Chrome** or **My Files**), then tap **back**.",
+      "Tap **Install**. If you see **“Blocked by Play Protect”**, tap **Install anyway** (or **More details → Install anyway**).",
+    ],
+  },
+  xiaomi: {
+    title: "On Xiaomi / Redmi / POCO (MIUI / HyperOS)",
+    steps: [
+      "Open the downloaded file. Grant **Install unknown apps** / **Allow from this source** to **Chrome** (or **Mi Browser** / **File Manager**) when asked.",
+      "MIUI runs a quick security scan (“Verifying…”). Wait for it to finish, then tap **Install** → **Install anyway**.",
+      "If the Install button is greyed out or the install is blocked: open the **Security** app → **Settings** (gear icon) → turn **off** **“Scan apps before installing”**, then try again.",
+      "Brand-new Xiaomi phones sometimes block sideloading for the first day. If nothing works, **turn Wi-Fi and mobile data off** for the moment you tap **Install**, then turn them back on.",
+    ],
+  },
+  oneplus: {
+    title: "On OnePlus / Oppo / Realme (OxygenOS / ColorOS)",
+    steps: [
+      "Open the downloaded file. When prompted, tap **Settings** and turn on **Allow from this source** for your browser.",
+      "ColorOS / OxygenOS may ask you to enter your **lock-screen PIN or password** to confirm — this is normal.",
+      "Tap **Install**. If a “safety check” or Play Protect warning appears, choose **Install anyway**.",
+    ],
+  },
+  vivo: {
+    title: "On Vivo / iQOO (Funtouch OS / OriginOS)",
+    steps: [
+      "Open the downloaded file and tap **Settings** → turn on **Allow install** / **Install unknown apps** for your browser.",
+      "If install is still blocked, go to **Settings → More settings → Permissions & privacy** (or the **i Manager** app) and turn **off** **“Install via external sources verification”** / **“Internet apps installation”**.",
+      "Tap **Install** → **Install anyway** if warned.",
+    ],
+  },
+  pixel: {
+    title: "On Google Pixel (stock Android)",
+    steps: [
+      "Open the downloaded file. Tap **Settings** on the prompt, turn on **Allow from this source**, then tap **back**.",
+      "Tap **Install**.",
+      "If Play Protect says the app wasn't scanned, tap **Install anyway** (and **Don't send** if asked).",
+    ],
+  },
+  motorola: {
+    title: "On Motorola / Nothing / Lava / most other phones",
+    steps: [
+      "Open the downloaded file. Tap **Settings** on the prompt and turn on **Allow from this source** for your browser.",
+      "Tap **back**, then **Install**.",
+      "If a Play Protect warning appears, tap **Install anyway**.",
+    ],
+  },
+  other: {
+    title: "If you're not sure which phone you have",
+    steps: [
+      "Open the downloaded **rupee-radar-ai.apk** file (tap the download notification, or open **Files → Downloads**).",
+      "Android will say it can't install from this source → tap **Settings** → turn on **Allow from this source** (or **Install unknown apps**) for the app you're installing from.",
+      "Go **back** and tap **Install**. If your phone warns the app is unverified, choose **Install anyway**.",
+    ],
+  },
+};
+
+/** Renders **bold** markers inside a plain string. */
+function Rich({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return (
+    <>
+      {parts.map((p, i) =>
+        p.startsWith("**") && p.endsWith("**") ? (
+          <strong key={i} className="text-app-text font-semibold">
+            {p.slice(2, -2)}
+          </strong>
+        ) : (
+          <span key={i}>{p}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+export default function Download() {
+  useSeo({
+    title: "Download Rupee Radar AI (Android APK)",
+    description:
+      "Download and install the Rupee Radar AI Android app. Step-by-step install instructions for Samsung, Xiaomi, OnePlus, Vivo, Pixel and more.",
+    canonical: "https://rupeeradarai.com/download",
+  });
+
+  const [version, setVersion] = useState<LatestVersion | null>(null);
+  const [brand, setBrand] = useState<Brand>("samsung");
+
+  useEffect(() => {
+    api<LatestVersion>("/app-version/latest?platform=android")
+      .then(setVersion)
+      .catch(() => setVersion(null));
+  }, []);
+
+  const stable = version?.latestStable ?? version?.latestBeta ?? null;
+  const brandInfo = BRAND_STEPS[brand];
+
+  return (
+    <div className="max-w-3xl mx-auto px-6 py-16">
+      <h1 className="text-3xl font-bold mb-3">Download Rupee Radar AI</h1>
+      <p className="text-app-muted mb-8">
+        The Android app is currently installed directly (not yet on the Play Store). It's quick —
+        download the file below, then follow the steps for your phone.
+      </p>
+
+      {/* Download card */}
+      <div className="rounded-2xl border border-app-border bg-app-surface p-6 mb-10">
+        <a
+          href={apkUrlFor(stable?.versionName)}
+          download
+          onClick={() => trackEvent("apk_download", { source: "download_page", manufacturer: brand, version: stable?.versionName })}
+          className="block w-full text-center rounded-xl bg-brand text-black font-bold text-lg py-4 hover:opacity-90 transition-opacity"
+        >
+          Download the Rupee Radar AI App
+        </a>
+        <p className="text-sm text-app-muted mt-3 text-center">
+          {stable ? (
+            <>
+              <strong className="text-app-text">Version {stable.versionName}</strong> · Android 8.0
+              and up · ~13 MB
+            </>
+          ) : (
+            <>Android 8.0 and up · ~13 MB</>
+          )}
+        </p>
+        <p className="text-xs text-app-muted mt-1 text-center">
+          This link always serves the latest version.
+        </p>
+        {stable?.releaseNotes && (
+          <p className="text-sm text-app-muted mt-4 border-t border-app-border pt-4">
+            <strong className="text-app-text">What's new:</strong> {stable.releaseNotes}
+          </p>
+        )}
+      </div>
+
+      {/* Common steps */}
+      <h2 className="text-xl font-bold mb-3">How to install</h2>
+      <ol className="list-decimal list-inside space-y-3 text-app-muted mb-8">
+        <li>
+          <Rich text="Tap **Download the Rupee Radar AI App** above. The file **rupee-radar-ai.apk** saves to your **Downloads**." />
+        </li>
+        <li>
+          <Rich text="**Open the file** — tap the download notification, or open the **Files** / **My Files** app and go to **Downloads**." />
+        </li>
+        <li>
+          <Rich text="Your phone will say it **can't install apps from this source**. That's expected for any app outside the Play Store — the next step turns it on, just for this one app you're installing from." />
+        </li>
+        <li>
+          <Rich text="Follow your phone's exact steps below, then tap **Install** and **Open**." />
+        </li>
+      </ol>
+
+      {/* Brand selector */}
+      <div className="rounded-2xl border border-app-border bg-app-surface p-6">
+        <label htmlFor="brand" className="block text-sm font-semibold text-app-text mb-2">
+          Which phone do you have?
+        </label>
+        <select
+          id="brand"
+          value={brand}
+          onChange={(e) => setBrand(e.target.value as Brand)}
+          className="w-full rounded-lg border border-app-border bg-app-bg text-app-text px-3 py-2.5 mb-5"
+        >
+          {(Object.keys(BRAND_LABELS) as Brand[]).map((b) => (
+            <option key={b} value={b}>
+              {BRAND_LABELS[b]}
+            </option>
+          ))}
+        </select>
+
+        <h3 className="text-lg font-bold mb-3">{brandInfo.title}</h3>
+        <ol className="list-decimal list-inside space-y-3 text-app-muted">
+          {brandInfo.steps.map((s, i) => (
+            <li key={i}>
+              <Rich text={s} />
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div className="mt-8 text-sm text-app-muted space-y-2">
+        <p>
+          <strong className="text-app-text">Is this safe?</strong> Yes. The “unknown apps”
+          warning appears for every app installed outside the Play Store, not because anything is
+          wrong. You can turn the permission back off after installing.
+        </p>
+        <p>
+          <strong className="text-app-text">Updates:</strong> come back to this page and download
+          again — the app also tells you in-app when a newer version is available.
+        </p>
+        <p>
+          Trouble installing? Email{" "}
+          <a href="mailto:support@rupeeradarai.com" className="text-brand hover:underline">
+            support@rupeeradarai.com
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  );
+}

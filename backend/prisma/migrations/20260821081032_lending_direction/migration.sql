@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `LentMoney` ADD COLUMN `direction` VARCHAR(191) NOT NULL DEFAULT 'LENT';

@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-app-bg text-app-text;
+}
+
+@layer components {
+  /* Mirrors the Android app's GlassCard.kt — a translucent surface with a subtle light border,
+     standing in for real backdrop-blur glassmorphism. Lifts slightly on hover for a tactile feel
+     across every screen that uses it, without needing per-page hover styling. */
+  .glass-card {
+    @apply bg-app-surface/60 border border-app-border rounded-2xl backdrop-blur-sm transition-transform duration-300 ease-out hover:-translate-y-1 hover:border-app-text/20;
+  }
+  /* Opt-in glow variant, same convention as GlassCard's glowColor param — pass a color utility
+     alongside this class (e.g. "glow shadow-brand/30") for a screen's one hero element only. */
+  .glow {
+    @apply shadow-[0_0_40px_-10px_currentColor];
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

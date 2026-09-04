@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `ParkingTicket` ADD COLUMN `kind` VARCHAR(191) NOT NULL DEFAULT 'PARKING';

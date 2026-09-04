@@ -1,0 +1,112 @@
+name: Verify production
+
+# A second, independent signal to the single Sentry uptime monitor on /health/db — and unlike that
+# monitor this also watches the website's APK download (content-type + reachability), which nothing
+# else does. Read-only GETs against public endpoints; no secrets, no writes, never runs on PRs.
+on:
+  # Every 3h, not every 30min — the Sentry uptime monitor already probes /health/db at 60s and
+  # pages within ~3min, so this is a backstop (it also checks /cards + the APK content-type, which
+  # nothing else does). Every 30min was ~1400 runs/month — most of the free Actions allowance.
+  schedule:
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Probe production
+        id: probe
+        run: |
+          set +e
+          out="$(bash scripts/verify-release.sh 2>&1)"
+          rc=$?
+          echo "$out"
+          {
+            echo "## Production verification"
+            echo '```'
+            echo "$out"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          # stash the output for the issue body
+          {
+            echo "report<<REPORT_EOF"
+            echo "$out"
+            echo "REPORT_EOF"
+          } >> "$GITHUB_OUTPUT"
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Open or update an issue on failure
+        if: steps.probe.outputs.rc != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "🚨 Production verification failing";
+            const report = process.env.PROBE_REPORT || "(no output captured)";
+            const body = [
+              `\`verify-release.sh\` failed on the scheduled production probe.`,
+              ``,
+              `Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              ``,
+              "```",
+              report,
+              "```",
+              ``,
+              `_Auto-updated by \`.github/workflows/verify-prod.yml\` — this comment re-fires on every failing run until the checks pass and the issue is closed._`,
+            ].join("\n");
+
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "prod-verify",
+              per_page: 20,
+            });
+            const hit = existing.data.find((i) => i.title === title);
+
+            if (hit) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: hit.number, body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title, body, labels: ["prod-verify"],
+              });
+            }
+        env:
+          PROBE_REPORT: ${{ steps.probe.outputs.report }}
+
+      - name: Auto-close the issue when checks pass again
+        if: steps.probe.outputs.rc == '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "🚨 Production verification failing";
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: "open", labels: "prod-verify", per_page: 20,
+            });
+            for (const i of open.data.filter((x) => x.title === title)) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: i.number,
+                body: `✅ Production verification passed again on ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId} — closing.`,
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: i.number, state: "closed", state_reason: "completed",
+              });
+            }
+
+      - name: Fail the job if the probe failed
+        if: steps.probe.outputs.rc != '0'
+        run: exit 1

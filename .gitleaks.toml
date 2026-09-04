@@ -1,0 +1,33 @@
+# gitleaks config for the weekly security scan (.github/workflows/security-scan.yml).
+# Extends the built-in ruleset; only adds allowlisting for known-safe paths and values.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Paths and values that are safe by design in this repo"
+paths = [
+  # The published release APK — binary, contains the (public, write-only) Sentry DSN + build
+  # metadata that scanners mis-flag. The real signing keystore lives in secrets/ (gitignored).
+  '''web/public/.*\.apk''',
+  # Design PDFs / screenshots.
+  '''figmaScreen/.*''',
+  # Lockfiles — integrity hashes, not secrets.
+  '''.*package-lock\.json''',
+  # All of these are .gitignored (never committed) — listed so a LOCAL `gitleaks dir` run, which
+  # doesn't honour .gitignore, matches the clean CI result (CI only checks out tracked files).
+  '''secrets/.*''',
+  '''FirebaseJson/.*''',
+  '''android/keystore\.properties''',
+  '''\.claude/.*''',
+  '''.*/build/.*''',
+  '''node_modules/.*''',
+]
+regexes = [
+  # The Sentry Android DSN is a write-only PUBLIC key by design and ships in every APK; it is
+  # documented as safe-in-git-adjacent in docs/play-data-safety.md. It is NOT committed to this
+  # repo (it lives in ~/.gradle/gradle.properties) — this entry is belt-and-suspenders.
+  '''o4511953670963200\.ingest\.us\.sentry\.io''',
+  # Firebase Web API keys and the Google OAuth client id in google-services.json / strings.xml are
+  # public client identifiers, not secrets (Google's own guidance).
+  '''AIza[0-9A-Za-z_\-]{35}''',
+]

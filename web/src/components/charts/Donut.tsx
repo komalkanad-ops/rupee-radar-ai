@@ -1,0 +1,62 @@
+interface Slice {
+  label: string;
+  value: number;
+  color: string;
+}
+
+// Hand-rolled SVG donut — same dependency-free approach used in the admin console and the Android
+// app's Canvas charts, kept consistent across all three surfaces.
+export function Donut({ data, size = 180 }: { data: Slice[]; size?: number }) {
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+  const radius = size / 2;
+  const strokeWidth = radius * 0.32;
+  const innerRadius = radius - strokeWidth / 2;
+  const circumference = 2 * Math.PI * innerRadius;
+
+  let offset = 0;
+  const arcs = data
+    .filter((d) => d.value > 0)
+    .map((d) => {
+      const fraction = total > 0 ? d.value / total : 0;
+      const dash = fraction * circumference;
+      const arc = (
+        <circle
+          key={d.label}
+          cx={radius}
+          cy={radius}
+          r={innerRadius}
+          fill="none"
+          stroke={d.color}
+          strokeWidth={strokeWidth}
+          strokeDasharray={`${dash} ${circumference - dash}`}
+          strokeDashoffset={-offset}
+          transform={`rotate(-90 ${radius} ${radius})`}
+        />
+      );
+      offset += dash;
+      return arc;
+    });
+
+  return (
+    <div className="flex items-center gap-6 flex-wrap">
+      <svg width={size} height={size}>
+        {arcs}
+        <text x={radius} y={radius - 4} textAnchor="middle" className="fill-app-text text-xl font-semibold">
+          {"₹"}{total.toLocaleString("en-IN")}
+        </text>
+        <text x={radius} y={radius + 16} textAnchor="middle" className="fill-app-muted text-[10px]">
+          total spend
+        </text>
+      </svg>
+      <div className="space-y-1.5">
+        {data.map((d) => (
+          <div key={d.label} className="flex items-center gap-2 text-sm">
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: d.color }} />
+            <span className="text-app-muted capitalize">{d.label}</span>
+            <span className="font-medium text-app-text">₹{d.value.toLocaleString("en-IN")}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

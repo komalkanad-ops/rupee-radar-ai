@@ -1,0 +1,824 @@
+[
+  {
+    "bank": "HDFC Bank",
+    "bank_type": "private",
+    "card_name": "HDFC Bank Millennia Credit Card",
+    "network": "Visa/Mastercard/RuPay",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 1000,
+    "annual_fee_inr": 1000,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹1,00,000 or more in the preceding year",
+    "reward_rate": "5% cashback (CashPoints) on Amazon, Flipkart, Myntra, Swiggy, BigBasket, Zomato, Uber, Tata CLiQ, Cult.fit and other partner merchants (capped at 1,000 CashPoints/statement cycle); 1% cashback on all other eligible spends (capped at 1,000 CashPoints/statement cycle); 1 CashPoint is treated as ≈ ₹1 when redeemed as statement credit/cashback",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "1,000 CashPoints (≈ ₹1,000) as welcome benefit"
+    ],
+    "milestone_benefits": [
+      "1 complimentary domestic lounge access per quarter on spending ₹1,00,000+ in that calendar quarter (voucher of ₹1,000 from select brands as alternative)"
+    ],
+    "lounge_access": "Domestic lounge access tied to quarterly spend milestone of ₹1,00,000 (not a flat number of free visits)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, capped at ₹250/statement cycle, on fuel transactions between ₹400-₹1,00,000",
+    "merchant_bonus_categories": ["amazon", "flipkart", "myntra", "swiggy", "bigbasket", "zomato", "uber", "tata_cliq", "online_shopping"],
+    "eligibility_notes": "Salaried: Indian resident, age 21-40, net monthly income above ₹35,000. Self-employed: ITR above ₹6 lakh/year.",
+    "source_urls": [
+      "https://www.hdfc.bank.in/credit-cards/millennia-credit-card",
+      "https://www.paisabazaar.com/hdfc-bank/millennia-credit-card/",
+      "https://cardinsider.com/hdfc-bank/"
+    ],
+    "last_verified_note": "Verified via hdfc.bank.in and paisabazaar.com (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "HDFC Bank",
+    "bank_type": "private",
+    "card_name": "HDFC Bank MoneyBack+ Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹50,000 or more in the preceding year",
+    "reward_rate": "10X CashPoints per ₹150 (≈5%) on Flipkart, Amazon, Swiggy, BigBasket and Reliance Smart SuperStore spends; 2 CashPoints per ₹150 (≈1%) on all other retail spends; 1 CashPoint ≈ ₹1 at redemption as statement credit",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "500 CashPoints on card issuance"
+    ],
+    "milestone_benefits": [
+      "Gift vouchers on reaching defined annual spend thresholds (exact slabs vary by offer cycle)"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between ₹400-₹5,000, capped at ₹250/statement cycle",
+    "merchant_bonus_categories": ["amazon", "flipkart", "swiggy", "bigbasket", "reliance_smart", "grocery"],
+    "eligibility_notes": "Entry-level card; income requirement not explicitly published in sources reviewed, typically ~₹15,000-25,000/month for salaried applicants per aggregator guidance.",
+    "source_urls": [
+      "https://cardinsider.com/hdfc-bank/",
+      "https://www.hdfc.bank.in/credit-cards"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026; income eligibility not independently confirmed on hdfc.bank.in"
+  },
+  {
+    "bank": "HDFC Bank",
+    "bank_type": "private",
+    "card_name": "HDFC Bank Regalia Gold Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 2500,
+    "annual_fee_inr": 2500,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹4,00,000 or more in the preceding 12 months",
+    "reward_rate": "5 Reward Points per ₹200 (≈1.25% at best value) on eligible retail spends including utilities/insurance/education; 25 Reward Points per ₹200 (≈6.25% at best value) on Myntra, Marks & Spencer, Nykaa and Reliance Digital spends",
+    "reward_point_value_est_inr": 0.5,
+    "welcome_benefits": [
+      "Voucher worth ₹2,500 from partner brands on joining"
+    ],
+    "milestone_benefits": [
+      "Flight and shopping vouchers on reaching annual spend milestones (varies by offer cycle)"
+    ],
+    "lounge_access": "3 complimentary domestic lounge visits per calendar quarter if ₹60,000+ spent in the preceding quarter; 6 complimentary international lounge visits per year via Priority Pass",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between ₹400-₹1,00,000, capped at ₹250/statement cycle; 2% forex markup",
+    "merchant_bonus_categories": ["myntra", "marks_and_spencer", "nykaa", "reliance_digital", "travel", "dining"],
+    "eligibility_notes": "Salaried: net monthly income >₹1,50,000 (non-government) or >₹1,00,000 (government); age 21-60. Self-employed: ITR >₹12 lakh/year; age 21-65.",
+    "source_urls": [
+      "https://www.hdfc.bank.in/credit-cards/regalia-gold-credit-card",
+      "https://www.hdfc.bank.in/credit-cards/regalia-gold-credit-card/eligibility",
+      "https://www.paisabazaar.com/hdfc-bank/hdfc-regalia-gold-credit-card/",
+      "https://www.business-standard.com/finance/personal-finance/hdfc-bank-revises-regalia-gold-lounge-access-rewards-rules-details-126051900822_1.html"
+    ],
+    "last_verified_note": "Verified via hdfc.bank.in and paisabazaar.com, Aug 2026; note a 2026 lounge/reward rules revision was reported by Business Standard"
+  },
+  {
+    "bank": "HDFC Bank",
+    "bank_type": "private",
+    "card_name": "HDFC Bank Infinia Credit Card (Metal Edition)",
+    "network": "Visa Infinite/Mastercard World Elite",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 12500,
+    "annual_fee_inr": 12500,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹10,00,000 or more in the preceding year",
+    "reward_rate": "5 Reward Points per ₹150 spent (≈3.33% at best redemption); up to 10X on SmartBuy travel/shopping bookings",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "12,500 bonus Reward Points on joining",
+      "Complimentary Club Marriott membership"
+    ],
+    "milestone_benefits": [
+      "Additional bonus points and exclusive privileges at higher annual spend tiers (invite-managed, varies by relationship)"
+    ],
+    "lounge_access": "Unlimited complimentary domestic and international airport lounge access for primary and add-on cardholders; golf privileges",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, capped at ₹1,000/statement cycle; 2% forex markup",
+    "merchant_bonus_categories": ["smartbuy_travel", "smartbuy_shopping", "apple_products", "tanishq", "all_spends"],
+    "eligibility_notes": "Invite-only card. Reported income threshold for invitations: salaried private-sector ≥₹5 lakh/month, government employees ≥₹3.5 lakh/month, self-employed ITR ≥₹60 lakh/year (not officially published by HDFC).",
+    "source_urls": [
+      "https://www.hdfc.bank.in/credit-cards/infinia-credit-card/eligibility",
+      "https://www.paisabazaar.com/hdfc-bank/infinia-credit-card/",
+      "https://cardinsider.com/hdfc-bank/hdfc-bank-infinia-credit-card/"
+    ],
+    "last_verified_note": "Verified via hdfc.bank.in and paisabazaar.com, Aug 2026; effective Feb 1 2026, HDFC capped Infinia redemptions to 5/month with a ₹2,00,000 per-cycle limit per angelone.in reporting"
+  },
+  {
+    "bank": "HDFC Bank",
+    "bank_type": "private",
+    "card_name": "HDFC Bank Diners Club Black Metal Edition Credit Card",
+    "network": "Diners Club",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 10000,
+    "annual_fee_inr": 10000,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹8,00,000 or more in the preceding year",
+    "reward_rate": "5 Reward Points per ₹150 on regular spends (≈3.33%); 10X Reward Points on SmartBuy bookings (up to ≈33% on select redemptions); 2X Reward Points on weekend dining",
+    "reward_point_value_est_inr": 0.7,
+    "welcome_benefits": [
+      "Complimentary Club Marriott, Swiggy One and Amazon Prime memberships on spending ₹1,50,000 within 90 days of card issuance"
+    ],
+    "milestone_benefits": [
+      "Continued premium memberships and travel vouchers on sustained annual spend"
+    ],
+    "lounge_access": "Unlimited complimentary domestic and international airport lounge access for primary and add-on cardholders; 24 complimentary golf games annually",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, capped at ₹1,000/statement cycle; 2% forex markup",
+    "merchant_bonus_categories": ["weekend_dining", "smartbuy_travel", "smartbuy_shopping"],
+    "eligibility_notes": "High-income, invite-leaning card; HDFC revised Infinia/Diners Club Black eligibility criteria in 2026 to require higher declared income (exact published threshold not confirmed in sources reviewed).",
+    "source_urls": [
+      "https://www.hdfc.bank.in/credit-cards/diners-club-black-metal-edition-credit-card",
+      "https://www.paisabazaar.com/hdfc-bank/hdfc-diners-club-black-credit-card/",
+      "https://www.investingpro.in/credit-cards/rewards/hdfc-dcb"
+    ],
+    "last_verified_note": "Verified via hdfc.bank.in and paisabazaar.com, Aug 2026; realistic point value (~70 paise) per investingpro.in Aug 2026 assessment"
+  },
+  {
+    "bank": "HDFC Bank",
+    "bank_type": "private",
+    "card_name": "Tata Neu Infinity HDFC Bank Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "co_brand",
+    "is_cashback_card": false,
+    "joining_fee_inr": 1499,
+    "annual_fee_inr": 1499,
+    "fee_waiver_condition": "Annual fee waived on reaching defined annual spend targets (varies by offer cycle)",
+    "reward_rate": "Up to 10% NeuCoins on Tata Neu app spends (5% base + 5% for NeuPass members); 5% NeuCoins on other Tata brand spends; 1.5% NeuCoins on UPI spends via RuPay variant; 1% NeuCoins on other spends",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "1,499 NeuCoins credited to Tata Neu app on joining"
+    ],
+    "milestone_benefits": [
+      "Bonus NeuCoins and exclusive Tata-ecosystem perks on spend milestones"
+    ],
+    "lounge_access": "Complimentary domestic airport lounge access (limited visits per year, spend-conditional)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between ₹400-₹1,00,000",
+    "merchant_bonus_categories": ["tata_neu", "tata_cliq", "bigbasket", "croma", "westside", "upi"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed; general HDFC premium-lifestyle card income norms likely apply.",
+    "source_urls": [
+      "https://cardinsider.com/hdfc-bank/",
+      "https://www.hdfc.bank.in/credit-cards"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026; recommend cross-check against hdfc.bank.in Tata Neu Infinity page before production use"
+  },
+  {
+    "bank": "HDFC Bank",
+    "bank_type": "private",
+    "card_name": "Swiggy HDFC Bank Credit Card",
+    "network": "RuPay",
+    "category": "lifestyle",
+    "is_cashback_card": true,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹2,00,000 or more in the preceding year",
+    "reward_rate": "10% cashback on Swiggy app spends (food delivery, Instamart, Dineout, Genie), capped at ₹1,500/billing cycle; 5% cashback on select online categories, capped at ₹1,500/billing cycle; 1% cashback on all other eligible spends, capped at ₹500/billing cycle",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "3-month complimentary Swiggy One membership (varies by offer cycle)"
+    ],
+    "milestone_benefits": [
+      "Extended Swiggy One membership benefits on sustained monthly Swiggy spend"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, standard HDFC terms",
+    "merchant_bonus_categories": ["swiggy", "swiggy_instamart", "swiggy_dineout", "swiggy_genie", "online_shopping"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed.",
+    "source_urls": [
+      "https://www.hdfc.bank.in/credit-cards/swiggy-hdfc-bank-credit-card",
+      "https://www.hdfc.bank.in/credit-cards/swiggy-hdfc-bank-credit-card/fees-and-charges",
+      "https://www.paisabazaar.com/hdfc-bank/swiggy-credit-card/"
+    ],
+    "last_verified_note": "Verified via hdfc.bank.in and paisabazaar.com (search-synthesized), Aug 2026; distinct from the premium invite-only Swiggy BLCK HDFC Bank Credit Card"
+  },
+  {
+    "bank": "HDFC Bank",
+    "bank_type": "private",
+    "card_name": "IndianOil HDFC Bank Credit Card",
+    "network": "RuPay",
+    "category": "fuel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹50,000 or more in the preceding year",
+    "reward_rate": "5% value back (Fuel Points) on spends at IndianOil outlets, groceries and bill payments; 1 Fuel Point per ₹150 on other purchases including UPI spends",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "Welcome voucher worth ₹250"
+    ],
+    "milestone_benefits": [
+      "Fuel vouchers and bonus points on reaching annual spend milestones"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at IndianOil outlets",
+    "merchant_bonus_categories": ["indianoil_fuel", "groceries", "bill_payments", "upi"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed; entry-level fuel co-brand card.",
+    "source_urls": [
+      "https://cardinsider.com/hdfc-bank/",
+      "https://www.hdfc.bank.in/credit-cards"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "ICICI Bank",
+    "bank_type": "private",
+    "card_name": "Amazon Pay ICICI Bank Credit Card",
+    "network": "Visa",
+    "category": "co_brand",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": null,
+    "reward_rate": "5% cashback on Amazon.in purchases for Amazon Prime members; 3% cashback on Amazon.in purchases for non-Prime members; 2% cashback on 100+ partner merchants via Amazon Pay; 1% cashback on all other spends (excluding fuel)",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "Cashback/discount benefits up to ₹2,500 on card activation and initial spends",
+      "One month complimentary EazyDiner Prime membership"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": ["amazon", "amazon_pay_partners"],
+    "eligibility_notes": "Lifetime free card; must have an Amazon.in account; standard ICICI Bank credit card income norms apply (not separately published).",
+    "source_urls": [
+      "https://cardinsider.com/icici-bank/",
+      "https://www.icici.bank.in/personal-banking/cards/credit-card"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "ICICI Bank",
+    "bank_type": "private",
+    "card_name": "ICICI Bank Platinum Chip Credit Card",
+    "network": "Visa",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": null,
+    "reward_rate": "2 Reward Points per ₹100 on retail spends (fuel excluded)",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions at IOCL outlets, standard terms",
+    "merchant_bonus_categories": ["dining", "movies", "retail"],
+    "eligibility_notes": "Age 21-65; minimum income ~₹20,000/month (salaried) or ~₹2.5 lakh/year reported by aggregators (not independently confirmed on icici.bank.in in this research pass).",
+    "source_urls": [
+      "https://www.icici.bank.in/personal-banking/cards/credit-card/platinum-chip-credit-card",
+      "https://www.paisabazaar.com/icici-bank/icici-platinum-chip-visa-credit-cards/",
+      "https://www.bankbazaar.com/credit-card/icici-bank-platinum-chip-visa-credit-card.html"
+    ],
+    "last_verified_note": "Verified via icici.bank.in and paisabazaar.com (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "ICICI Bank",
+    "bank_type": "private",
+    "card_name": "ICICI Bank Coral Credit Card",
+    "network": "Mastercard",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹50,000 or more in the preceding year",
+    "reward_rate": "1 Reward Point per ₹100 (0.25%) on utility and insurance spends; 2 Reward Points per ₹100 (0.5%) on all other eligible spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": "1 complimentary domestic lounge visit per quarter, conditional on ₹75,000+ spend in the preceding quarter",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between ₹400-₹4,000",
+    "merchant_bonus_categories": ["movies", "dining"],
+    "eligibility_notes": "Entry-level Gemstone series card; specific income floor not published in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/icici-bank/",
+      "https://www.icici.bank.in/personal-banking/cards/credit-card"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "ICICI Bank",
+    "bank_type": "private",
+    "card_name": "ICICI Bank Rubyx Credit Card",
+    "network": "Mastercard/American Express",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 3000,
+    "annual_fee_inr": 2000,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹3,00,000 or more in the preceding year",
+    "reward_rate": "4 Reward Points per ₹100 (≈1%) on international spends; 2 Reward Points per ₹100 (≈0.5%) on domestic spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "TataCliQ, EaseMyTrip and Croma vouchers",
+      "Complimentary EazyDiner Prime membership"
+    ],
+    "milestone_benefits": [
+      "3,000 Reward Points on spending ₹3 lakh, plus 1,500 Reward Points for every additional ₹1 lakh spent, up to 15,000 bonus points per anniversary year"
+    ],
+    "lounge_access": "Complimentary domestic airport lounge access (limited visits per quarter)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between ₹400-₹4,000",
+    "merchant_bonus_categories": ["travel", "shopping", "golf", "dining"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed; upper-mid income segment card.",
+    "source_urls": [
+      "https://cardinsider.com/icici-bank/",
+      "https://www.paisabazaar.com/icici-bank/icici-bank-rubyx-visa-credit-card/",
+      "https://cardinsider.com/icici-bank/icici-bank-rubyx-credit-card/"
+    ],
+    "last_verified_note": "Verified via cardinsider.com and paisabazaar.com (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "ICICI Bank",
+    "bank_type": "private",
+    "card_name": "ICICI Bank Sapphiro Credit Card",
+    "network": "Mastercard/American Express",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 6500,
+    "annual_fee_inr": 3500,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹6,00,000 or more in the preceding year",
+    "reward_rate": "4 Reward Points per ₹100 (≈1%) spent abroad; 2 Reward Points per ₹100 (≈0.5%) spent domestically",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "Exclusive travel and shopping vouchers worth more than ₹13,000",
+      "Complimentary DreamFolks DragonPass programme membership"
+    ],
+    "milestone_benefits": [
+      "4,000 Reward Points on spending ₹4 lakh, plus 2,000 Reward Points for every additional ₹1 lakh spent, up to 20,000 bonus points per anniversary year"
+    ],
+    "lounge_access": "4 complimentary domestic lounge visits per quarter; 2 complimentary international lounge visits per year",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between ₹400-₹4,000",
+    "merchant_bonus_categories": ["travel", "shopping", "golf", "dining", "bookmyshow", "inox"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed; premium/upper-income segment card.",
+    "source_urls": [
+      "https://cardinsider.com/icici-bank/",
+      "https://www.icici.bank.in/personal-banking/cards/credit-card/sapphiro-card",
+      "https://www.paisabazaar.com/icici-bank/icici-bank-sapphiro-visa-credit-card/"
+    ],
+    "last_verified_note": "Verified via icici.bank.in and paisabazaar.com (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "ICICI Bank",
+    "bank_type": "private",
+    "card_name": "ICICI Bank Emeralde Private Metal Credit Card",
+    "network": "Mastercard World Elite/American Express",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 12499,
+    "annual_fee_inr": 12499,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹10,00,000 or more in the preceding year (monthly-billing variant waived on ₹1,00,000+ monthly spend)",
+    "reward_rate": "6 Reward Points per ₹200 (≈3%) on all transactions except fuel, utilities and insurance; 1 Reward Point per ₹100 on insurance and utilities; redeemable 1:1, i.e. 1 Reward Point = ₹1",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "Complimentary Taj Epicure and EazyDiner Prime memberships",
+      "12,500 bonus Reward Points"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": "Unlimited complimentary domestic and international airport lounge access (primary and add-on/Plus cardholders) via Priority Pass",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, standard terms",
+    "merchant_bonus_categories": ["movies", "travel", "shopping", "dining"],
+    "eligibility_notes": "Super-premium invite-leaning card; specific income floor not published in sources reviewed.",
+    "source_urls": [
+      "https://www.icici.bank.in/personal-banking/cards/credit-card/emeralde-private-metal-credit-card",
+      "https://www.paisabazaar.com/icici-bank/emeralde-private-metal-credit-card/",
+      "https://cardinsider.com/icici-bank/icici-bank-emeralde-private-metal-credit-card/"
+    ],
+    "last_verified_note": "Verified via icici.bank.in and paisabazaar.com (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "ICICI Bank",
+    "bank_type": "private",
+    "card_name": "ICICI Bank HPCL Super Saver Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "fuel",
+    "is_cashback_card": true,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹1,50,000 or more in the preceding year",
+    "reward_rate": "4% cashback on fuel spends at HPCL pumps; 5% value back (Reward Points) on departmental store and utility spends; 2 Reward Points per ₹100 on all other domestic and international spends",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "2,000 bonus Reward Points on spending ₹5,000 within 45 days of card issuance",
+      "₹100 fuel cashback on activation"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": "Limited complimentary domestic lounge access (spend-conditional)",
+    "fuel_surcharge_waiver": "4% cashback at HPCL pumps functions in lieu of surcharge; 1% fuel surcharge waiver elsewhere",
+    "merchant_bonus_categories": ["hpcl_fuel", "departmental_stores", "utilities"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/icici-bank/",
+      "https://www.icici.bank.in/personal-banking/cards/credit-card"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "ICICI Bank",
+    "bank_type": "private",
+    "card_name": "MakeMyTrip ICICI Bank Signature Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "travel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 999,
+    "annual_fee_inr": 999,
+    "fee_waiver_condition": null,
+    "reward_rate": "6 myCash per ₹200 (≈3%) on hotel spends; 3 myCash per ₹200 (≈1.5%) on flight, bus and cab bookings; 1 myCash per ₹200 (≈0.5%) on other spends; 1 myCash = ₹1 redeemable on MakeMyTrip",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "₹1,000 MakeMyTrip voucher",
+      "Complimentary MMTBLACK Gold tier membership"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": ["makemytrip", "hotels", "flights", "cabs", "bus_bookings"],
+    "eligibility_notes": "Joining-fee-only model with no separate published annual renewal waiver condition in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/icici-bank/",
+      "https://www.icici.bank.in/personal-banking/cards/credit-card"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "Axis Bank",
+    "bank_type": "private",
+    "card_name": "Axis Bank ACE Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 499,
+    "annual_fee_inr": 499,
+    "fee_waiver_condition": "Annual fee waived on spends greater than ₹2,00,000 in the preceding year; joining fee reversed on spending ₹10,000 within first 45 days",
+    "reward_rate": "5% cashback on bill payments and mobile recharges via Google Pay; 4% cashback on Swiggy, Ola and Zomato (capped at ₹500/month); 2% cashback on all other spends",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [],
+    "milestone_benefits": [
+      "Accelerated reward bonuses on dining, groceries and utility bill categories at spend thresholds (offer-cycle dependent)"
+    ],
+    "lounge_access": "Complimentary domestic airport lounge access (spend-conditional, limited visits)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, capped at ₹500/month, on fuel transactions between ₹400-₹4,000",
+    "merchant_bonus_categories": ["google_pay", "utility_bills", "mobile_recharge", "swiggy", "zomato", "ola"],
+    "eligibility_notes": "Income eligibility not explicitly published in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/axis-bank/",
+      "https://www.paisabazaar.com/axis-bank/ace-credit-card/",
+      "https://select.finology.in/credit-card/axis-bank-ace-credit-card"
+    ],
+    "last_verified_note": "Verified via cardinsider.com and paisabazaar.com (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "Axis Bank",
+    "bank_type": "private",
+    "card_name": "Flipkart Axis Bank Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "co_brand",
+    "is_cashback_card": true,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹3,50,000 or more in the preceding year",
+    "reward_rate": "5% cashback on Flipkart and Cleartrip; 7.5% cashback on Myntra; 4% cashback on preferred partners (Swiggy, Uber, PVR, FitPass and Stoga by FitPass); 1% cashback on all other spends",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "₹250 Flipkart voucher",
+      "₹100 Swiggy discount"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": "Complimentary domestic airport lounge access (limited visits, spend-conditional)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between ₹400-₹4,000",
+    "merchant_bonus_categories": ["flipkart", "myntra", "cleartrip", "swiggy", "uber", "pvr", "fitpass"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/axis-bank/"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "Axis Bank",
+    "bank_type": "private",
+    "card_name": "Axis Bank Atlas Credit Card",
+    "network": "Visa Signature",
+    "category": "travel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 5000,
+    "annual_fee_inr": 5000,
+    "fee_waiver_condition": "No standard spend-based renewal waiver publicly listed; fee applies each year",
+    "reward_rate": "5 EDGE Miles per ₹100 (≈5%) on travel EDGE, airline and hotel merchant spends up to ₹2,00,000/month cumulative; 2 EDGE Miles per ₹100 (≈2%) on travel-category spends above that threshold and on most other eligible spends",
+    "reward_point_value_est_inr": 1.5,
+    "welcome_benefits": [],
+    "milestone_benefits": [
+      "2,500 EDGE Miles at ₹3 lakh annual spend",
+      "2,500 EDGE Miles at ₹7.5 lakh annual spend",
+      "5,000 EDGE Miles at ₹15 lakh annual spend"
+    ],
+    "lounge_access": "Complimentary domestic and international airport lounge access for primary cardholder (visit count tier-dependent)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between ₹400-₹4,000",
+    "merchant_bonus_categories": ["travel_edge", "airlines", "hotels"],
+    "eligibility_notes": "Salaried: minimum annual income ₹12 lakh. Self-employed: minimum annual income ₹15 lakh. Age 18-70.",
+    "source_urls": [
+      "https://www.paisabazaar.com/axis-bank/atlas-credit-card/",
+      "https://www.axis.bank.in/cards/credit-card/axis-bank-atlas-credit-card",
+      "https://www.axis.bank.in/cards/credit-card/axis-bank-atlas-credit-card/rewards-benefits"
+    ],
+    "last_verified_note": "Verified via axis.bank.in and paisabazaar.com (search-synthesized), Aug 2026; EDGE Miles transfer to airline/hotel partners at 1:2 ratio assumed for value estimate"
+  },
+  {
+    "bank": "Axis Bank",
+    "bank_type": "private",
+    "card_name": "Axis Bank Magnus Credit Card",
+    "network": "Visa Infinite/Mastercard World Elite",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 12500,
+    "annual_fee_inr": 12500,
+    "fee_waiver_condition": "Annual/joining fee waived for Burgundy Salary Account holders; renewal fee waived on spending ₹15,00,000+ in the preceding year for others",
+    "reward_rate": "12 EDGE Reward Points per ₹200 (≈1.2% base, higher at best redemption) on spends up to ₹1.5 lakh/calendar month; 35 EDGE Reward Points per ₹200 thereafter in the same month",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "Choice of gift voucher worth ₹12,500 from Luxe, Yatra or Postcard Hotels"
+    ],
+    "milestone_benefits": [
+      "Additional EDGE Points at defined higher annual spend tiers (relationship-dependent)"
+    ],
+    "lounge_access": "Unlimited complimentary domestic and international airport lounge access for primary and add-on cardholders",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, standard terms",
+    "merchant_bonus_categories": ["dining", "eazydiner", "travel", "shopping"],
+    "eligibility_notes": "Premium/super-premium segment; Burgundy Salary Account holders get automatic fee waiver. Specific income floor not independently confirmed in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/axis-bank/"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "Axis Bank",
+    "bank_type": "private",
+    "card_name": "Airtel Axis Bank Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "co_brand",
+    "is_cashback_card": true,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Not explicitly specified in sources reviewed",
+    "reward_rate": "25% cashback on Airtel recharges/bill payments via Airtel Thanks App (capped at 2x base cashback in same statement month); 10% cashback on utility bill payments (capped at base cashback per month); 10% value back on Zomato, Blinkit and District (up to ₹200 per partner per month); 1% cashback on all other spends",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "Amazon voucher worth ₹250"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, standard terms",
+    "merchant_bonus_categories": ["airtel_recharge", "airtel_bills", "utility_bills", "zomato", "blinkit", "district"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/axis-bank/"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "Axis Bank",
+    "bank_type": "private",
+    "card_name": "IndianOil Axis Bank RuPay Credit Card",
+    "network": "RuPay",
+    "category": "fuel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Not explicitly specified in sources reviewed",
+    "reward_rate": "20 Reward Points per ₹100 (≈4% at best value) on fuel transactions at IOCL stations; 5 Reward Points per ₹100 (≈1%) on online shopping; 1 EDGE Point per ₹100 (≈0.2%) on all other spends",
+    "reward_point_value_est_inr": 0.2,
+    "welcome_benefits": [
+      "1,250 EDGE Reward Points (worth ≈₹250) on card issuance"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at IOCL outlets (RuPay/UPI enabled)",
+    "merchant_bonus_categories": ["indianoil_fuel", "online_shopping"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed; entry-level fuel co-brand card.",
+    "source_urls": [
+      "https://cardinsider.com/axis-bank/"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "Axis Bank",
+    "bank_type": "private",
+    "card_name": "Axis Bank My Zone Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "lifestyle",
+    "is_cashback_card": false,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Occasionally waived via promotional offers; not a standard published spend-based waiver",
+    "reward_rate": "4 EDGE Points per ₹200 spent (≈0.4%)",
+    "reward_point_value_est_inr": 0.2,
+    "welcome_benefits": [
+      "Free SonyLIV subscription worth ₹1,499"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": "1 complimentary domestic lounge visit per quarter, subject to minimum spend",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, standard terms",
+    "merchant_bonus_categories": ["movies", "bookmyshow", "district", "dining", "shopping"],
+    "eligibility_notes": "Entry-level lifestyle card; income eligibility not explicitly published in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/axis-bank/"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  },
+  {
+    "bank": "Kotak Mahindra Bank",
+    "bank_type": "private",
+    "card_name": "Kotak 811 #DreamDifferent Credit Card",
+    "network": "Visa",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": null,
+    "reward_rate": "4 Reward Points per ₹100 (≈1% at conservative valuation) on online spends; 1 Reward Point per ₹100 (≈0.25%) on other spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "500 bonus Reward Points on card issuance"
+    ],
+    "milestone_benefits": [
+      "₹750 cashback and 4 PVR movie tickets on ₹75,000 annual spend"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver; railway surcharge waiver",
+    "merchant_bonus_categories": ["online_shopping"],
+    "eligibility_notes": "Secured card issued against a fixed deposit of ₹10,000 or more with Kotak Mahindra Bank; no income proof required; age 18-75.",
+    "source_urls": [
+      "https://cardinsider.com/kotak/kotak-811-dreamdifferent-credit-card/",
+      "https://www.kotak.bank.in/en/personal-banking/cards/credit-cards/811-dream-different-credit-card/milestone-program.html",
+      "https://www.bankbazaar.com/credit-card/kotak-811-dream-different-credit-card.html"
+    ],
+    "last_verified_note": "Verified via kotak.bank.in and cardinsider.com (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "Kotak Mahindra Bank",
+    "bank_type": "private",
+    "card_name": "Kotak League Platinum Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free card; no annual fee to waive (spend of ₹50,000 keeps certain benefits active per some aggregators)",
+    "reward_rate": "8 Reward Points per ₹150 (≈1.1%) on special bonus categories up to ₹2 lakh spend; 4 Reward Points per ₹150 (≈0.5%) on other eligible spends",
+    "reward_point_value_est_inr": 0.2,
+    "welcome_benefits": [
+      "5,000 Reward Points (worth ≈₹500) on joining",
+      "Movie voucher worth ₹500"
+    ],
+    "milestone_benefits": [
+      "4 free PVR movie tickets or 10,000 Reward Points on spending ₹1,25,000 every 6 months"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver; railway surcharge waiver",
+    "merchant_bonus_categories": ["movies", "pvr", "shopping"],
+    "eligibility_notes": "Age 21-60 (primary), 18+ (add-on). Minimum annual income ₹5 lakh. Available in select serviceable cities (Delhi NCR, Mumbai, Pune, Bangalore, Chennai, Hyderabad, Kolkata, Chandigarh, Ahmedabad and more).",
+    "source_urls": [
+      "https://www.paisabazaar.com/kotak-mahindra-bank/league-platinum-credit-card/",
+      "https://cardinsider.com/kotak/kotak-league-platinum-credit-card/",
+      "https://www.kotak.bank.in/en/personal-banking/cards/credit-cards/league-platinum-card.html"
+    ],
+    "last_verified_note": "Verified via kotak.bank.in and paisabazaar.com (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "Kotak Mahindra Bank",
+    "bank_type": "private",
+    "card_name": "Kotak Cashback+ Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 750,
+    "fee_waiver_condition": "Limited-time joining fee waiver reported; annual fee waiver condition not explicitly published in sources reviewed",
+    "reward_rate": "5% cashback on online food, grocery and entertainment spends; 3% cashback on fuel spends; base cashback rate on other spends not fully detailed in sources reviewed",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, standard terms",
+    "merchant_bonus_categories": ["online_food_delivery", "grocery", "entertainment", "fuel"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/kotak/"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026; some fields (base spend rate, fee waiver) could not be fully cross-checked against kotak.bank.in in this pass"
+  },
+  {
+    "bank": "Kotak Mahindra Bank",
+    "bank_type": "private",
+    "card_name": "Kotak Royale Signature Credit Card",
+    "network": "Mastercard",
+    "category": "travel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 999,
+    "fee_waiver_condition": "Annual fee waived on annual retail spends of ₹1,00,000 (first and second year)",
+    "reward_rate": "4 Reward Points per ₹150 (2X, ≈0.9-1.5% at best value) on hotels, airlines, restaurants, travel agencies, tour operators and international spends; 2 Reward Points per ₹150 (base, ≈0.6%) on other categories",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": "Up to 8 complimentary domestic lounge visits per year (capped at 2/quarter), conditional on ₹75,000+ spend in the preceding quarter",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, standard terms",
+    "merchant_bonus_categories": ["hotels", "airlines", "restaurants", "travel_agencies", "international_spends"],
+    "eligibility_notes": "Free variant only; paid premium variant of this card was discontinued after May 30, 2019 per aggregator reporting. 3.5% forex markup.",
+    "source_urls": [
+      "https://www.paisabazaar.com/kotak-mahindra-bank/royale-signature-credit-card/",
+      "https://www.cardexpert.in/kotak-royale-signature-credit-card-review/",
+      "https://www.kotak.bank.in/en/personal-banking/cards/credit-cards/royale-signature-credit-card.html"
+    ],
+    "last_verified_note": "Verified via kotak.bank.in and paisabazaar.com/cardexpert.in (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "Kotak Mahindra Bank",
+    "bank_type": "private",
+    "card_name": "Kotak White Credit Card",
+    "network": "Visa",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 3000,
+    "annual_fee_inr": 3000,
+    "fee_waiver_condition": "Annual fee waived on spends of ₹5,00,000 or more in the preceding year",
+    "reward_rate": "White Pass value earned on reaching spend-based milestones, capped at ₹27,000/year; not a flat per-spend point rate",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "₹1,500 voucher on spending ₹30,000 within 60 days of card issuance"
+    ],
+    "milestone_benefits": [
+      "White Pass value credited progressively at defined spend milestones through the year (up to ₹27,000 total)"
+    ],
+    "lounge_access": "Complimentary Priority Pass (4 free international visits/year, USD 35 thereafter); 8 complimentary domestic lounge visits/year (2/quarter)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between ₹500-₹3,000; railway surcharge waiver (1.8-2.5%)",
+    "merchant_bonus_categories": ["shopping", "travel"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed; premium segment card.",
+    "source_urls": [
+      "https://www.paisabazaar.com/kotak-mahindra-bank/kotak-white-credit-card/",
+      "https://cardinsider.com/kotak/kotak-white-credit-card/",
+      "https://www.kotak.bank.in/en/personal-banking/cards/credit-cards/white-credit-card/lounge-program.html"
+    ],
+    "last_verified_note": "Verified via kotak.bank.in and paisabazaar.com (search-synthesized), Aug 2026"
+  },
+  {
+    "bank": "Kotak Mahindra Bank",
+    "bank_type": "private",
+    "card_name": "Kotak White Reserve Credit Card",
+    "network": "Visa Infinite",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 12500,
+    "annual_fee_inr": 12500,
+    "fee_waiver_condition": "Waived at ₹3,00,000+ spend milestones per aggregator reporting; exact renewal-year waiver threshold not fully confirmed in sources reviewed",
+    "reward_rate": "White Pass value earned progressively at ₹3 lakh+ spend milestones; not a flat per-spend point rate",
+    "reward_point_value_est_inr": 1,
+    "welcome_benefits": [
+      "Complimentary Club Marriott membership"
+    ],
+    "milestone_benefits": [
+      "White Pass value credited at successive spend milestones starting ₹3 lakh"
+    ],
+    "lounge_access": "Unlimited/extended domestic and international lounge access via Priority Pass (higher tier than standard Kotak White)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, standard terms",
+    "merchant_bonus_categories": ["shopping", "travel", "dining"],
+    "eligibility_notes": "Super-premium segment; specific income floor not confirmed in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/kotak/",
+      "https://www.knowyourfinance.org/cards/card/kotak-white-reserve"
+    ],
+    "last_verified_note": "Verified via cardinsider.com and knowyourfinance.org (search-synthesized), Aug 2026; several fields could not be fully cross-checked against kotak.bank.in"
+  },
+  {
+    "bank": "Kotak Mahindra Bank",
+    "bank_type": "private",
+    "card_name": "IndiGo Kotak Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "co_brand",
+    "is_cashback_card": false,
+    "joining_fee_inr": 1500,
+    "annual_fee_inr": 1500,
+    "fee_waiver_condition": "Not explicitly specified in sources reviewed",
+    "reward_rate": "5 IndiGo BluChips per ₹100 (≈5% at BluChip face value) spent on IndiGo",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "2,500 IndiGo BluChips voucher on joining"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver, standard terms",
+    "merchant_bonus_categories": ["indigo_flights"],
+    "eligibility_notes": "Not explicitly detailed in sources reviewed.",
+    "source_urls": [
+      "https://cardinsider.com/kotak/"
+    ],
+    "last_verified_note": "Verified via cardinsider.com, Aug 2026"
+  }
+]

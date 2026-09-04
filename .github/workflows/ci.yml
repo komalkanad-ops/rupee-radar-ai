@@ -1,0 +1,99 @@
+name: CI
+
+# Safety net, not a deploy pipeline — deploy stays the manual git-subtree / static-import flow
+# (see README). Gates every PR + every commit on main with typecheck + tests + build for the three
+# surfaces this repo owns: the API and the two static sites.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**/*.md", "**/*.apk"]
+  pull_request:
+    paths-ignore: ["**/*.md", "**/*.apk"]
+
+# A PR branch that gets several quick pushes shouldn't stack up N full CI runs — keep only the
+# newest per ref. main is exempt (every commit there deserves its own recorded run).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: rupee_radar_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/rupee_radar_test
+      JWT_SECRET: ci-test-secret-not-for-production
+      # Every admin-gated test's adminToken() helper silently `return`s if login fails (see e.g.
+      # test/featureFlags.test.ts) — without these two vars plus test/globalSetup.ts bootstrapping
+      # the matching AdminUser row before the suite runs, every admin-gated test in this repo would
+      # silently no-op on this fresh CI database and CI would stay green while covering nothing.
+      ADMIN_BOOTSTRAP_EMAIL: admin@rupeeradarai.com
+      ADMIN_BOOTSTRAP_PASSWORD: ci-test-admin-password
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npx prisma generate
+      # Real integration test of the migration history itself — builds the whole schema from
+      # scratch against a fresh database, the same way a brand-new environment would.
+      - run: npx prisma migrate deploy
+      - run: npx tsc --noEmit
+      - run: npm test
+
+  admin-console:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: admin-console
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: admin-console/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+      # tsc --noEmit alone wouldn't catch a real Vite-specific build failure (e.g. an asset/import
+      # resolution issue) — the actual `npm run build` (tsc -b && vite build) is what deploys, so
+      # that's what CI should verify.
+      - run: npm run build
+
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+

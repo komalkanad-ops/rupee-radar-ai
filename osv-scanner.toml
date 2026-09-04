@@ -1,0 +1,54 @@
+# OSV-Scanner config for the weekly security scan (.github/workflows/security-scan.yml).
+# Only genuinely-not-applicable findings are ignored here, each with a reason and a review date.
+# Everything else surfaces on the scan and should be fixed or explicitly added here after triage.
+
+# ── Build-tool dev-server CVEs — not shipped to any user ─────────────────────────────
+# vite / esbuild only run on a developer's machine (`npm run dev`). The vulnerabilities are all
+# "a malicious website can talk to your local dev server" — irrelevant to the built static bundles
+# that actually go to rupeeradarai.com / admin.rupeeradarai.com. Real fix = vite 8 (breaking);
+# deferred with the rest of the toolchain upgrade.
+[[IgnoredVulns]]
+id = "GHSA-fx2h-pf6j-xcff" # vite dev server
+reason = "Dev-server only; not in the shipped static build. Fix needs vite 8 (breaking)."
+ignoreUntil = 2026-12-31
+
+[[IgnoredVulns]]
+id = "GHSA-4w7w-66w2-5vf9" # vite dev server
+reason = "Dev-server only; not in the shipped static build."
+ignoreUntil = 2026-12-31
+
+[[IgnoredVulns]]
+id = "GHSA-v6wh-96g9-6wx3" # vite dev server
+reason = "Dev-server only; not in the shipped static build."
+ignoreUntil = 2026-12-31
+
+[[IgnoredVulns]]
+id = "GHSA-67mh-4wv8-2f99" # esbuild dev server (transitive via vite)
+reason = "Dev-server only; not in the shipped static build. Resolved when vite is upgraded."
+ignoreUntil = 2026-12-31
+
+# ── react-router 6 → 7 (web + admin-console) — scheduled upgrade ─────────────────────
+# GHSA-337j (SSR hydration RCE) does not apply: both apps are pure client-side SPAs, no
+# server-side rendering / no `deserializeErrors`. GHSA-wrjc (open redirect via backslash in
+# <Link>/useNavigate) is real but low impact here — neither app takes a user-controlled redirect
+# target. Fix = react-router 7 (import path + merged package changes across ~45 files); time-boxed
+# so the scan re-surfaces it if the upgrade slips.
+[[IgnoredVulns]]
+id = "GHSA-337j-9hxr-rhxg"
+reason = "SPA-only, no SSR — advisory needs server-side hydration. Upgrade to react-router 7 scheduled."
+ignoreUntil = 2026-10-15
+
+[[IgnoredVulns]]
+id = "GHSA-wrjc-x8rr-h8h6"
+reason = "Open redirect — neither app passes a user-controlled redirect target. Upgrade to react-router 7 scheduled."
+ignoreUntil = 2026-10-15
+
+# ── uuid 9 (backend, transitive) ───────────────────────────────────────────────────
+# Pulled in only by firebase-admin > @google-cloud/storage > gaxios/teeny-request, which this
+# backend never exercises (firebase-admin is used for auth-token verification + FCM, not GCS
+# uploads). Forcing uuid 11 via `overrides` risks breaking gaxios (declares uuid ^9). Clears when
+# firebase-admin bumps its transitive uuid.
+[[IgnoredVulns]]
+id = "GHSA-w5hq-g745-h8pq"
+reason = "Transitive via firebase-admin's GCS layer, an unused code path. overrides→uuid@11 risks breaking gaxios."
+ignoreUntil = 2026-12-31

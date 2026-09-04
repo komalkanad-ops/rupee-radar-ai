@@ -1,0 +1,26 @@
+<IfModule mod_mime.c>
+  AddType application/vnd.android.package-archive .apk
+</IfModule>
+
+# Force the APK to download rather than render, and don't let a stale copy be cached for long.
+<FilesMatch "\.apk$">
+  <IfModule mod_headers.c>
+    Header set Content-Disposition "attachment"
+    Header set Cache-Control "public, max-age=300"
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  # Never rewrite an .apk request to the SPA's index.html. Without this exclusion, a request that
+  # lands in the brief window after a deploy but before the new versioned APK file has been copied
+  # to the origin gets served index.html (HTTP 200, text/html) — and Hostinger's hcdn then caches
+  # that HTML against the .apk URL at the edge, so users download a renamed .html until a manual
+  # cache purge. A real 404 here is an honest failure the CDN won't cache the same way.
+  RewriteCond %{REQUEST_URI} !\.apk$ [NC]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>

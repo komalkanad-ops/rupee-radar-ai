@@ -1,0 +1,688 @@
+[
+  {
+    "bank": "Bank of Baroda",
+    "bank_type": "psu",
+    "card_name": "BoB Premier Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 1000,
+    "annual_fee_inr": 1000,
+    "fee_waiver_condition": "Annual spend of INR 1,20,000 or more in the previous card anniversary year; joining fee waived on spend of INR 10,000 within first 60 days",
+    "reward_rate": "5X reward points on travel, dining and international spends; base rate approx 1 point per INR 100 on other spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "500 bonus reward points on spends of INR 5,000 or more within 60 days of card issuance"
+    ],
+    "milestone_benefits": [
+      "Joining fee waived on spend of INR 10,000 in first 60 days",
+      "Annual fee waived on spend of INR 1,20,000 in card anniversary year"
+    ],
+    "lounge_access": "1 complimentary domestic airport lounge visit per quarter, subject to quarterly spend of INR 20,000 in the previous quarter; access to 35+ lounges across 22 Indian cities",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at all fuel stations in India (transaction value between INR 400-5000)",
+    "merchant_bonus_categories": ["Travel", "Dining", "International spends"],
+    "eligibility_notes": "Salaried and self-employed Indian residents; typically requires minimum income around INR 3-6 lakh p.a. depending on variant; age 21-65",
+    "source_urls": [
+      "https://www.paisabazaar.com/bank-of-baroda/premier-credit-card/",
+      "https://www.bobcard.co.in/credit-card-types/premier",
+      "https://bankofbaroda.bank.in/personal-banking/digital-products/cards/credit-cards/premier"
+    ],
+    "last_verified_note": "Fee/reward details cross-checked via Paisabazaar and BOBCARD official page, Aug 2026; some pages (Paisabazaar) dated 2023 so figures may have shifted slightly."
+  },
+  {
+    "bank": "Bank of Baroda",
+    "bank_type": "psu",
+    "card_name": "BOBCARD Eterna Credit Card",
+    "network": "Visa",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 2499,
+    "annual_fee_inr": 2499,
+    "fee_waiver_condition": "Joining fee waived on spend of INR 25,000 within first 60 days; annual fee waived on spend of INR 2.5 lakh or more in a year",
+    "reward_rate": "15 reward points per INR 100 on online, travel, dining and movie spends; 3 points per INR 100 on other spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "10,000 bonus reward points on spend of INR 50,000 within 60 days of card issuance"
+    ],
+    "milestone_benefits": [
+      "20,000 bonus reward points on crossing INR 5 lakh spend within a year"
+    ],
+    "lounge_access": "Unlimited complimentary domestic airport lounge access",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at all fuel stations in India",
+    "merchant_bonus_categories": ["Online shopping", "Travel", "Dining", "Movies"],
+    "eligibility_notes": "Premium variant, higher income eligibility (approx INR 10 lakh+ p.a. typically required); forex markup 2%",
+    "source_urls": [
+      "https://www.cardexpert.in/bank-of-baroda-eterna-credit-card-review/",
+      "https://cardinsider.com/bank-of-baroda/bank-of-baroda-eterna-credit-card/",
+      "https://www.bobcard.co.in/credit-card-types/eterna"
+    ],
+    "last_verified_note": "Verified via CardExpert review and BOBCARD official page, Aug 2026."
+  },
+  {
+    "bank": "Bank of Baroda",
+    "bank_type": "psu",
+    "card_name": "Bank of Baroda Select Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 750,
+    "annual_fee_inr": 750,
+    "fee_waiver_condition": "Fee waived on annual spend of INR 70,000 or more",
+    "reward_rate": "Approx 1-4.5 reward points per INR 100 depending on spend category (varies by variant)",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": "Limited complimentary domestic lounge access (quarterly, spend-linked)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at select fuel stations",
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "Entry to mid-tier BoB card; specific eligibility not fully confirmed from live sources, treat figures as indicative",
+    "source_urls": [
+      "https://www.fincash.com/l/pf/bank-of-baroda-credit-card",
+      "https://www.paisabazaar.com/bobcard/credit-card-fees-charges/"
+    ],
+    "last_verified_note": "Could not find a current dedicated official BoB Select landing page during this research pass; details compiled from aggregator summaries only, so treat reward-rate figure as low-confidence and re-verify before shipping."
+  },
+  {
+    "bank": "Punjab National Bank",
+    "bank_type": "psu",
+    "card_name": "PNB RuPay Select Credit Card",
+    "network": "RuPay",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 750,
+    "fee_waiver_condition": "Annual fee waived with a minimum of one retail transaction every quarter",
+    "reward_rate": "2 reward points per INR 150 spent (1 Reward Point = INR 0.25)",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "300 bonus reward points as welcome benefit"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": "Complimentary domestic and international lounge access (RuPay Select tier benefit)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at fuel stations across India",
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "Salaried/self-employed Indian resident; RuPay network required for UPI-linked credit card usage",
+    "source_urls": [
+      "https://cardinsider.com/punjab-national-bank/pnb-rupay-select-credit-card/",
+      "https://www.paisabazaar.com/punjab-national-bank/pnb-rupay-select-credit-card/"
+    ],
+    "last_verified_note": "Verified via Cardinsider and Paisabazaar, Paisabazaar page dated 04 July 2026."
+  },
+  {
+    "bank": "Punjab National Bank",
+    "bank_type": "psu",
+    "card_name": "PNB RuPay Platinum Credit Card",
+    "network": "RuPay",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 500,
+    "fee_waiver_condition": "Annual fee waived with at least one transaction every quarter",
+    "reward_rate": "1 reward point per INR 100 spent; 50 extra points for E-bill registration",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "50 bonus reward points on registering for e-bill facility"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions between INR 400-5000",
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "Entry-level lifetime-free-eligible RuPay card; no joining fee",
+    "source_urls": [
+      "https://www.bankbazaar.com/credit-card/pnb-rupay-platinum-credit-card.html",
+      "https://cardinsider.com/punjab-national-bank/pnb-rupay-platinum-credit-card/"
+    ],
+    "last_verified_note": "Verified via BankBazaar and Cardinsider, Aug 2026."
+  },
+  {
+    "bank": "Punjab National Bank",
+    "bank_type": "psu",
+    "card_name": "PNB Patanjali RuPay Select Credit Card",
+    "network": "RuPay",
+    "category": "co_brand",
+    "is_cashback_card": false,
+    "joining_fee_inr": 500,
+    "annual_fee_inr": 750,
+    "fee_waiver_condition": "Annual fee waived with at least one transaction per quarter",
+    "reward_rate": "Standard PNB RuPay Select reward rate plus flat INR 50 cashback per INR 2,500 spent at Patanjali",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "Access to 300+ merchant offers"
+    ],
+    "milestone_benefits": [
+      "5-7% cashback at Patanjali Ayurved for Swadeshi Samridhi Card holders recharging via this card"
+    ],
+    "lounge_access": "Complimentary domestic and international lounge access (Select tier)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver",
+    "merchant_bonus_categories": ["Patanjali Ayurved retail"],
+    "eligibility_notes": "Co-branded with Patanjali; otherwise same eligibility as PNB RuPay Select",
+    "source_urls": [
+      "https://www.paisabazaar.com/punjab-national-bank/patanjali-credit-cards/",
+      "https://cardinsider.com/punjab-national-bank/pnb-rupay-select-patanjali-credit-card/"
+    ],
+    "last_verified_note": "Verified via Paisabazaar and Cardinsider, Aug 2026; Patanjali-specific cashback terms should be reconfirmed at time of launch in-product."
+  },
+  {
+    "bank": "Canara Bank",
+    "bank_type": "psu",
+    "card_name": "Canara Bank RuPay Select Credit Card",
+    "network": "RuPay",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free, no joining or annual fee",
+    "reward_rate": "2 reward points per INR 100 spent (1 Reward Point = INR 0.25); no rewards on cash withdrawals, balance transfer, forex or fee/interest transactions",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": "Complimentary domestic lounge access across the country",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at fuel stations",
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "Credit limit up to INR 25 lakh; up to 4 free add-on cards; interest-free period 20-50 days",
+    "source_urls": [
+      "https://www.paisabazaar.com/canara-bank/rupay-select-credit-card/",
+      "https://www.canarabank.bank.in/pages/rupay-select-credit-card"
+    ],
+    "last_verified_note": "Verified via Paisabazaar (dated 30 May 2026) and Canara Bank official page."
+  },
+  {
+    "bank": "Canara Bank",
+    "bank_type": "psu",
+    "card_name": "Canara Bank Visa Classic Credit Card",
+    "network": "Visa",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free",
+    "reward_rate": "2 reward points per INR 100 on PoS and e-commerce spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on fuel transactions",
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "Entry-level lifetime-free card; up to 50 days interest-free credit",
+    "source_urls": [
+      "https://www.paisabazaar.com/canara-bank/visa-credit-cards/",
+      "https://www.wishfin.com/credit-cards/canara-bank"
+    ],
+    "last_verified_note": "Verified via Paisabazaar and Wishfin, Aug 2026."
+  },
+  {
+    "bank": "Canara Bank",
+    "bank_type": "psu",
+    "card_name": "Canara Bank Visa Platinum Credit Card",
+    "network": "Visa",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free, no joining or annual fee",
+    "reward_rate": "2 reward points per INR 100 on PoS and e-commerce spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": "Complimentary domestic airport lounge access, twice per quarter",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver",
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "Baggage insurance cover up to INR 25,000; fraud protection cover up to INR 5 lakh",
+    "source_urls": [
+      "https://cardinsider.com/canara-bank/canara-bank-visa-platinum-credit-card/",
+      "https://piceapp.com/blogs/canara-bank-credit-card-lounge-access/"
+    ],
+    "last_verified_note": "Verified via Cardinsider and Pice, Aug 2026; note Canara RuPay Platinum variant (different from Visa Platinum) reportedly has no lounge access per Pice."
+  },
+  {
+    "bank": "American Express",
+    "bank_type": "foreign",
+    "card_name": "American Express Platinum Travel Credit Card",
+    "network": "American Express",
+    "category": "travel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 5000,
+    "annual_fee_inr": 5000,
+    "fee_waiver_condition": "No standard spend-based waiver; flat fee every year",
+    "reward_rate": "1 Membership Rewards point per INR 50 spent",
+    "reward_point_value_est_inr": 0.5,
+    "welcome_benefits": [
+      "10,000-15,000 bonus Membership Rewards points on meeting minimum spend within 90 days (varies by promo)",
+      "Taj Epicure / EazyDiner Prime style dining privileges"
+    ],
+    "milestone_benefits": [
+      "Bonus travel vouchers on annual spend milestones (varies by year's promotion)"
+    ],
+    "lounge_access": "Complimentary domestic lounge access via Priority Pass / Amex lounge program (limited visits per year)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at HPCL outlets",
+    "merchant_bonus_categories": ["Taj Hotels", "Dining via EazyDiner"],
+    "eligibility_notes": "Premium travel-focused Amex card; income eligibility typically INR 6 lakh+ p.a.",
+    "source_urls": [
+      "https://www.americanexpress.com/in/credit-cards/platinum-travel-credit-card/",
+      "https://www.americanexpress.com/in/benefits/platinum-travel-credit-card/"
+    ],
+    "last_verified_note": "Fee confirmed on official Amex India page, Aug 2026; exact current welcome-bonus point count not independently confirmed this pass, flagged as approximate."
+  },
+  {
+    "bank": "American Express",
+    "bank_type": "foreign",
+    "card_name": "American Express SmartEarn Credit Card",
+    "network": "American Express",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 495,
+    "annual_fee_inr": 495,
+    "fee_waiver_condition": "100% annual fee waiver if spend in preceding card year is INR 40,000 or more",
+    "reward_rate": "Accelerated Membership Rewards points on Amazon, Flipkart, Uber, BookMyShow, Zomato, EaseMyTrip and similar partner merchants; base rate lower on other spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "Bonus points/vouchers on early spend milestones (varies by promo)"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at HPCL outlets",
+    "merchant_bonus_categories": ["Amazon", "Flipkart", "Uber", "BookMyShow", "Zomato", "EaseMyTrip"],
+    "eligibility_notes": "Entry-level Amex card, lower income eligibility than Platinum Travel/Reserve",
+    "source_urls": [
+      "https://www.americanexpress.com/in/credit-cards/smart-earn-credit-card/"
+    ],
+    "last_verified_note": "Verified via official Amex India SmartEarn page, Aug 2026."
+  },
+  {
+    "bank": "American Express",
+    "bank_type": "foreign",
+    "card_name": "American Express Membership Rewards Credit Card",
+    "network": "American Express",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 1000,
+    "annual_fee_inr": 4500,
+    "fee_waiver_condition": "Renewal fee waived on annual spend of INR 1,50,000 or more in preceding year",
+    "reward_rate": "1 Membership Rewards point per INR 50 spent (excludes fuel, insurance, utilities, cash, EMI conversions); bonus 1,000 points for 4 transactions of INR 1,500+ in a month, plus 1,000 more on INR 20,000+ monthly spend",
+    "reward_point_value_est_inr": 0.4,
+    "welcome_benefits": [
+      "4,000 bonus Membership Rewards points on paying joining fee and spending INR 15,000 within 90 days"
+    ],
+    "milestone_benefits": [
+      "5,000 Membership Rewards points one-time bonus on first renewal"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at HPCL outlets",
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "Mid-tier Amex card designed as an everyday rewards accumulator; MR points never expire while card is active",
+    "source_urls": [
+      "https://cardinsider.com/american-express/american-express-membership-rewards-credit-card/",
+      "https://www.americanexpress.com/in/benefits/membership-rewards-card/"
+    ],
+    "last_verified_note": "Verified via Cardinsider and Amex official benefits page, Aug 2026."
+  },
+  {
+    "bank": "American Express",
+    "bank_type": "foreign",
+    "card_name": "American Express Gold Charge Card",
+    "network": "American Express",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 1000,
+    "annual_fee_inr": 4500,
+    "fee_waiver_condition": "No standard waiver; charge card with no preset spending limit, balance due in full monthly",
+    "reward_rate": "1 Membership Rewards point per INR 50 spent (excludes insurance, cash transactions); 1,000 bonus points for six transactions of INR 1,000+ in a month",
+    "reward_point_value_est_inr": 0.4,
+    "welcome_benefits": [
+      "4,000 bonus points on paying first-year fee and spending INR 10,000 within 90 days of activation"
+    ],
+    "milestone_benefits": [
+      "1,000 bonus points for 6 transactions of INR 1,000+ in a month"
+    ],
+    "lounge_access": "Limited complimentary lounge access via Amex/Priority Pass program",
+    "fuel_surcharge_waiver": "Fuel surcharge waived at HPCL fuel stations",
+    "merchant_bonus_categories": ["Hilton", "InterContinental", "Hyatt (room upgrade + USD 100 hotel credit on 2-night stays at 400+ hotels)"],
+    "eligibility_notes": "Charge card (not a revolving credit card); requires strong income/credit profile",
+    "source_urls": [
+      "https://www.cardexpert.in/amex-gold-charge-card-review/",
+      "https://www.americanexpress.com/in/charge-cards/gold-card/"
+    ],
+    "last_verified_note": "Verified via CardExpert and Amex official page, Aug 2026."
+  },
+  {
+    "bank": "American Express",
+    "bank_type": "foreign",
+    "card_name": "American Express Platinum Reserve Credit Card",
+    "network": "American Express",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 10000,
+    "annual_fee_inr": 10000,
+    "fee_waiver_condition": "No standard spend-based waiver on this super-premium card",
+    "reward_rate": "Standard Membership Rewards accrual plus enhanced rate on select categories (exact base rate not separately confirmed this pass)",
+    "reward_point_value_est_inr": 0.5,
+    "welcome_benefits": [
+      "11,000 Membership Rewards points on spend of INR 30,000 within 90 days or upon payment of first-year fee"
+    ],
+    "milestone_benefits": [
+      "Voucher worth INR 1,000 from partner brands on reaching INR 50,000 spend in a calendar month"
+    ],
+    "lounge_access": "12 domestic and 2 international complimentary lounge visits per year; complimentary Priority Pass membership (USD 99 value, 1,400+ lounges in 100+ countries)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver at HPCL outlets",
+    "merchant_bonus_categories": ["Accor+ Explorer", "Taj Epicure", "EazyDiner Prime", "Golf privileges"],
+    "eligibility_notes": "Amex's top-tier India card; high income eligibility (typically INR 25 lakh+ p.a. or equivalent)",
+    "source_urls": [
+      "https://www.cardexpert.in/american-express-reserve-credit-card-review/",
+      "https://www.americanexpress.com/in/benefits/platinum-reserve-card/"
+    ],
+    "last_verified_note": "Verified via CardExpert and Amex official page, Aug 2026."
+  },
+  {
+    "bank": "HSBC",
+    "bank_type": "foreign",
+    "card_name": "HSBC TravelOne Credit Card",
+    "network": "Visa",
+    "category": "travel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 4999,
+    "annual_fee_inr": 4999,
+    "fee_waiver_condition": "Fee waiver details tied to annual spend threshold; not fully confirmed this pass",
+    "reward_rate": "4 reward points per INR 100 on travel platforms, flights and international transactions; 2 reward points per INR 100 on other eligible spends",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "INR 1,000 cashback",
+      "INR 3,000 postcard hotel voucher",
+      "EazyDiner Prime membership on spend of INR 10,000 within 30 days",
+      "3,000 bonus reward points on first INR 1,00,000 spend within 90 days"
+    ],
+    "milestone_benefits": [
+      "Milestone benefit lifts effective reward rate from 2% to 2.8% (5% for Accor bookings) per CardExpert analysis"
+    ],
+    "lounge_access": "6 domestic and 4 international lounge visits per year, plus golf and lifestyle privileges",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver (standard HSBC terms)",
+    "merchant_bonus_categories": ["Accor hotels", "Travel booking platforms"],
+    "eligibility_notes": "Premium travel card; high income eligibility, invite-only or select-city availability common for HSBC premium cards",
+    "source_urls": [
+      "https://www.cardexpert.in/hsbc-travelone-credit-card-india-review/",
+      "https://cardinsider.com/hsbc-bank/hsbc-travelone-credit-card/"
+    ],
+    "last_verified_note": "Verified via CardExpert and Cardinsider, Aug 2026 (both 2026-dated reviews)."
+  },
+  {
+    "bank": "HSBC",
+    "bank_type": "foreign",
+    "card_name": "HSBC Live+ Credit Card",
+    "network": "Visa Infinite",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 999,
+    "annual_fee_inr": 999,
+    "fee_waiver_condition": "Fee reversed once yearly spend crosses INR 2 lakh",
+    "reward_rate": "10% cashback on dining, food delivery, grocery, shopping and utility spends (capped at INR 1,200/month); 1.5% unlimited cashback on other eligible spends",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [
+      "INR 1,000 cashback for new applicants (Jul-Dec 2026 promo window) on completing INR 25,000 eligible spend within 30 days of card issuance, after HSBC app login"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": "2 complimentary domestic lounge visits/year (max 1 per 6 months); 1 complimentary international lounge visit/year via Visa Airport Companion",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver",
+    "merchant_bonus_categories": ["Dining", "Food delivery", "Grocery", "Shopping", "Utilities"],
+    "eligibility_notes": "Cashback stated directly as INR value, i.e. cashback card not points card",
+    "source_urls": [
+      "https://cardinsider.com/hsbc-bank/hsbc-cashback-credit-card/",
+      "https://www.hsbc.co.in/credit-cards/products/live-plus/",
+      "https://cardmaven.in/hsbc-live-plus-credit-card-review/"
+    ],
+    "last_verified_note": "Verified via HSBC official page and Cardmaven 2026 review; welcome offer dates (Jul-Dec 2026) are promo-specific and will change."
+  },
+  {
+    "bank": "HSBC",
+    "bank_type": "foreign",
+    "card_name": "HSBC RuPay Cashback Credit Card",
+    "network": "RuPay",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 499,
+    "fee_waiver_condition": "Fee waived on annual spend over INR 2 lakh",
+    "reward_rate": "10% cashback on dining, food delivery and grocery (capped at INR 400/statement cycle); 1% cashback on other eligible spends (also capped at INR 400/cycle)",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [
+      "INR 500 cashback on HSBC app login and INR 10,000 spend within 30 days",
+      "INR 250 Amazon eGift voucher on applying online with video verification"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": "Complimentary domestic and international airport lounge access, no spend criteria",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver",
+    "merchant_bonus_categories": ["Dining", "Food delivery", "Grocery"],
+    "eligibility_notes": "Minimum income requirement approx INR 6 lakh p.a. for salaried applicants; UPI-linked via RuPay network; 2-month EazyDiner Prime membership on activation",
+    "source_urls": [
+      "https://www.paisabazaar.com/hsbc-bank/rupay-cashback-credit-card/",
+      "https://cardinsider.com/hsbc-bank/hsbc-rupay-cashback-credit-card/"
+    ],
+    "last_verified_note": "Verified via Paisabazaar (dated 16 August 2026, i.e. same-day) and Cardinsider."
+  },
+  {
+    "bank": "HSBC",
+    "bank_type": "foreign",
+    "card_name": "HSBC Visa Platinum Credit Card",
+    "network": "Visa",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free, no joining or annual fee",
+    "reward_rate": "2 reward points per INR 150 spent; 5X accelerated points (up to 15,000/year) on crossing INR 4 lakh annual spend",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [
+      "2,000 reward points on HSBC app login and INR 5,000 spend within 30 days",
+      "Complimentary 3-month Swiggy One membership on activation"
+    ],
+    "milestone_benefits": [
+      "5X reward points (up to 15,000 bonus points/year) on annual spend of INR 4 lakh+"
+    ],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "Fuel surcharge waiver up to INR 3,000 savings on fuel transactions",
+    "merchant_bonus_categories": ["Air miles conversion with British Airways, Air India, Etihad, Singapore Airlines"],
+    "eligibility_notes": "Income eligibility approx INR 6 lakh p.a.; forex markup 3.5%; available in select major cities only",
+    "source_urls": [
+      "https://cardinsider.com/hsbc-bank/hsbc-visa-platinum-credit-card/",
+      "https://www.hsbc.co.in/credit-cards/products/visa-platinum/"
+    ],
+    "last_verified_note": "Verified via Cardinsider and HSBC official page, Aug 2026."
+  },
+  {
+    "bank": "Standard Chartered",
+    "bank_type": "foreign",
+    "card_name": "Standard Chartered Ultimate Credit Card",
+    "network": "Visa",
+    "category": "premium",
+    "is_cashback_card": false,
+    "joining_fee_inr": 5000,
+    "annual_fee_inr": 5000,
+    "fee_waiver_condition": "No standard spend-based waiver confirmed; flat premium fee",
+    "reward_rate": "5 reward points per INR 150 spent (approx 3.33% reward rate); 1 Reward Point = INR 1",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": "Complimentary Priority Pass membership with free domestic and international lounge access",
+    "fuel_surcharge_waiver": "Fuel surcharge waiver applicable per standard SC terms",
+    "merchant_bonus_categories": ["Duty-free purchases (5% cashback)", "Golf (12 complimentary rounds/year at premier courses)"],
+    "eligibility_notes": "Forex markup 2% (lower than typical 3.5%); premium high-income card",
+    "source_urls": [
+      "https://www.paisabazaar.com/standard-chartered-bank/ultimate-credit-card/",
+      "https://www.cardexpert.in/standard-chartered-ultimate-review/"
+    ],
+    "last_verified_note": "Verified via Paisabazaar (dated 16 August 2026) and CardExpert."
+  },
+  {
+    "bank": "Standard Chartered",
+    "bank_type": "foreign",
+    "card_name": "Standard Chartered EaseMyTrip Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "travel",
+    "is_cashback_card": false,
+    "joining_fee_inr": 350,
+    "annual_fee_inr": 350,
+    "fee_waiver_condition": "Annual fee waived on spend of INR 50,000 or more in the year",
+    "reward_rate": "2 reward points per INR 100 on EaseMyTrip bookings and other retail spends; 10X points per INR 100 on standalone hotel/airline website/app bookings; 2 points = INR 0.50",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver (standard SC terms)",
+    "merchant_bonus_categories": ["EaseMyTrip bookings", "Standalone hotel/airline sites"],
+    "eligibility_notes": "Co-branded travel card; INR 99 redemption fee applies when redeeming points; points expire in 2 years",
+    "source_urls": [
+      "https://www.paisabazaar.com/standard-chartered-bank/easemytrip-credit-card/",
+      "https://cardinsider.com/standard-chartered/standard-chartered-easemytrip-credit-card/"
+    ],
+    "last_verified_note": "Verified via Paisabazaar (dated 08 August 2026) and Cardinsider."
+  },
+  {
+    "bank": "Standard Chartered",
+    "bank_type": "foreign",
+    "card_name": "Standard Chartered Rewards Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 1000,
+    "fee_waiver_condition": "Renewal fee waived on spend of INR 3 lakh or more in previous anniversary year",
+    "reward_rate": "4 reward points per INR 150 on retail spends; additional 4X points on retail spends after crossing INR 20,000 monthly spend (capped at 2,000 bonus points/month)",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [
+      "Additional 4X reward points on retail spend after INR 20,000 monthly spend milestone, capped at 2,000 bonus points/month"
+    ],
+    "lounge_access": "1 complimentary domestic airport lounge access per quarter",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver on transactions INR 400-2,000, capped at INR 400/month",
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "No joining fee; mid-tier mass-market rewards card",
+    "source_urls": [
+      "https://cardinsider.com/standard-chartered/standard-chartered-rewards-credit-card/",
+      "https://www.paisabazaar.com/standard-chartered-bank/standard-chartered-rewards-credit-card/"
+    ],
+    "last_verified_note": "Verified via Cardinsider and Paisabazaar (dated 22 July 2026)."
+  },
+  {
+    "bank": "Standard Chartered",
+    "bank_type": "foreign",
+    "card_name": "Standard Chartered Platinum Rewards Credit Card",
+    "network": "Visa/Mastercard",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 250,
+    "annual_fee_inr": 250,
+    "fee_waiver_condition": "Lifetime free if spend of INR 500 within first 30 days of card issuance",
+    "reward_rate": "5 reward points per INR 150 on dining and fuel (approx 3.3% rate, no monthly cap); 1 reward point per INR 150 on other spends; 1 RP = INR 0.25",
+    "reward_point_value_est_inr": 0.25,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": "Fuel surcharge waiver on standard terms",
+    "merchant_bonus_categories": ["Dining", "Fuel"],
+    "eligibility_notes": "Entry-level SC card; lifetime free supplementary cards for family; EMI conversion up to INR 5 lakh with zero processing fee",
+    "source_urls": [
+      "https://cardinsider.com/standard-chartered/standard-chartered-platinum-rewards-credit-card/",
+      "https://www.sc.com/in/credit-cards/platinum-rewards/"
+    ],
+    "last_verified_note": "Verified via Cardinsider and SC official page, Aug 2026."
+  },
+  {
+    "bank": "OneCard",
+    "bank_type": "nbfc",
+    "card_name": "OneCard Metal Credit Card",
+    "network": "Visa/RuPay (varies by issuing bank partner)",
+    "category": "rewards",
+    "is_cashback_card": false,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free, no joining or annual fee",
+    "reward_rate": "1 reward point per INR 50 spent; 5X reward points on the top 2 spend categories each month; fractional point earning below INR 150",
+    "reward_point_value_est_inr": 0.1,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": "Limited/no complimentary lounge access on base variant (varies by issuing partner bank)",
+    "fuel_surcharge_waiver": "1% fuel surcharge waiver (varies by partner bank)",
+    "merchant_bonus_categories": ["Top 2 monthly spend categories (auto-detected, 5X bonus)"],
+    "eligibility_notes": "Issued by FPL Technologies Pvt Ltd in partnership with banking partners including Federal Bank, BOBCARD, CSB Bank, Indian Bank, SBM Bank and South Indian Bank; fully app-managed onboarding and servicing; reward points redeemable for instant statement credit at approx INR 0.10/point (0.2%-1% effective reward rate)",
+    "source_urls": [
+      "https://www.cardexpert.in/onecard-review/",
+      "https://cardinsider.com/fintech-cards/onecard-credit-card/",
+      "https://www.paisabazaar.com/federal-bank/onecard-credit-card/"
+    ],
+    "last_verified_note": "Verified via CardExpert, Cardinsider and Paisabazaar (dated 12 August 2026); note actual issuing bank varies per applicant based on FPL Technologies' risk assessment/partner allocation."
+  },
+  {
+    "bank": "Slice",
+    "bank_type": "nbfc",
+    "card_name": "Slice Super Card (Slice UPI Credit Card)",
+    "network": "RuPay",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free, no joining or annual fee",
+    "reward_rate": "2% flat cashback on all spends including UPI transactions; up to 3% for top-tier users meeting spend and Slice Savings Account quarterly-average-balance conditions",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": ["Rotating weekly 'Slice Spark' partner-brand offers"],
+    "eligibility_notes": "Issued by Slice Small Finance Bank (formerly via North East Small Finance Bank tie-up before Slice received its own SFB license); UPI-linked RuPay credit card; no foreign currency conversion fee; 'Slice in 3' 0%-interest EMI split on purchases of INR 1,999+; card replacement fee INR 300+GST",
+    "source_urls": [
+      "https://www.credyfi.com/blog/slice-credit-card-review-2026-is-the-upi-cashback-card-still-worth-it-honest-verdict",
+      "https://faayda.com/cards/slice-upi",
+      "https://slice.bank.in/credit-card"
+    ],
+    "last_verified_note": "Verified via multiple 2026-dated reviews (Credyfi, Faayda) and Slice's own site; note the 'up to 3% cashback' tier is reported by reviewers as not consistently achievable for most users."
+  },
+  {
+    "bank": "Uni Cards",
+    "bank_type": "nbfc",
+    "card_name": "Uni Pay 1/3rd Card",
+    "network": "Visa/RuPay",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free, no joining or annual fee",
+    "reward_rate": "1% cashback on all spends when paid in full; no rewards earned if spend is converted to the 3-month EMI ('Pay 1/3rd') option",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": [],
+    "eligibility_notes": "Core product is a BNPL-style 'split into 3 free EMIs' feature (also offers 6/9/12/18-month paid EMI conversion); reviewers note comparatively high late fees; 1% reward rate is considered low versus peers",
+    "source_urls": [
+      "https://www.cardexpert.in/uni-card-review/",
+      "https://bankkaro.com/blog/uni-card-review/3936/"
+    ],
+    "last_verified_note": "Verified via CardExpert and BankKaro, Aug 2026."
+  },
+  {
+    "bank": "LazyPay",
+    "bank_type": "nbfc",
+    "card_name": "LazyPay Credit Card (LazyCard)",
+    "network": "RuPay/Visa (partner-bank dependent)",
+    "category": "cashback",
+    "is_cashback_card": true,
+    "joining_fee_inr": 0,
+    "annual_fee_inr": 0,
+    "fee_waiver_condition": "Lifetime free, no joining or annual fee",
+    "reward_rate": "Up to 5% cashback on select categories; lower flat rate on general spends; no confirmed upper cap on cashback per most recent reviews",
+    "reward_point_value_est_inr": 1.0,
+    "welcome_benefits": [
+      "INR 500 cashback on first transaction with the card"
+    ],
+    "milestone_benefits": [],
+    "lounge_access": null,
+    "fuel_surcharge_waiver": null,
+    "merchant_bonus_categories": ["Select partner categories (exact list not confirmed this pass)"],
+    "eligibility_notes": "Digital-first, app-managed card by LazyPay (PayU group); requires applicant to already be an existing credit card user in some review sources; instant approval, virtual card issued immediately; interest rates noted as steep by reviewers",
+    "source_urls": [
+      "https://cardreview.in/lazypay-credit-card-review/",
+      "https://bankkaro.com/blog/lazypay-bnpl-review/3946/",
+      "https://www.bankbazaar.com/credit-card/lazypay-lazy-credit-card.html"
+    ],
+    "last_verified_note": "Lowest-confidence entry in this dataset — exact issuing bank partner and full cashback category list could not be confirmed from a live official LazyPay source this pass; recommend re-verification before shipping."
+  }
+]

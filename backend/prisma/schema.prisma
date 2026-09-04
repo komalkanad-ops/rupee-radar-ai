@@ -1,0 +1,1308 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum BankType {
+  PRIVATE
+  PSU
+  FOREIGN
+  NBFC
+  FINTECH
+}
+
+enum CardCategory {
+  REWARDS
+  CASHBACK
+  TRAVEL
+  FUEL
+  LIFESTYLE
+  PREMIUM
+  BUSINESS
+  CO_BRAND
+}
+
+enum CorrectionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum RecurringType {
+  SUBSCRIPTION
+  LOAN
+  EMI
+  SIP
+  CREDIT_CARD_BILL
+  OTHER
+}
+
+enum LoanType {
+  HOME
+  CAR
+  PERSONAL
+  COMMERCIAL
+  EDUCATION
+  OTHER
+}
+
+enum ChallengeType {
+  NO_SPEND_WEEKEND
+  SAVE_AMOUNT
+  CUSTOM
+}
+
+enum UserChallengeStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+}
+
+model Bank {
+  id      String       @id @default(cuid())
+  name    String       @unique
+  type    BankType
+  logoUrl String?
+  cards   CreditCard[]
+}
+
+model CreditCard {
+  id                      String           @id @default(cuid())
+  bankId                  String
+  bank                    Bank             @relation(fields: [bankId], references: [id])
+  name                    String
+  network                 String
+  category                CardCategory
+  isCashbackCard          Boolean          @default(false)
+  joiningFeeInr           Int              @default(0)
+  annualFeeInr            Int              @default(0)
+  feeWaiverCondition      String?
+  rewardSpendPerPoint     String?
+  rewardPointValueEstInr  Float?
+  welcomeBenefits         Json?
+  milestoneBenefits       Json?
+  loungeAccess            String?
+  fuelSurchargeWaiver     String?
+  merchantBonusCategories Json?
+  eligibilityNotes        String?
+  applyUrl                String?
+  sourceUrls              Json?
+  lastVerifiedAt          DateTime?
+  corrections             CardCorrection[]
+  changeLogs              CardChangeLog[]
+  walletEntries           UserCreditCard[]
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+
+  @@index([bankId])
+  @@index([category])
+}
+
+// Audit trail — one row per field changed whenever an admin approves a correction, so users can
+// see a card's history ("joining fee increased from ₹500 to ₹1,000 in Jan 2026") instead of only
+// the current snapshot.
+model CardChangeLog {
+  id            String     @id @default(cuid())
+  cardId        String
+  card          CreditCard @relation(fields: [cardId], references: [id])
+  field         String
+  previousValue String?
+  newValue      String
+  changedAt     DateTime   @default(now())
+
+  @@index([cardId, changedAt])
+}
+
+model RedemptionPortal {
+  id                  String  @id @default(cuid())
+  name                String
+  url                 String
+  notes               String?
+  applicableBankNames Json?
+}
+
+model CardCorrection {
+  id                String           @id @default(cuid())
+  cardId            String
+  card              CreditCard       @relation(fields: [cardId], references: [id])
+  submittedByUserId String?
+  field             String
+  proposedValue     String
+  note              String?
+  status            CorrectionStatus @default(PENDING)
+  llmDiffSummary    String?
+  createdAt         DateTime         @default(now())
+  reviewedAt        DateTime?
+}
+
+model User {
+  id                   String                @id @default(cuid())
+  email                String?               @unique
+  phone                String?               @unique
+  name                 String?
+  photoUrl             String?
+  // "google" | "phone_firebase" | "phone_custom" | "anonymous" — anonymous covers the
+  // debug/skip-login path and pre-auth installs that never linked a real identity.
+  authProvider         String?
+  firebaseUid          String?               @unique
+  lastLoginAt          DateTime?
+  city                 String? // peer benchmarking + settable from Profile
+  incomeBracket        String? // peer benchmarking + settable from Profile
+  salaryDayOfMonth     Int? // predictive cash-flow calendar
+  // Self-reported, settable from the phone-login profile-completion form (Google sign-in already
+  // supplies name/email from the ID token, so it never needs this form) or from Settings.
+  gender               String?
+  // "SALARIED" | "BUSINESS" | "CREATOR" | "OTHER" — set in onboarding / Profile, drives
+  // persona-aware labels (salary vs revenue vs avg income), the net-worth runway framing, and
+  // which services are hidden. Defaults to SALARIED so pre-persona rows behave as before.
+  persona              String                @default("SALARIED")
+  // The user's own full reordering of every service/screen (an array of Screen.<X>.route keys,
+  // JSON-encoded) — overrides FeatureFlag.order's admin-set default once present. Null means "use
+  // the admin default," not "empty list."
+  serviceOrderJson     String?
+  // At most 4 route keys (JSON-encoded array) — the user's chosen Dashboard "quick actions" row,
+  // overriding the app's hardcoded default 4 once present. Same null-means-unset convention.
+  quickActionRoutesJson String?
+  referralCode         String?               @unique // generated lazily on first GET /referrals/me
+  createdAt            DateTime              @default(now())
+  devices              Device[]
+  smsTransactions      SmsTransaction[]
+  recurringPayments    RecurringPayment[]
+  netWorthSnapshots    NetWorthSnapshot[]
+  proEntitlement       ProEntitlement?
+  healthScoreSnapshots HealthScoreSnapshot[]
+  walletCards          UserCreditCard[]
+  challenges           UserChallenge[]
+  badges               UserBadge[]
+  householdMemberships HouseholdMember[]
+  coinLedgerEntries    CoinLedgerEntry[]
+  voucherRedemptions   VoucherRedemption[]
+  referralsMade        ReferralConversion[]  @relation("Referrer")
+  referralReceived     ReferralConversion?   @relation("Referred")
+  bankLinks            BankLink[]
+  creditScoreSnapshots CreditScoreSnapshot[]
+  billPayments         BillPayment[]
+  lentMoneyEntries     LentMoney[]
+  todoItems            TodoItem[]
+  loans                Loan[]
+  parkingTickets       ParkingTicket[]
+  productRecords       ProductRecord[]
+  wishlistItems        WishlistItem[]
+  feedback             Feedback[]
+  savingsInstruments   SavingsInstrument[]
+  chatUsage            ChatUsage?
+  merchantCategoryOverrides MerchantCategoryOverride[]
+  featureUsageEvents        FeatureUsageEvent[]
+  bugReports                BugReport[]
+  budgets                   Budget[]
+  goals                     Goal[]
+  investments               Investment[]
+}
+
+// User-set monthly spend limit per category — replaces the trailing-3-month average that
+// insights/budget-status and the health score's budget-adherence factor fall back to when no
+// Budget row exists for a category.
+model Budget {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  category       String
+  monthlyLimitInr Float
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([userId, category])
+  @@index([userId])
+}
+
+// A savings goal with a target amount + date (house, car, retirement corpus, …) — distinct from the
+// single-item WishlistItem: Goals are the planner (required monthly contribution, on-track / behind).
+model Goal {
+  id                     String    @id @default(cuid())
+  userId                 String
+  user                   User      @relation(fields: [userId], references: [id])
+  name                   String
+  kind                   String    @default("GENERAL") // GENERAL|HOUSE|CAR|EDUCATION|RETIREMENT|TRAVEL|EMERGENCY
+  targetAmountInr        Float
+  currentAmountInr       Float     @default(0)
+  targetDate             DateTime
+  monthlyContributionInr Float?
+  active                 Boolean   @default(true)
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+// A single manual-entry investment holding surfaced on the Financial Review screen (Mutual Funds /
+// Stocks / FD / Other). Purely user-maintained — no live valuation — mirroring the Goal/WishlistItem
+// backend-synced-cache pattern. `returnPct` is optional; when both `currentValueInr` and
+// `investedInr` are present the client can also derive it.
+model Investment {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  kind            String   @default("MUTUAL_FUND") // MUTUAL_FUND|STOCKS|FD|OTHER
+  label           String
+  investedInr     Float
+  currentValueInr Float?
+  returnPct       Float?
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// Admin-managed challenge catalog (e.g. "No-spend weekend", "Save ₹5k this month"). targetAmount is
+// only meaningful for SAVE_AMOUNT; NO_SPEND_WEEKEND checks zero non-essential spend across the
+// window instead.
+model Challenge {
+  id             String          @id @default(cuid())
+  key            String          @unique
+  title          String
+  description    String
+  type           ChallengeType
+  targetAmount   Float?
+  durationDays   Int
+  active         Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  userChallenges UserChallenge[]
+}
+
+model UserChallenge {
+  id           String              @id @default(cuid())
+  userId       String
+  user         User                @relation(fields: [userId], references: [id])
+  challengeId  String
+  challenge    Challenge           @relation(fields: [challengeId], references: [id])
+  startedAt    DateTime            @default(now())
+  endsAt       DateTime
+  status       UserChallengeStatus @default(ACTIVE)
+  progressJson Json?
+
+  @@index([userId, status])
+}
+
+model Badge {
+  id         String      @id @default(cuid())
+  key        String      @unique
+  title      String
+  iconKey    String
+  userBadges UserBadge[]
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  badgeId  String
+  badge    Badge    @relation(fields: [badgeId], references: [id])
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+}
+
+// A user's self-reported "cards I actually hold" list — distinct from the local-only Android
+// bookmark/favorite concept (browsing interest, not ownership). "Usage" here is a self-reported
+// check-in (lastConfirmedUsedAt), not derived from transaction data — this schema has no
+// per-transaction card attribution to compute real usage from.
+model UserCreditCard {
+  id                     String        @id @default(cuid())
+  userId                 String
+  user                   User          @relation(fields: [userId], references: [id])
+  cardId                 String
+  card                   CreditCard    @relation(fields: [cardId], references: [id])
+  acquiredAt             DateTime?
+  lastConfirmedUsedAt    DateTime?
+  status                 String        @default("ACTIVE") // ACTIVE | CLOSED
+  createdAt              DateTime      @default(now())
+  // Self-reported — no per-transaction card attribution exists in this schema to derive real
+  // outstanding balance/limit automatically, same limitation lastConfirmedUsedAt already lives with.
+  creditLimitInr         Int?
+  currentOutstandingInr  Int?
+  loungeVisits           LoungeVisit[]
+  // Reward Expiry Alerts — self-reported same as the two fields above, since no card-issuer API
+  // exists anywhere in this stack to pull a real points balance/expiry.
+  rewardPointsBalance    Int?
+  rewardPointsExpiryDate DateTime?
+
+  @@index([userId])
+}
+
+// Self-reported lounge-visit check-ins (append-only log, count computed on read per calendar
+// quarter) — mirrors CoinLedgerEntry's "don't denormalize a running total" pattern.
+model LoungeVisit {
+  id               String         @id @default(cuid())
+  userCreditCardId String
+  userCreditCard   UserCreditCard @relation(fields: [userCreditCardId], references: [id])
+  visitedAt        DateTime       @default(now())
+
+  @@index([userCreditCardId])
+}
+
+model Device {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  deviceIdentifier String   @unique
+  platform         String   @default("android")
+  pushToken        String?
+  digestOptIn      Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  // Reported by the app on every /push/register (i.e. every launch) so the admin App Adoption
+  // page can show the live version spread of installed devices. Null for rows created before
+  // this was added / by a client that doesn't send it.
+  appVersionCode   Int?
+  appVersionName   String?
+  // Hardware/OS identity, reported alongside the version fields on every /push/register so the
+  // admin User Activity page can show "which device is this person on". Null for rows created
+  // before this was added / by a client that predates it.
+  deviceModel        String?
+  deviceManufacturer String?
+  osVersion          String?
+  lastSeenAt       DateTime @default(now()) @updatedAt
+}
+
+model ProEntitlement {
+  id                String    @id @default(cuid())
+  userId            String    @unique
+  user              User      @relation(fields: [userId], references: [id])
+  playPurchaseToken String?
+  productId         String?
+  expiryAt          DateTime?
+  verifiedAt        DateTime?
+  status            String    @default("inactive")
+}
+
+// Tracks the AI chat assistant's free-tier lifetime message cap (3 messages, ever — not per day
+// or per session) — a real AI call costs real mesh-api tokens, so free users get a small taste
+// rather than unlimited access. Counted for PRO users too (useful for usage analytics later) but
+// only enforced against non-PRO users; see chatRouter.ts.
+model ChatUsage {
+  userId       String   @id
+  user         User     @relation(fields: [userId], references: [id])
+  messageCount Int      @default(0)
+  updatedAt    DateTime @updatedAt
+}
+
+model SmsTransaction {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  rawSmsHash      String
+  bankSender      String?
+  amount          Float
+  merchant        String?
+  category        String?
+  // "card" | "upi" | "bank_transfer" | "wallet" | null — inferred from which SMS regex rule
+  // matched (smsRules.ts channel field), not from merchant text. Null for anything parsed via the
+  // LLM fallback (mesh-api doesn't return a channel) or synced before this field existed — same
+  // "can't retroactively fix without raw SMS" limitation already accepted for category backfills.
+  paymentMethod   String?
+  parsedVia       String   @default("regex")
+  txnDate         DateTime
+  createdAt       DateTime @default(now())
+  // "80C" | "80D" | null — auto-matched by merchant keyword (tax nudges feature), user-overridable.
+  taxSection      String?
+  // The bank's own "Available Balance" figure, when the SMS states one (see smsRules.ts's
+  // extractAvailableBalance) — null for messages that don't include this phrasing, or anything
+  // synced before this field existed (same "can't retroactively fix without raw SMS" limitation as
+  // paymentMethod above). Powers the per-bank current-balance view.
+  balanceAfterTxn Float?
+  // Best-effort UPI app name ("Paytm" | "PhonePe" | "Google Pay" | "Amazon Pay" | "Jupiter" | ...),
+  // when the SMS's payee VPA handle maps to a known PSP (see smsRules.ts's extractPaymentApp) —
+  // null when the channel isn't UPI, the SMS doesn't include a VPA, or the handle isn't recognized.
+  // The UI falls back to showing the reliable `paymentMethod` channel label in that case.
+  paymentApp      String?
+
+  @@unique([userId, rawSmsHash])
+  @@index([userId, txnDate])
+}
+
+model RecurringPayment {
+  id           String                @id @default(cuid())
+  userId       String
+  user         User                  @relation(fields: [userId], references: [id])
+  type         RecurringType
+  name         String
+  amount       Float
+  frequency    String
+  nextDueDate  DateTime?
+  linkedCardId String?
+  autoDetected Boolean               @default(false)
+  active       Boolean               @default(true)
+  // Self-reported usage tag for SUBSCRIPTION-type rows (no real per-service usage telemetry exists
+  // to derive this automatically) — drives the "flag for cancellation" heuristic in the cancel
+  // assistant. Null until the user tags it.
+  usageTag     String?
+  providerId   String?
+  provider     SubscriptionProvider? @relation(fields: [providerId], references: [id])
+  createdAt    DateTime              @default(now())
+  billPayments BillPayment[]
+  // EMI-review workflow (autoDetected rows only). detectedCount/firstDetectedAt accumulate across
+  // repeated SMS for the same lender so the "convert to loan" form can prefill a real start date
+  // and show "seen N payments since …". dismissedAt tombstones a false positive so the next SMS
+  // scan's upsert skips re-creating it. convertedLoanId is set when the row is promoted to a real
+  // Loan (row also goes active=false so it stops counting in the dues projection).
+  detectedCount   Int       @default(1)
+  firstDetectedAt DateTime?
+  dismissedAt     DateTime?
+  convertedLoanId String?
+}
+
+// One-off action items — reimbursement claims to raise, a pending bill to pay, or any other
+// finance-adjacent to-do — distinct from RecurringPayment (a periodic, recurring obligation with
+// its own detection/frequency machinery) and from LentMoney (person-to-person debt tracking). A
+// todo is a single task with an optional amount/due date, done once and checked off.
+model TodoItem {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  title         String
+  description   String?
+  amount        Float?
+  // "CLAIM" (reimbursement/insurance claim to raise) | "BILL" (a pending bill payment) | "OTHER" —
+  // drives which icon the app shows, not a hard schema constraint (kept as free text, same
+  // looseness as RecurringPayment.frequency, since this is UI classification, not billing logic).
+  type          String    @default("OTHER")
+  dueDate       DateTime?
+  status        String    @default("OPEN") // "OPEN" | "DONE"
+  completedAt   DateTime?
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  // Set when this item was created by the Smart Action Engine (from a flagged subscription or a
+  // Tax Nudges 80D/80D_MEDICAL match) rather than typed in by the user — drives a badge in the app
+  // so an auto-suggested item reads differently from one the user added themselves.
+  autoGenerated Boolean   @default(false)
+
+  @@index([userId])
+}
+
+// Parking fines / traffic challans the user is tracking — a small pay-this-or-it-grows obligation
+// list, same synced-CRUD shape as TodoItem (backend is source of truth, Android keeps a Room copy).
+// Kept distinct from TodoItem so the fields that matter for a challan (challan number, vehicle,
+// issuing location, a due date after which penalties escalate) are first-class, not stuffed into a
+// free-text note.
+// Parking & toll spending the user logs (or that SMS scanning catches). Reframed from the original
+// "parking fines/challans to pay" model — `kind` splits parking vs toll; `issuedDate` is the spend
+// date, `location` the lot/plaza (now optional-in-practice), `amount` what was paid. The
+// challan/vehicle/dueDate/status/paidAt fields are retained for the pre-reframe rows and are unused
+// by new entries (status defaults to PAID — these are already-incurred expenses).
+model ParkingTicket {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  kind          String    @default("PARKING") // "PARKING" | "TOLL"
+  challanNumber String?
+  location      String
+  vehicleNumber String?
+  amount        Float
+  issuedDate    DateTime
+  dueDate       DateTime?
+  status        String    @default("UNPAID") // legacy: "UNPAID" | "PAID"
+  paidAt        DateTime?
+  notes         String?
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+
+  @@index([userId])
+}
+
+// Things the user has bought and wants a record of — receipts, warranty windows, serial numbers.
+// Backend-synced like ParkingTicket/TodoItem (server is source of truth, the Android Room table is
+// a cache). The actual invoice/receipt images stay on the phone only (see ProductImageStore.kt) —
+// there's no blob storage in this backend — so nothing image-related appears here.
+model ProductRecord {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  name           String
+  brand          String?
+  category       String?
+  purchaseDate   DateTime
+  pricePaid      Float?
+  seller         String?
+  warrantyMonths Int?
+  // Either supplied directly, or computed client-side from purchaseDate + warrantyMonths when the
+  // user leaves it blank.
+  warrantyExpiry DateTime?
+  serialNumber   String?
+  notes          String?   @db.Text
+  active         Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+
+  @@index([userId])
+}
+
+// A thing the user is saving up to buy, with a running "how close am I" tracker. Backend-synced
+// like ProductRecord/ParkingTicket (server is source of truth, the Android Room table is a cache).
+// The optional reference photo stays on the phone only (see WishlistImageStore.kt) — there's no
+// blob storage in this backend — so `imageUrl` is reserved/unused for now.
+model WishlistItem {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  name         String
+  targetAmount Float
+  savedAmount  Float    @default(0)
+  imageUrl     String? // reserved — the photo is currently local-only, see WishlistImageStore.kt
+  link         String?
+  notes        String?  @db.Text
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+}
+
+// Money the user has lent out to someone (an asset/receivable) — the mirror image of
+// RecurringType.LOAN above (a loan the user owes, a liability). Kept as a distinct model rather
+// than reusing RecurringPayment to avoid conflating the two directions of money owed.
+model LentMoney {
+  id                 String               @id @default(cuid())
+  userId             String
+  user               User                 @relation(fields: [userId], references: [id])
+  personName         String
+  // Set only if the user picked a device contact — the app never requests broad contacts access,
+  // just a one-off grant for the single contact picked (see Android ContactPicker).
+  phone              String?
+  amount             Float
+  reason             String?
+  lentDate           DateTime             @default(now())
+  expectedReturnDate DateTime?
+  status             String               @default("OUTSTANDING") // "OUTSTANDING" | "RETURNED"
+  returnedDate       DateTime?
+  active             Boolean              @default(true)
+  createdAt          DateTime             @default(now())
+  // User-picked generic avatar for the lending-list row — "MALE" | "FEMALE" | null (falls back to
+  // a neutral icon). Not derived from real contact data; the app never requests contact-photo
+  // access, this is a manual per-entry pick.
+  avatarGender       String?
+  // "LENT" (money the user gave out — an asset/receivable, the original feature) |
+  // "BORROWED" (money the user took — a liability/payable they owe back). Same OUTSTANDING/
+  // RETURNED status lifecycle applies to both directions, just with the ownership flipped, so this
+  // reuses the existing model/table instead of a parallel one.
+  direction          String               @default("LENT")
+  // Installment tracking for the P2P IOU Tracker — a partial-repayment running total, distinct
+  // from the binary OUTSTANDING/RETURNED status above (status still flips to RETURNED once
+  // amountRepaid reaches amount, via lendingRouter.ts's dedicated /repayment endpoint).
+  amountRepaid       Float                @default(0)
+  // Optional — powers the UPI deep-link settlement reminder; null until the user adds it.
+  upiVpa             String?
+  repayments         LentMoneyRepayment[]
+  // A real *planned* multi-date schedule (dueDate + amount pairs) — distinct from repayments
+  // above, which is the *actual* dated log of what's already been paid. Deliberately not
+  // auto-reconciled against repayments (no "which repayment satisfies which installment" matching
+  // logic) — marking one paid is its own manual check-in, the same self-reported-confirmation
+  // pattern Loan.lastPaymentConfirmedAt already uses, rather than a bigger auto-matching feature.
+  installments       LentMoneyInstallment[]
+
+  @@index([userId])
+}
+
+// Individual dated repayment events, distinct from LentMoney.amountRepaid (which stays the fast
+// running total the OUTSTANDING/RETURNED flip logic already reads). Added so the app's lending
+// detail view can show real repayment history ("when it was repaid", one entry per installment)
+// instead of only ever knowing the cumulative total with no dates.
+model LentMoneyRepayment {
+  id          String    @id @default(cuid())
+  lentMoneyId String
+  lentMoney   LentMoney @relation(fields: [lentMoneyId], references: [id], onDelete: Cascade)
+  amount      Float
+  paidAt      DateTime  @default(now())
+
+  @@index([lentMoneyId])
+}
+
+model LentMoneyInstallment {
+  id          String    @id @default(cuid())
+  lentMoneyId String
+  lentMoney   LentMoney @relation(fields: [lentMoneyId], references: [id], onDelete: Cascade)
+  dueDate     DateTime
+  amount      Float
+  // Null until manually marked paid — see LentMoney.installments' own doc comment for why this
+  // isn't auto-reconciled against the repayment ledger.
+  paidAt      DateTime?
+
+  @@index([lentMoneyId])
+}
+
+// Admin-curated merchant -> cancellation/downgrade deep-link lookup for the subscription cancel
+// assistant. Mirrors MerchantCardRecommendation's merchant-pattern-matching approach below.
+model SubscriptionProvider {
+  id                String             @id @default(cuid())
+  merchantPattern   String
+  providerName      String
+  cancelUrl         String?
+  downgradeUrl      String?
+  recurringPayments RecurringPayment[]
+}
+
+model NetWorthSnapshot {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  assets           Json
+  liabilities      Json
+  totalNetWorth    Float
+  monthlyIncomeInr Float?
+  month            DateTime
+  createdAt        DateTime @default(now())
+
+  @@unique([userId, month])
+}
+
+// One row per user per month — mirrors NetWorthSnapshot's upsert-by-month pattern. Kept as an
+// append-only history (rather than recomputed on every read) so "streak" (consecutive months above
+// threshold) and a trend line are cheap to query instead of requiring a full recompute over all-time
+// SmsTransaction/RecurringPayment/NetWorthSnapshot data on every request.
+model HealthScoreSnapshot {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  month     DateTime
+  score     Int
+  breakdown Json
+  createdAt DateTime @default(now())
+
+  @@unique([userId, month])
+}
+
+model MerchantCardRecommendation {
+  id                  String  @id @default(cuid())
+  merchantNamePattern String
+  category            String
+  notes               String?
+}
+
+// Backing store for the custom-OTP phone-login path (the alternative to Firebase's own phone
+// verification, kept ready to switch on later per AuthConfig.kt on Android).
+model PhoneOtp {
+  id        String   @id @default(cuid())
+  phone     String
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([phone])
+}
+
+// Lets an admin allowlist a specific real phone number to see its OTP code directly in the
+// /phone/request-otp response even in production — no SMS gateway has ever been wired up in this
+// project, so this is the only way a named beta tester can complete real (non-anonymous) phone
+// login while that gap exists. Deliberately does NOT weaken verification itself: phone_custom's
+// existing hashed-OTP comparison in POST /auth/session is completely untouched, this only changes
+// who gets shown the already-real code instead of it going nowhere.
+model LoginBypassEntry {
+  id        String   @id @default(cuid())
+  phone     String   @unique
+  enabled   Boolean  @default(true)
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  // "SUPER_ADMIN" (everything, incl. managing other admins) | "EDITOR" (catalog + operations —
+  // cards, corrections, redemptions, feedback) | "VIEWER" (read-only across every page, incl.
+  // Observability). Free string, not an enum, matching this schema's own convention for this kind
+  // of tag (Loan.type, etc.) so a new role never needs a migration. Defaults to SUPER_ADMIN so the
+  // existing bootstrap admin (and any admin created before this field existed) keeps exactly the
+  // same full access it already had — this is additive, not a downgrade.
+  role         String   @default("SUPER_ADMIN")
+  createdAt    DateTime @default(now())
+}
+
+// Admin-managed URLs the app fetches at runtime instead of hardcoding — Play Store link, support
+// contact, terms/privacy, social links, referral/affiliate links, etc. Lets marketing/legal/support
+// URLs change without an app release. Card-specific "apply now" links live on CreditCard.applyUrl
+// instead, since those are 1:1 with a card rather than app-wide.
+model AppLink {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  label     String
+  url       String
+  category  String   @default("general")
+  updatedAt DateTime @updatedAt
+}
+
+// --- Family/shared vault mode ---
+model Household {
+  id          String            @id @default(cuid())
+  name        String
+  ownerUserId String
+  inviteCode  String            @unique
+  createdAt   DateTime          @default(now())
+  members     HouseholdMember[]
+}
+
+model HouseholdMember {
+  id                          String    @id @default(cuid())
+  householdId                 String
+  household                   Household @relation(fields: [householdId], references: [id])
+  userId                      String
+  user                        User      @relation(fields: [userId], references: [id])
+  role                        String    @default("member") // "owner" | "member"
+  // Per-member opt-in — no blanket sharing. Members who haven't opted in show as "hidden" in the
+  // consolidated view rather than being silently excluded.
+  netWorthSharingEnabled      Boolean   @default(false)
+  // A second, separate opt-in — pooled category spend (groceries/utilities only, see
+  // householdRouter.ts's HOUSEHOLD_SHARED_CATEGORIES) is a much narrower disclosure than net worth,
+  // so it gets its own flag rather than reusing netWorthSharingEnabled.
+  categorySpendSharingEnabled Boolean   @default(false)
+  joinedAt                    DateTime  @default(now())
+
+  @@unique([householdId, userId])
+}
+
+// --- Merchant offer aggregator (admin-curated — no live bank-offer data feed exists) ---
+model MerchantOffer {
+  id                  String   @id @default(cuid())
+  merchantNamePattern String
+  bankName            String?
+  title               String
+  description         String?
+  discountPct         Float?
+  validFrom           DateTime
+  validUntil          DateTime
+  sourceUrl           String?
+}
+
+// --- Peer benchmarking (synthetic seed data — see scripts/seedBenchmarks.ts) ---
+model CityIncomeBracketBenchmark {
+  id            String @id @default(cuid())
+  city          String
+  incomeBracket String
+  category      String
+  avgSpendPct   Float
+
+  @@unique([city, incomeBracket, category])
+}
+
+// --- Coins/credits economy: referrals earn coins, coins redeem for admin-curated vouchers ---
+
+// One row per successfully completed referral — @unique on referredUserId means a user can only
+// ever be credited as "referred" once, blocking double-dipping via the same or different codes.
+model ReferralConversion {
+  id             String   @id @default(cuid())
+  referrerUserId String
+  referrer       User     @relation("Referrer", fields: [referrerUserId], references: [id])
+  referredUserId String   @unique
+  referred       User     @relation("Referred", fields: [referredUserId], references: [id])
+  coinsAwarded   Int
+  completedAt    DateTime @default(now())
+}
+
+enum CoinLedgerReason {
+  REFERRAL_BONUS
+  VOUCHER_REDEMPTION
+  ADMIN_ADJUSTMENT
+  BILL_PAYMENT_BONUS
+  FEEDBACK_BONUS
+}
+
+// Append-only ledger — a user's coin balance is SUM(delta), computed on read rather than cached,
+// so there's no denormalized balance column that can drift out of sync.
+model CoinLedgerEntry {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  delta     Int // positive = earned, negative = spent
+  reason    CoinLedgerReason
+  relatedId String? // e.g. the ReferralConversion or VoucherRedemption id
+  createdAt DateTime         @default(now())
+
+  @@index([userId])
+}
+
+// Admin-curated voucher catalog — same admin-CRUD-plus-public-GET shape as MerchantOffer. No live
+// voucher-issuing API integration exists, so fulfillment is manual (see VoucherRedemption).
+model Voucher {
+  id             String              @id @default(cuid())
+  title          String
+  description    String?
+  coinCost       Int
+  imageUrl       String?
+  stockRemaining Int? // null = unlimited
+  active         Boolean             @default(true)
+  createdAt      DateTime            @default(now())
+  redemptions    VoucherRedemption[]
+  // Admin-entered gift-card code + PIN. When set, redeeming this voucher is INSTANT — the user
+  // sees the code/PIN immediately and the redemption is marked FULFILLED. When null, redemption
+  // stays PENDING_FULFILLMENT for the manual queue. Never returned by the public catalog list.
+  code           String?
+  pin            String?
+}
+
+enum VoucherRedemptionStatus {
+  PENDING_FULFILLMENT
+  FULFILLED
+  CANCELLED
+}
+
+model VoucherRedemption {
+  id              String                  @id @default(cuid())
+  userId          String
+  user            User                    @relation(fields: [userId], references: [id])
+  voucherId       String
+  voucher         Voucher                 @relation(fields: [voucherId], references: [id])
+  coinsCost       Int // snapshotted at redemption time — insulated from later catalog price changes
+  status          VoucherRedemptionStatus @default(PENDING_FULFILLMENT)
+  fulfillmentNote String? // admin-entered gift-card code / reference once fulfilled (manual queue)
+  // For instant vouchers: the code/PIN the user actually received, snapshotted so a later edit to
+  // Voucher.code doesn't change what an already-redeemed user sees.
+  revealedCode    String?
+  revealedPin     String?
+  createdAt       DateTime                @default(now())
+  fulfilledAt     DateTime?
+
+  @@index([userId])
+  @@index([status])
+}
+
+// --- Account Aggregator bank-linking (Setu AA sandbox) — additive second transaction source
+// alongside SMS parsing. AA-sourced transactions land in SmsTransaction itself (see
+// modules/accountAggregator/accountAggregatorRouter.ts's ingestAccountAggregatorTransactions),
+// not a parallel model — this table only tracks the consent/link lifecycle. ---
+model BankLink {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  consentId     String    @unique // Setu's consent id
+  status        String // mirrors Setu's own PENDING/ACTIVE/REJECTED/REVOKED/EXPIRED
+  fiTypes       String // comma-joined, e.g. "DEPOSIT"
+  consentExpiry DateTime?
+  lastSyncedAt  DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([userId])
+}
+
+// --- Credit score (PRO feature, sandbox scaffold — no bureau vendor chosen yet, see
+// modules/creditscore/creditBureauClient.ts). On-demand pull, unlike HealthScoreSnapshot's
+// monthly cadence, so no month-boundary/unique constraint — a user can re-request anytime. ---
+model CreditScoreSnapshot {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  bureau    String? // e.g. "CIBIL" — null until a vendor is wired in
+  score     Int?
+  scoreBand String? // e.g. "Excellent" | "Good" | "Fair" | "Poor"
+  factors   Json? // free-form list of factor strings, same pattern as
+  // HealthScoreSnapshot.breakdown
+  status    String // "PENDING" | "FETCHED" | "FAILED"
+  pulledAt  DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+// --- Loan & EMI tracker — Car/Personal/Home/Commercial/Education loans, one row per loan account.
+// Deliberately stores only the raw inputs (principal, ROI, start date, and whichever *one* of
+// tenureMonths/emiAmount the user didn't type — the app computes and stores the other at save
+// time using the standard reducing-balance EMI formula). Everything time-dependent — outstanding
+// balance, months remaining, projected close date, prepayment "what if" scenarios — is deliberately
+// NOT stored here and is instead computed live client-side (see Android's LoanCalculator.kt),
+// the same "store raw truth, compute derived-and-time-sensitive fields on read" convention this
+// project already uses for bill diligence (healthScoreRouter) and card dead-weight flagging
+// (walletRouter). No backend calculation logic exists for this feature at all — mirrors
+// RewardRateCalculator's precedent of being an Android-only pure-Kotlin calculator with no server
+// equivalent, since there's no other client (web/admin) that needs this math today. ---
+model Loan {
+  id                     String    @id @default(cuid())
+  userId                 String
+  user                   User      @relation(fields: [userId], references: [id])
+  type                   LoanType
+  bankName               String
+  accountRef             String? // optional loan account number, for the user's own reference
+  principal              Float
+  roiAnnualPct           Float
+  startDate              DateTime
+  tenureMonths           Int // always populated — computed from emiAmount at save time if the user typed EMI instead
+  emiAmount              Float // always populated — computed from tenureMonths at save time if the user typed tenure instead
+  active                 Boolean   @default(true) // false once the user marks it closed/foreclosed
+  notes                  String?
+  // Self-reported "I paid this month's EMI" check-in — same pattern as UserCreditCard's
+  // lastConfirmedUsedAt (no per-transaction card/loan attribution exists in this schema to detect
+  // real payment automatically, so this is a manual confirmation like Wallet's). Drives the
+  // overdue flag: a loan is overdue once its due-day-of-month has passed for the current cycle and
+  // this timestamp isn't on/after that date yet.
+  lastPaymentConfirmedAt DateTime?
+  // Set once the user marks the loan paid off ahead of schedule (e.g. using the prepayment
+  // optimizer's numbers as guidance) — distinct from `active`, which only means
+  // deleted/hidden. A foreclosed loan stays active: true and still shows in the loan list, just
+  // in a "closed" state rather than "ongoing."
+  foreclosedAt           DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+// --- In-app bill payment (Razorpay sandbox) — one row per payment attempt, distinct from
+// RecurringPayment which tracks the recurring obligation, not individual attempts. Free feature
+// (no requirePro) — see modules/billpayment/billPaymentRouter.ts's header comment for why. ---
+model BillPayment {
+  id                 String            @id @default(cuid())
+  userId             String
+  user               User              @relation(fields: [userId], references: [id])
+  recurringPaymentId String?
+  recurringPayment   RecurringPayment? @relation(fields: [recurringPaymentId], references: [id])
+  amount             Float
+  razorpayOrderId    String            @unique
+  razorpayPaymentId  String?
+  status             String // "CREATED" | "PAID" | "FAILED"
+  createdAt          DateTime          @default(now())
+  paidAt             DateTime?
+
+  @@index([userId])
+}
+
+enum FeedbackSource {
+  APP
+  WEB
+}
+
+enum FeedbackStatus {
+  NEW
+  REVIEWED
+  RESOLVED
+}
+
+// userId is nullable — the website has no login/user-identity concept at all (a pure public
+// marketing site), so a web submission has nothing to attach to a real account. Coins are only
+// ever awarded when a valid user session token was presented with the request (checked in
+// feedbackRouter.ts via optionalUser, not a client-supplied "source" flag — a client claiming
+// source: "app" without a real token doesn't get coins).
+model Feedback {
+  id           String         @id @default(cuid())
+  userId       String?
+  user         User?          @relation(fields: [userId], references: [id])
+  source       FeedbackSource
+  message      String         @db.Text
+  email        String?
+  rating       Int?
+  status       FeedbackStatus @default(NEW)
+  coinsAwarded Int?
+  createdAt    DateTime       @default(now())
+
+  @@index([userId])
+  @@index([status])
+}
+
+// Distinct from Feedback above (which is a deliberate, coin-rewarded, general-purpose flow reached
+// from Settings) — this is a low-friction, un-rewarded, contextual report reachable from a small
+// button overlaid on every screen, carrying which screen it fired from plus device/version context
+// so a beta bug report is actually actionable without asking the tester follow-up questions.
+model BugReport {
+  id             String          @id @default(cuid())
+  userId         String?
+  user           User?           @relation(fields: [userId], references: [id])
+  type           BugReportType
+  message        String          @db.Text
+  screenRoute    String
+  appVersionName String?
+  appVersionCode Int?
+  deviceModel    String?
+  androidSdkInt  Int?
+  status         FeedbackStatus  @default(NEW)
+  createdAt      DateTime        @default(now())
+
+  @@index([userId])
+  @@index([status])
+  @@index([screenRoute])
+}
+
+enum BugReportType {
+  BUG
+  SUGGESTION
+}
+
+enum AppVersionChannel {
+  BETA
+  STABLE
+}
+
+// One row per released build, created from the admin console when cutting a release. Distinct
+// from `versionCode`/`versionName` in build.gradle.kts (which is what actually ships inside a
+// given APK/AAB) — this is the *catalog* of what's been released and to which channel, so the app
+// itself can ask "is there something newer than what I'm running" without needing Play Console API
+// access (no such integration exists in this project — see CLAUDE.md's standing Play Console
+// blocker). `platform` is deliberately a free string, not an enum, so iOS/web-app entries could be
+// added later without a schema change.
+model AppVersion {
+  id                      String            @id @default(cuid())
+  platform                String            @default("android")
+  versionName             String
+  versionCode             Int
+  channel                 AppVersionChannel
+  releaseNotes            String?
+  // If set, a client reporting a versionCode below this should be told to update rather than just
+  // informed one's available — a real force-update mechanism, not yet wired to block anything on
+  // the Android side (the app only ever shows an informational banner today, see SettingsScreen.kt)
+  // but the data model supports it once that's actually needed.
+  minSupportedVersionCode Int?
+  createdAt               DateTime          @default(now())
+
+  @@unique([platform, versionCode])
+}
+
+// Admin-controlled rollout state for a named feature/screen in the app — lets the admin console
+// change what users see for a feature (beta-badge it, put it in maintenance, hide it entirely)
+// without an app release. `key` is a stable identifier the app checks against its own screen
+// registry (e.g. "mall_mode", "ai_chat") — free-text, not a Prisma enum, matching this schema's
+// established "new value never needs a migration" convention (LentMoney.direction, Loan.type,
+// SavingsInstrument.type all do the same). A key with no row here is treated as LIVE by the app
+// (see GET /feature-flags's own doc comment) — admins only ever need to create a row for a feature
+// once its state actually needs to differ from the default.
+model FeatureFlag {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  displayName String
+  // LIVE (normal) | BETA | EARLY_ACCESS (both visible with a badge, fully functional) |
+  // COMING_SOON | MAINTENANCE (visible but blocked, shows `message` instead of navigating) |
+  // DISABLED (removed from the UI entirely, as if it doesn't exist).
+  status      String   @default("LIVE")
+  // Shown to the user in place of the real screen for COMING_SOON/MAINTENANCE — e.g. "Launching
+  // next month" or "We'll be back shortly, undergoing maintenance."
+  message     String?
+  // Admin-controlled default display order for the service this flag's key represents — lower
+  // sorts first. Purely a default: a user's own serviceOrderJson (see User model) overrides this
+  // once they've customized their own arrangement. Ties (the common case — most flags never get a
+  // deliberate order set) fall back to sorting by key, so the ordering is still stable.
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// A single admin-authored banner shown app-wide (Dashboard) — for whole-app-level notices
+// (scheduled maintenance, a new release announcement) that don't belong to any one feature, unlike
+// FeatureFlag above. Kept as an append-only list (mirrors this schema's other admin-authored-content
+// tables) rather than a single mutable row, so past announcements aren't destroyed when superseded
+// — the app only ever shows the newest row with active: true.
+model AppAnnouncement {
+  id        String   @id @default(cuid())
+  message   String
+  severity  String   @default("INFO") // INFO | WARNING | MAINTENANCE
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Marketing-site app screenshots for the "See it in action" carousel on rupeeradarai.com.
+// The image bytes live in the DB (LONGBLOB) rather than on disk because the Hostinger Node app's
+// working directory is wiped on every redeploy — and there's no object storage wired up. Uploaded
+// + reordered from the admin console (Config → Site Screenshots); served publicly, one row at a
+// time, via GET /site-content/screenshots/:id/image.
+model SiteScreenshot {
+  id        String   @id @default(cuid())
+  caption   String   @default("")
+  category  String   @default("")
+  sortOrder Int      @default(0)
+  mimeType  String
+  data      Bytes
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+// Savings/investment tracker — FDs, gold savings schemes, stocks/mutual funds, and physical gold/
+// silver, distinct from Loan (a liability) and from a plain "savings" SmsTransaction category (a
+// single spend that happens to be a contribution here, linked via SavingsContribution.
+// sourceTransactionId when the user explicitly converts one). `type` is a free string, not a Prisma
+// enum, matching this schema's established convention (LentMoney.direction, Loan.type, etc.) so a
+// new instrument type never needs a migration. principalInr is a denormalized running total kept in
+// sync by savingsRouter.ts whenever a contribution is logged — same "counter kept in sync via
+// router logic" pattern as LentMoney.amountRepaid, not recomputed from contributions on every read.
+model SavingsInstrument {
+  id                   String                @id @default(cuid())
+  userId               String
+  user                 User                  @relation(fields: [userId], references: [id])
+  type                 String // "FIXED_DEPOSIT" | "GOLD_SCHEME" | "STOCKS" | "MUTUAL_FUND" | "GOLD_COIN" | "SILVER_COIN" | "OTHER"
+  name                 String
+  institution          String? // bank / jeweller / broker
+  principalInr         Float                 @default(0)
+  currentValueInr      Float? // optional user-entered mark-to-market estimate, not a live feed
+  // Running weight in grams for GOLD_COIN/SILVER_COIN/GOLD_SCHEME — stored in one canonical unit
+  // (grams) rather than separate gram/kg fields; the Android UI formats large values as kg itself.
+  quantityGrams        Float?
+  quantityUnits        Float? // running units/shares held, for STOCKS/MUTUAL_FUND
+  maturityDate         DateTime? // FIXED_DEPOSIT
+  interestRatePct      Float? // FIXED_DEPOSIT
+  // How new contributions to this instrument are expected to happen — most relevant to a Mutual
+  // Fund SIP, but not restricted to that type. "ONE_TIME" (a single lumpsum, not expected to
+  // repeat) | "MONTHLY" | "CUSTOM_INTERVAL" (every customIntervalDays) | null (no set schedule,
+  // contributions logged ad hoc). Purely informational/a reminder cue today — nothing schedules a
+  // push notification off it yet, same "data model ready, not yet wired to a scheduler" precedent
+  // as AppVersion.minSupportedVersionCode.
+  contributionSchedule String?
+  customIntervalDays   Int? // only meaningful when contributionSchedule == "CUSTOM_INTERVAL"
+  notes                String?
+  active               Boolean               @default(true)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  contributions        SavingsContribution[]
+
+  @@index([userId])
+}
+
+model SavingsContribution {
+  id                  String            @id @default(cuid())
+  instrumentId        String
+  instrument          SavingsInstrument @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
+  amountInr           Float
+  quantity            Float? // grams/units added by this contribution, if applicable
+  contributedAt       DateTime          @default(now())
+  // Set when this contribution was created by converting an existing SmsTransaction (the Expenses
+  // "Convert to savings" action) — null for a contribution logged directly on the Savings tracker.
+  // Deliberately not a foreign key to SmsTransaction: SmsTransaction rows are per-device-synced and
+  // can be deleted independently, and this is only ever used for a one-way "where did this come
+  // from" display, not a join.
+  sourceTransactionId String?
+  createdAt           DateTime          @default(now())
+
+  @@index([instrumentId])
+}
+
+// One row per callMesh() invocation, written by callMesh itself (fire-and-forget, never blocks or
+// fails the actual feature) so mesh-api usage can be broken down by feature — mesh-api's own
+// /usage endpoint (proxied live in MeshUsageController for the official account-wide cost report)
+// has no concept of "which app feature made this call," only our own tagging can answer that.
+model MeshUsageLog {
+  id               String   @id @default(cuid())
+  feature          String // "chat" | "sms_parse_fallback" | "correction_summary" | "insight_narrative"
+  model            String
+  userId           String?
+  promptTokens     Int?
+  completionTokens Int?
+  totalTokens      Int?
+  createdAt        DateTime @default(now())
+
+  @@index([feature, createdAt])
+}
+
+// General-purpose app/website event & error log, public POST (rate-limited by the app-wide
+// limiter, same reasoning as Feedback's optionalUser route) so a client can report a real error the
+// moment it happens instead of it only ever being discoverable via adb logcat on a physically
+// connected device — the gap that made this session's chat-timeout investigation slower than it
+// needed to be. requireAdmin GET for the admin console's Logs page, filterable by source/level/
+// feature.
+model AppEventLog {
+  id        String   @id @default(cuid())
+  source    String // "ANDROID" | "WEB" | "ADMIN" | "BACKEND"
+  level     String   @default("ERROR") // "INFO" | "WARN" | "ERROR"
+  feature   String? // e.g. "chat", "sms_sync" — free string, not an enum, same convention as Loan.type
+  message   String
+  metadata  Json?
+  userId    String?
+  createdAt DateTime @default(now())
+
+  @@index([source, level, createdAt])
+  @@index([feature, createdAt])
+}
+
+// A cross-platform "What's New" timeline — distinct from AppVersion, which tracks Android's actual
+// APK build numbers for release-channel/update-check purposes. Website and the admin console are
+// continuously deployed static SPAs with no real build-number concept, so forcing them into
+// AppVersion's (platform, versionCode) shape would mean fabricating meaningless version codes for
+// them. Instead this is one row per release covering whichever surfaces actually changed, read by
+// both the in-app "What's New" screen and the website's /changelog page.
+model ChangelogEntry {
+  id          String   @id @default(cuid())
+  version     String   @unique // internal product-changelog version, e.g. "0.0.39" — independent of
+  // AppVersion.versionName (the real Android APK version)
+  releaseDate DateTime
+  platforms   Json // string[] subset of "android" | "web" | "admin" | "backend"
+  summary     String?
+  highlights  Json // { type: "FEATURE" | "FIX" | "IMPROVEMENT", platform: string, text: string }[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Backend-synced mirror of the Android app's local-only MerchantCategoryOverrideEntity (Room) —
+// the local table stays the fast offline-first read path (categorization must never wait on a
+// network round trip), but was previously the *only* copy of a user's learned merchant→category
+// corrections, silently wiped by any destructive Room migration with no recovery path. This table
+// makes that memory durable and portable across devices: the app pushes here on every explicit
+// categorization action (fire-and-forget, same as every other local-first sync in this app) and
+// pulls the full list down on the same Dashboard-load sync point ExpenseRepository.downloadTransactions
+// already uses.
+model MerchantCategoryOverride {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  normalizedMerchant String
+  category          String
+  updatedAt         DateTime @updatedAt
+
+  @@unique([userId, normalizedMerchant])
+}
+
+// First-party, self-hosted website analytics — deliberately not Google Analytics/Plausible/etc.
+// (all need an external account signup, out of scope for this pass) and deliberately NOT the same
+// table as AppEventLog (that's error/warning logs; conflating pageviews with error reports would
+// make both harder to query). Public POST (the website has no login system at all), admin-only
+// read via a summary aggregation rather than exposing raw rows to the client.
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  path      String
+  eventType String // "pageview" | a named conversion event, e.g. "download_app_click"
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([eventType, createdAt])
+  @@index([path, createdAt])
+}
+
+// The Android app's own feature-usage telemetry — distinct from AnalyticsEvent above (that's the
+// public website, no login, no per-user attribution). This is per-user (requireUser-gated) so the
+// admin console can answer "which real features get used, by how many distinct users, and which
+// are barely touched" rather than just raw event counts. One row per screen visit (fired once per
+// navigation, not per recomposition) plus optional finer-grained actions worth distinguishing
+// beyond "screen was opened" (e.g. "export_csv").
+model FeatureUsageEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  screen    String
+  action    String?
+  createdAt DateTime @default(now())
+
+  @@index([screen, createdAt])
+  @@index([userId, createdAt])
+  @@index([createdAt])
+}
+
+// Per-route request telemetry, rolled up into 5-minute buckets (see lib/routeMetrics.ts). One row
+// per (bucket, method, route-pattern) — NOT one per request — so a busy host writes a handful of
+// rows every 5 min, not thousands. `route` is always the Express route PATTERN (`/users/:id`),
+// never a raw URL, so it can't become a high-cardinality / PII key. The synthetic
+// `route: "__db_probe"` rows carry /health/db connect latency so the wedged-pool outage
+// (memory project_backend_500_outage_2026-08-22) has a charted leading indicator, not just a
+// binary tripwire. Pruned to ~30d by the retention job.
+model RouteMetricBucket {
+  id         String   @id @default(cuid())
+  bucketAt   DateTime
+  method     String
+  route      String
+  count      Int      @default(0)
+  errorCount Int      @default(0) // status >= 500
+  clientErrs Int      @default(0) // 400..499
+  p50Ms      Int      @default(0)
+  p95Ms      Int      @default(0)
+  maxMs      Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@unique([bucketAt, method, route])
+  @@index([bucketAt])
+}
