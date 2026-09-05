@@ -35,18 +35,25 @@ export function requestLog(req: Request, res: Response, next: NextFunction) {
   if (process.env.NODE_ENV === "test") return next();
   const startedAt = Date.now();
   res.on("finish", () => {
-    if (QUIET_PATHS.has(req.path)) return;
-    const line = {
-      ts: new Date().toISOString(),
-      level: res.statusCode >= 500 ? "error" : res.statusCode >= 400 ? "warn" : "info",
-      requestId: getRequestId(req),
-      userId: (req as any).userId ?? (req as any).adminId ?? null,
-      method: req.method,
-      path: req.baseUrl + (req.route?.path && req.route.path !== "/" ? req.route.path : req.path.slice(req.baseUrl.length) || "/"),
-      status: res.statusCode,
-      durationMs: Date.now() - startedAt,
-    };
+    // Everything below — including building `line` — is defensive: a malformed/incomplete request
+    // (a scanner sending garbage, a connection dropped mid-parse) can reach this handler with
+    // `req.path`/`req.baseUrl` not fully populated by Express. That previously threw a bare
+    // TypeError straight out of an EventEmitter callback (invisible to express-async-errors,
+    // "Uncaught exception" in the runtime log) — never let a logging failure escape at all.
     try {
+      if (QUIET_PATHS.has(req.path)) return;
+      const baseUrl = req.baseUrl ?? "";
+      const path = req.path ?? "";
+      const line = {
+        ts: new Date().toISOString(),
+        level: res.statusCode >= 500 ? "error" : res.statusCode >= 400 ? "warn" : "info",
+        requestId: getRequestId(req),
+        userId: (req as any).userId ?? (req as any).adminId ?? null,
+        method: req.method,
+        path: baseUrl + (req.route?.path && req.route.path !== "/" ? req.route.path : path.slice(baseUrl.length) || "/"),
+        status: res.statusCode,
+        durationMs: Date.now() - startedAt,
+      };
       console.log(JSON.stringify(line));
     } catch {
       /* never let a logging failure break the response lifecycle */
