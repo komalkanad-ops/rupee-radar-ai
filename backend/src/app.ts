@@ -63,7 +63,7 @@ import { featureUsageRouter } from "./modules/featureUsage/featureUsageRouter.js
 import { analyticsRouter } from "./modules/analytics/analyticsRouter.js";
 import { loginBypassRouter } from "./modules/loginBypass/loginBypassRouter.js";
 import { monitoringRouter } from "./modules/monitoring/monitoringRouter.js";
-import { generalLimiter, smsLimiter } from "./lib/rateLimiters.js";
+import { generalLimiter, smsLimiter, adminLimiter } from "./lib/rateLimiters.js";
 import { requestId, requestLog, getRequestId } from "./lib/requestId.js";
 import { routeMetrics, recordMetric } from "./lib/routeMetrics.js";
 
@@ -205,7 +205,6 @@ app.use("/merchant-recommendations", merchantRecommendationsRouter);
 app.use("/billing", billingRouter);
 app.use("/config", configRouter);
 app.use("/push", pushRouter);
-app.use("/users", usersRouter);
 app.use("/statements", statementRouter);
 app.use("/health-score", healthScoreRouter);
 app.use("/wallet", walletRouter);
@@ -233,9 +232,11 @@ app.use("/changelog", changelogRouter);
 app.use("/merchant-overrides", merchantOverridesRouter);
 // smsLimiter (5000/15min), not generalLimiter — this runs as a follow-up step of an SMS backfill.
 app.use("/categorization", smsLimiter, classifyRouter);
-app.use("/feature-usage", featureUsageRouter);
-app.use("/analytics", analyticsRouter);
-app.use("/admin/monitoring", monitoringRouter);
+// adminLimiter (3000/15min), not generalLimiter — see ADMIN_ONLY_PREFIXES in rateLimiters.ts.
+app.use("/feature-usage", adminLimiter, featureUsageRouter);
+app.use("/analytics", adminLimiter, analyticsRouter);
+app.use("/admin/monitoring", adminLimiter, monitoringRouter);
+app.use("/users", adminLimiter, usersRouter);
 
 // Sentry's Express error handler — captures the exception WITH request/route/transaction context
 // (the bare `Sentry.captureException(err)` this replaces had none, so issues in Monitoring.tsx
