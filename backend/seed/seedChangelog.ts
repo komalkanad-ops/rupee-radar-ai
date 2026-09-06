@@ -725,6 +725,18 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "Wheel labels can no longer render past the edge of the chart." },
     ],
   },
+  {
+    version: "1.0.40",
+    releaseDate: "2026-09-06",
+    platforms: ["android"],
+    summary: "Bug fixes from your reports.",
+    highlights: [
+      { type: "FIX", platform: "android", text: "Your city, income and income-day in Profile → Personalization now stick after saving instead of sometimes showing blank." },
+      { type: "FIX", platform: "android", text: "Bill payment now has a working fallback — if in-app pay isn't available it opens CRED / Google Pay / PhonePe so you can still pay your card bill." },
+      { type: "IMPROVEMENT", platform: "android", text: "Money Leaks has a month picker — step back to see how your leaks looked in earlier months and whether they're shrinking." },
+      { type: "IMPROVEMENT", platform: "android", text: "If you run a business or freelance, the income-day field is worded for you now instead of assuming a salary." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
