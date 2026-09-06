@@ -118,6 +118,36 @@ describe("POST /auth/session", () => {
     const res = await request(app).get("/auth/me").set("Authorization", `Bearer ${session.body.token}`);
     expect(res.body.serviceOrder).toBeNull();
     expect(res.body.quickActionRoutes).toBeNull();
+    expect(res.body.layoutQuiz).toBeNull();
+  });
+
+  it("PATCH /auth/me round-trips the layoutQuiz answer object and clears it on null", async () => {
+    const deviceId = `auth-test-quiz-${Date.now()}`;
+    const session = await request(app).post("/auth/session").send({ provider: "anonymous", deviceId });
+    createdUserIds.push(deviceId);
+    const auth = { Authorization: `Bearer ${session.body.token}` };
+
+    const answers = { focus: ["spend", "debt"], cards: ["active"], situations: ["loans", "lending"] };
+    const patched = await request(app).patch("/auth/me").set(auth).send({ layoutQuiz: answers });
+    expect(patched.status).toBe(200);
+    expect(patched.body.layoutQuiz).toEqual(answers);
+
+    const getRes = await request(app).get("/auth/me").set(auth);
+    expect(getRes.body.layoutQuiz).toEqual(answers);
+
+    const cleared = await request(app).patch("/auth/me").set(auth).send({ layoutQuiz: null });
+    expect(cleared.body.layoutQuiz).toBeNull();
+  });
+
+  it("PATCH /auth/me rejects a non-object layoutQuiz", async () => {
+    const deviceId = `auth-test-quiz-bad-${Date.now()}`;
+    const session = await request(app).post("/auth/session").send({ provider: "anonymous", deviceId });
+    createdUserIds.push(deviceId);
+    const res = await request(app)
+      .patch("/auth/me")
+      .set("Authorization", `Bearer ${session.body.token}`)
+      .send({ layoutQuiz: ["not", "an", "object"] });
+    expect(res.status).toBe(400);
   });
 
   it("PATCH /auth/me rejects more than 4 quickActionRoutes", async () => {

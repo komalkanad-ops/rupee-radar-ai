@@ -167,6 +167,11 @@ model User {
   // At most 4 route keys (JSON-encoded array) — the user's chosen Dashboard "quick actions" row,
   // overriding the app's hardcoded default 4 once present. Same null-means-unset convention.
   quickActionRoutesJson String?
+  // Raw answers to the "Set up my layout" quiz, JSON object `{ "<questionId>": ["<answerId>", ...] }`.
+  // Stored so the client can re-open the quiz pre-filled and re-score when new services ship — the
+  // quiz's OUTPUT is written to serviceOrderJson/quickActionRoutesJson above; this is just the input.
+  // Null = the user hasn't taken the quiz.
+  layoutQuizJson       String?               @db.Text
   referralCode         String?               @unique // generated lazily on first GET /referrals/me
   createdAt            DateTime              @default(now())
   devices              Device[]
