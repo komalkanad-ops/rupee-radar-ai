@@ -179,7 +179,10 @@ export default function Download() {
           )}
         </p>
         <p className="text-xs text-app-muted mt-1 text-center">
-          This link always serves the latest version.
+          This link always serves the latest version.{" "}
+          <a href="https://apk.rupeeradarai.com" className="underline hover:text-app-text">
+            Older versions
+          </a>
         </p>
         {stable?.releaseNotes && (
           <p className="text-sm text-app-muted mt-4 border-t border-app-border pt-4">

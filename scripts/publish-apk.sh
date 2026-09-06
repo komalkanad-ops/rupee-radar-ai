@@ -12,6 +12,10 @@
 # static assets ~1h and ignores Cache-Control — a fixed filename would serve a stale APK each
 # release. /download reads /app-version/latest and links to the versioned file. A stable copy is
 # also written (that one needs a CDN purge to refresh).
+#
+# Every past versioned APK is kept in web/public/apk/ (served at apk.rupeeradarai.com) instead of
+# being deleted, with an auto-generated index.html. The current release also gets a copy there so
+# the archive is always complete; git dedupes the identical blob.
 set -euo pipefail
 
 SRC="${1:-}"
@@ -22,6 +26,8 @@ fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PUB="$REPO_ROOT/web/public"
+ARCHIVE="$PUB/apk"
+mkdir -p "$ARCHIVE"
 
 # versionName / versionCode from the APK itself — needs aapt/aapt2 (Android SDK build-tools).
 # If they're not on PATH, pass them explicitly:  VN=1.0.40 VC=74 ./scripts/publish-apk.sh <apk>
@@ -35,17 +41,26 @@ if [ -z "$VN" ] || [ -z "$VC" ]; then
   exit 1
 fi
 
-find "$PUB" -maxdepth 1 -name 'rupee-radar-ai-*.apk' ! -name "rupee-radar-ai-${VN}.apk" -delete
+# Move any older versioned APK out of web/public/ into the archive (keeps the web build lean —
+# only the current version + the stable pointer stay on the main site).
+find "$PUB" -maxdepth 1 -name 'rupee-radar-ai-*.apk' ! -name "rupee-radar-ai-${VN}.apk" -exec mv -f {} "$ARCHIVE/" \;
+
 cp "$SRC" "$PUB/rupee-radar-ai-${VN}.apk"
 cp "$SRC" "$PUB/rupee-radar-ai.apk"
+cp "$SRC" "$ARCHIVE/rupee-radar-ai-${VN}.apk"
+
+bash "$REPO_ROOT/scripts/gen-apk-archive-index.sh"
+
 SIZE_MB=$(( $(stat -f%z "$PUB/rupee-radar-ai.apk" 2>/dev/null || stat -c%s "$PUB/rupee-radar-ai.apk") / 1048576 ))
+ARCHIVE_COUNT=$(ls -1 "$ARCHIVE"/rupee-radar-ai-*.apk 2>/dev/null | wc -l | tr -d ' ')
 
 cat <<EOF
 
 ==> Staged  web/public/rupee-radar-ai-${VN}.apk  (+ stable rupee-radar-ai.apk)  ~${SIZE_MB} MB
+==> Archive web/public/apk/  now holds ${ARCHIVE_COUNT} versions (apk.rupeeradarai.com)
 
 Next:
-  git add web/public/rupee-radar-ai*.apk && git commit && git push origin main
+  git add web/public/rupee-radar-ai*.apk web/public/apk && git commit && git push origin main
   POST /app-version { platform:"android", versionName:"${VN}", versionCode:${VC}, channel:"STABLE" }
   POST /changelog   { version:"${VN}", releaseDate:"$(date -u +%Y-%m-%d)", platforms:["android"], ... }
   purge the rupeeradarai.com CDN cache, then check the .apk content-type is

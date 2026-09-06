@@ -1,0 +1,23 @@
+# apk.rupeeradarai.com — the versioned-APK archive. Every past release stays downloadable here;
+# the main site (rupeeradarai.com/download) only ever links to the latest.
+<IfModule mod_mime.c>
+  AddType application/vnd.android.package-archive .apk
+</IfModule>
+
+<FilesMatch "\.apk$">
+  <IfModule mod_headers.c>
+    Header set Content-Disposition "attachment"
+    # Old versions never change once published — cache them hard.
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </IfModule>
+</FilesMatch>
+
+DirectoryIndex index.html
+# Fallback plain listing if index.html is ever missing.
+Options +Indexes
+
+# This directory is a plain file store — make sure the parent SPA rewrite never reaches it.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^ - [L]
+</IfModule>
