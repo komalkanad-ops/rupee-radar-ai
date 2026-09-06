@@ -737,6 +737,16 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "If you run a business or freelance, the income-day field is worded for you now instead of assuming a salary." },
     ],
   },
+  {
+    version: "1.0.41",
+    releaseDate: "2026-09-06",
+    platforms: ["android", "backend"],
+    summary: "Set up your layout in six questions.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "New “Set up my layout” quiz — answer six quick questions and Rupee Radar puts the services you care about at the top of your list and in your Dashboard quick-actions. You can still rearrange everything by hand in Arrange Services." },
+      { type: "IMPROVEMENT", platform: "android", text: "Find it from the one-time Dashboard prompt, or any time from Arrange Services." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
