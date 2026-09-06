@@ -321,6 +321,17 @@ function parseJsonArray(raw: string | null): string[] | null {
   }
 }
 
+// The layout-quiz answers are a plain `{ [questionId]: string[] }` object; null means "not taken".
+function parseJsonObject(raw: string | null): Record<string, unknown> | null {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
 function serializeUser(user: {
   id: string;
   name: string | null;
@@ -335,6 +346,7 @@ function serializeUser(user: {
   persona: string | null;
   serviceOrderJson: string | null;
   quickActionRoutesJson: string | null;
+  layoutQuizJson: string | null;
   createdAt: Date;
 }) {
   return {
@@ -355,6 +367,9 @@ function serializeUser(user: {
     persona: user.persona ?? "SALARIED",
     serviceOrder: parseJsonArray(user.serviceOrderJson),
     quickActionRoutes: parseJsonArray(user.quickActionRoutesJson),
+    // Raw "Set up my layout" quiz answers, `{ "<questionId>": ["<answerId>", ...] }` — null until
+    // the user takes the quiz. The client re-opens the quiz pre-filled from this.
+    layoutQuiz: parseJsonObject(user.layoutQuizJson),
     createdAt: user.createdAt,
   };
 }
@@ -373,7 +388,7 @@ authRouter.get("/me", requireUser, async (req: UserRequest, res) => {
 const PERSONAS = ["SALARIED", "BUSINESS", "CREATOR", "OTHER"];
 
 authRouter.patch("/me", requireUser, async (req: UserRequest, res) => {
-  const { name, email, gender, persona, city, incomeBracket, salaryDayOfMonth, serviceOrder, quickActionRoutes } = req.body ?? {};
+  const { name, email, gender, persona, city, incomeBracket, salaryDayOfMonth, serviceOrder, quickActionRoutes, layoutQuiz } = req.body ?? {};
 
   if (persona !== undefined && !PERSONAS.includes(persona)) {
     return res.status(400).json({ error: `persona must be one of ${PERSONAS.join(", ")}` });
@@ -385,6 +400,11 @@ authRouter.patch("/me", requireUser, async (req: UserRequest, res) => {
     if (!Array.isArray(quickActionRoutes) || quickActionRoutes.length > 4) {
       return res.status(400).json({ error: "quickActionRoutes must be an array of at most 4 route keys" });
     }
+  }
+  // layoutQuiz is opaque to the server — a plain object of answer selections the client scores
+  // itself; null explicitly clears it. Just reject a non-object so a bad client can't store junk.
+  if (layoutQuiz !== undefined && layoutQuiz !== null && (typeof layoutQuiz !== "object" || Array.isArray(layoutQuiz))) {
+    return res.status(400).json({ error: "layoutQuiz must be an object or null" });
   }
 
   try {
@@ -400,6 +420,7 @@ authRouter.patch("/me", requireUser, async (req: UserRequest, res) => {
         salaryDayOfMonth,
         serviceOrderJson: serviceOrder !== undefined ? JSON.stringify(serviceOrder) : undefined,
         quickActionRoutesJson: quickActionRoutes !== undefined ? JSON.stringify(quickActionRoutes) : undefined,
+        layoutQuizJson: layoutQuiz !== undefined ? (layoutQuiz === null ? null : JSON.stringify(layoutQuiz)) : undefined,
       },
     });
     // Returns the exact same full shape GET /auth/me does — the Android client parses both
