@@ -9,6 +9,10 @@ const STABLE_APK_URL = "/rupee-radar-ai.apk";
 const apkUrlFor = (versionName?: string) =>
   versionName ? `/rupee-radar-ai-${versionName}.apk` : STABLE_APK_URL;
 
+// Read the real download size from the APK's Content-Length rather than hardcoding it (the build
+// size drifts a MB or so each release). A HEAD request is tiny; if it fails we just omit the size.
+const formatMb = (bytes: number) => `${(bytes / 1_000_000).toFixed(0)} MB`;
+
 interface LatestVersion {
   latestStable: { versionName: string; versionCode: number; releaseNotes: string; createdAt: string } | null;
   latestBeta: { versionName: string; versionCode: number; releaseNotes: string; createdAt: string } | null;
@@ -123,6 +127,8 @@ export default function Download() {
   const [version, setVersion] = useState<LatestVersion | null>(null);
   const [brand, setBrand] = useState<Brand>("samsung");
 
+  const [apkSize, setApkSize] = useState<string | null>(null);
+
   useEffect(() => {
     api<LatestVersion>("/app-version/latest?platform=android")
       .then(setVersion)
@@ -131,6 +137,18 @@ export default function Download() {
 
   const stable = version?.latestStable ?? version?.latestBeta ?? null;
   const brandInfo = BRAND_STEPS[brand];
+
+  useEffect(() => {
+    const url = apkUrlFor(stable?.versionName);
+    fetch(url, { method: "HEAD" })
+      .then((r) => {
+        const len = Number(r.headers.get("content-length"));
+        setApkSize(len > 0 ? formatMb(len) : null);
+      })
+      .catch(() => setApkSize(null));
+  }, [stable?.versionName]);
+
+  const sizeLabel = apkSize ?? "~11 MB";
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-16">
@@ -154,10 +172,10 @@ export default function Download() {
           {stable ? (
             <>
               <strong className="text-app-text">Version {stable.versionName}</strong> · Android 8.0
-              and up · ~13 MB
+              and up · {sizeLabel}
             </>
           ) : (
-            <>Android 8.0 and up · ~13 MB</>
+            <>Android 8.0 and up · {sizeLabel}</>
           )}
         </p>
         <p className="text-xs text-app-muted mt-1 text-center">
