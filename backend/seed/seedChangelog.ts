@@ -758,6 +758,18 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "Turn the first-visit tips on or off, or reset them, under Settings → Feature tips." },
     ],
   },
+  {
+    version: "1.0.43",
+    releaseDate: "2026-09-08",
+    platforms: ["android"],
+    summary: "Cleaner screen guides, plus a few fixes.",
+    highlights: [
+      { type: "IMPROVEMENT", platform: "android", text: "The screen guide is now the screen's own title — tap any page heading (it carries a small ⓘ) to see what the page is for. No more floating button." },
+      { type: "IMPROVEMENT", platform: "android", text: "Each guide now also tells you what to do on that screen, in one line." },
+      { type: "FIX", platform: "android", text: "Insights: the spending wheel no longer scatters labels across the chart — smaller categories fold into \"Other\"." },
+      { type: "FIX", platform: "android", text: "Nearby: a clearer message instead of a raw \"400\" error when a store can't be matched." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
