@@ -747,6 +747,17 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "Find it from the one-time Dashboard prompt, or any time from Arrange Services." },
     ],
   },
+  {
+    version: "1.0.42",
+    releaseDate: "2026-09-07",
+    platforms: ["android"],
+    summary: "Every screen now explains itself.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "The first time you open any feature, a short card explains what it is and how it helps you — worded for how you earn (salary, business, freelance, or other)." },
+      { type: "FEATURE", platform: "android", text: "Tap the ⓘ button on any screen to bring that explanation back whenever you want it." },
+      { type: "IMPROVEMENT", platform: "android", text: "Turn the first-visit tips on or off, or reset them, under Settings → Feature tips." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
