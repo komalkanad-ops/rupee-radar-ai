@@ -770,6 +770,16 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "Nearby: a clearer message instead of a raw \"400\" error when a store can't be matched." },
     ],
   },
+  {
+    version: "1.0.44",
+    releaseDate: "2026-09-09",
+    platforms: ["android"],
+    summary: "Polish on the screen guides and the spending wheel.",
+    highlights: [
+      { type: "FIX", platform: "android", text: "Insights: tapping a smaller category no longer greys out the whole spending wheel." },
+      { type: "FIX", platform: "android", text: "A screen's guide now closes when you navigate away, and shows instantly if you've turned animations off." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
