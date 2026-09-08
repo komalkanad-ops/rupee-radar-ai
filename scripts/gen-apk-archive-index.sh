@@ -1,18 +1,42 @@
 #!/usr/bin/env bash
-# Regenerates web/public/apk/index.html — the listing served at apk.rupeeradarai.com — from
-# whatever rupee-radar-ai-<version>.apk files are currently in web/public/apk/.
-# Called by publish-apk.sh; safe to run standalone after adding/removing an APK by hand.
+# Regenerates web/public/apk/index.html — the listing served at apk.rupeeradarai.com.
+#
+# Lists EVERY past release. Recent builds live in web/public/apk/ (served straight off the site).
+# Older builds are attached to the GitHub release `apk-archive` on the public repo so they don't
+# bloat this repo or every Hostinger deploy — see ARCHIVED_VERSIONS below.
+#
+# Called by publish-apk.sh; safe to run standalone after adding/removing a local APK by hand.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIR="$REPO_ROOT/web/public/apk"
 OUT="$DIR/index.html"
 
+GH_BASE="https://github.com/komalkanad-ops/rupee-radar-ai/releases/download/apk-archive"
+
+# Versions on the GitHub `apk-archive` release. Preferably read live via `gh` (self-maintaining);
+# the hardcoded list is the fallback for CI / offline / no-gh. (1.0.15–1.0.18 have no archived build.)
+ARCHIVED_VERSIONS_FALLBACK="
+1.0.0 1.0.1 1.0.2 1.0.3 1.0.4 1.0.5 1.0.6 1.0.7 1.0.8 1.0.9
+1.0.10 1.0.11 1.0.12 1.0.13 1.0.14
+1.0.19 1.0.20 1.0.21 1.0.22 1.0.23 1.0.24 1.0.25 1.0.26 1.0.27 1.0.28 1.0.29
+1.0.30 1.0.31 1.0.32 1.0.33 1.0.34 1.0.35 1.0.36 1.0.37 1.0.38 1.0.39 1.0.40 1.0.41
+1.0.42 1.0.43
+"
+ARCHIVED_VERSIONS=$(
+  gh release view apk-archive --repo komalkanad-ops/rupee-radar-ai --json assets \
+    --jq '.assets[].name | sub("^rupee-radar-ai-";"") | sub("\\.apk$";"")' 2>/dev/null \
+  || printf '%s' "$ARCHIVED_VERSIONS_FALLBACK"
+)
+
 size_of() { local b; b=$(stat -f%z "$1" 2>/dev/null || stat -c%s "$1"); awk -v b="$b" 'BEGIN{printf "%.1f MB", b/1000000}'; }
 
-# version-sort the APKs, newest first (portable: no mapfile — macOS ships bash 3.2)
-APKS=$(cd "$DIR" && ls -1 rupee-radar-ai-*.apk 2>/dev/null | sort -Vr)
-COUNT=$(printf '%s\n' "$APKS" | grep -c . || true)
+LOCAL_VERSIONS=$(cd "$DIR" && ls -1 rupee-radar-ai-*.apk 2>/dev/null | sed -E 's/^rupee-radar-ai-(.*)\.apk$/\1/' || true)
+
+# Union of local + archived, version-sorted newest first, deduped.
+ALL_VERSIONS=$(printf '%s\n%s\n' "$LOCAL_VERSIONS" "$ARCHIVED_VERSIONS" | tr ' ' '\n' | grep -E '^[0-9]' | sort -Vru)
+COUNT=$(printf '%s\n' "$ALL_VERSIONS" | grep -c . || true)
+LOCAL_COUNT=$(printf '%s\n' "$LOCAL_VERSIONS" | grep -c . || true)
 
 {
   cat <<'HTML'
@@ -45,20 +69,24 @@ COUNT=$(printf '%s\n' "$APKS" | grep -c . || true)
   <ul>
 HTML
 
-  printf '%s\n' "$APKS" | while IFS= read -r apk; do
-    [ -n "$apk" ] || continue
-    ver="${apk#rupee-radar-ai-}"; ver="${ver%.apk}"
-    sz="$(size_of "$DIR/$apk")"
-    printf '    <li><a href="%s" download>Version %s</a><span class="meta">%s</span></li>\n' "$apk" "$ver" "$sz"
+  printf '%s\n' "$ALL_VERSIONS" | while IFS= read -r ver; do
+    [ -n "$ver" ] || continue
+    apk="rupee-radar-ai-${ver}.apk"
+    if [ -f "$DIR/$apk" ]; then
+      href="$apk"; meta="$(size_of "$DIR/$apk")"
+    else
+      href="$GH_BASE/$apk"; meta="GitHub"
+    fi
+    printf '    <li><a href="%s" download>Version %s</a><span class="meta">%s</span></li>\n' "$href" "$ver" "$meta"
   done
 
   cat <<HTML
   </ul>
-  <p class="note">Older builds are provided as-is. Generated $(date -u +%Y-%m-%d).</p>
+  <p class="note">Older builds are provided as-is, hosted on GitHub. Generated $(date -u +%Y-%m-%d).</p>
 </div>
 </body>
 </html>
 HTML
 } > "$OUT"
 
-echo "wrote $OUT  (${COUNT} versions)"
+echo "wrote $OUT  (${COUNT} versions; ${LOCAL_COUNT} local, rest on GitHub)"
