@@ -8,14 +8,16 @@
 # then run this from THIS repo with the path to that APK:
 #   ./scripts/publish-apk.sh <android-repo>/app/build/outputs/apk/release/app-release.apk
 #
-# Published under a VERSIONED name (rupee-radar-ai-<versionName>.apk) because Hostinger's CDN caches
-# static assets ~1h and ignores Cache-Control — a fixed filename would serve a stale APK each
-# release. /download reads /app-version/latest and links to the versioned file. A stable copy is
-# also written (that one needs a CDN purge to refresh).
+# The CURRENT build is written to web/public/ under a VERSIONED name
+# (rupee-radar-ai-<versionName>.apk) — Hostinger's CDN caches static assets ~1h and ignores
+# Cache-Control, so a fixed filename would serve a stale APK each release. /download reads
+# /app-version/latest and links to the versioned file. A stable rupee-radar-ai.apk is also written
+# (that one needs a CDN purge to refresh).
 #
-# Every past versioned APK is kept in web/public/apk/ (served at apk.rupeeradarai.com) instead of
-# being deleted, with an auto-generated index.html. The current release also gets a copy there so
-# the archive is always complete; git dedupes the identical blob.
+# EVERY release (incl. the current one) is also uploaded to the GitHub release `apk-archive` on the
+# public repo. /download's "Previous versions" list is rendered live from that release's assets, so
+# the website repo only ever carries the single current APK — no growing archive folder, no
+# separate subdomain.
 set -euo pipefail
 
 SRC="${1:-}"
@@ -26,8 +28,6 @@ fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PUB="$REPO_ROOT/web/public"
-ARCHIVE="$PUB/apk"
-mkdir -p "$ARCHIVE"
 
 # versionName / versionCode from the APK itself — needs aapt/aapt2 (Android SDK build-tools).
 # If they're not on PATH, pass them explicitly:  VN=1.0.40 VC=74 ./scripts/publish-apk.sh <apk>
@@ -41,42 +41,31 @@ if [ -z "$VN" ] || [ -z "$VC" ]; then
   exit 1
 fi
 
-# Move any older versioned APK out of web/public/ into the archive (keeps the web build lean —
-# only the current version + the stable pointer stay on the main site).
-find "$PUB" -maxdepth 1 -name 'rupee-radar-ai-*.apk' ! -name "rupee-radar-ai-${VN}.apk" -exec mv -f {} "$ARCHIVE/" \;
+# Drop the previous versioned APK from the site (only the current one + the stable pointer live here).
+find "$PUB" -maxdepth 1 -name 'rupee-radar-ai-*.apk' ! -name "rupee-radar-ai-${VN}.apk" \
+  -exec git -C "$REPO_ROOT" rm -q --ignore-unmatch {} \; -exec rm -f {} \;
 
 cp "$SRC" "$PUB/rupee-radar-ai-${VN}.apk"
 cp "$SRC" "$PUB/rupee-radar-ai.apk"
-cp "$SRC" "$ARCHIVE/rupee-radar-ai-${VN}.apk"
 
-# Keep only the newest KEEP_LOCAL versioned APKs in the in-repo archive; push the rest to the
-# GitHub `apk-archive` release (unlimited, no repo/deploy bloat) and drop them locally. The index
-# generator reads the release's asset list live, so those versions still show up on
-# apk.rupeeradarai.com — just served from GitHub. Needs `gh` auth; skipped with a warning if absent.
-KEEP_LOCAL=6
-OLD_APKS=$(cd "$ARCHIVE" && ls -1 rupee-radar-ai-*.apk 2>/dev/null | sort -Vr | tail -n +$((KEEP_LOCAL + 1)) || true)
-if [ -n "$OLD_APKS" ]; then
-  if command -v gh >/dev/null 2>&1; then
-    (cd "$ARCHIVE" && gh release upload apk-archive $OLD_APKS --repo komalkanad-ops/rupee-radar-ai --clobber) \
-      && (cd "$ARCHIVE" && for a in $OLD_APKS; do git rm -q --ignore-unmatch "$a" >/dev/null 2>&1 || rm -f "$a"; done) \
-      && echo "==> Aged $(printf '%s\n' "$OLD_APKS" | grep -c .) old APK(s) onto the GitHub apk-archive release"
-  else
-    echo "WARN: gh not found — old APKs kept in-repo. Install gh + rerun to age them onto GitHub Releases." >&2
-  fi
+# Push this release to the GitHub archive (idempotent via --clobber). Needs `gh` auth.
+if command -v gh >/dev/null 2>&1; then
+  gh release upload apk-archive "$PUB/rupee-radar-ai-${VN}.apk" \
+    --repo komalkanad-ops/rupee-radar-ai --clobber \
+    && echo "==> Uploaded rupee-radar-ai-${VN}.apk to the GitHub apk-archive release"
+else
+  echo "WARN: gh not found — upload rupee-radar-ai-${VN}.apk to the apk-archive release by hand." >&2
 fi
 
-bash "$REPO_ROOT/scripts/gen-apk-archive-index.sh"
-
 SIZE_MB=$(( $(stat -f%z "$PUB/rupee-radar-ai.apk" 2>/dev/null || stat -c%s "$PUB/rupee-radar-ai.apk") / 1048576 ))
-ARCHIVE_COUNT=$(ls -1 "$ARCHIVE"/rupee-radar-ai-*.apk 2>/dev/null | wc -l | tr -d ' ')
 
 cat <<EOF
 
 ==> Staged  web/public/rupee-radar-ai-${VN}.apk  (+ stable rupee-radar-ai.apk)  ~${SIZE_MB} MB
-==> Archive web/public/apk/  now holds ${ARCHIVE_COUNT} versions (apk.rupeeradarai.com)
+==> Archived on GitHub release  apk-archive  (rendered on rupeeradarai.com/download → "Previous versions")
 
 Next:
-  git add web/public/rupee-radar-ai*.apk web/public/apk && git commit && git push origin main
+  git add web/public/rupee-radar-ai*.apk && git commit && git push origin main
   POST /app-version { platform:"android", versionName:"${VN}", versionCode:${VC}, channel:"STABLE" }
   POST /changelog   { version:"${VN}", releaseDate:"$(date -u +%Y-%m-%d)", platforms:["android"], ... }
   purge the rupeeradarai.com CDN cache, then check the .apk content-type is
