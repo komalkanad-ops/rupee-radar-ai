@@ -49,6 +49,22 @@ cp "$SRC" "$PUB/rupee-radar-ai-${VN}.apk"
 cp "$SRC" "$PUB/rupee-radar-ai.apk"
 cp "$SRC" "$ARCHIVE/rupee-radar-ai-${VN}.apk"
 
+# Keep only the newest KEEP_LOCAL versioned APKs in the in-repo archive; push the rest to the
+# GitHub `apk-archive` release (unlimited, no repo/deploy bloat) and drop them locally. The index
+# generator reads the release's asset list live, so those versions still show up on
+# apk.rupeeradarai.com — just served from GitHub. Needs `gh` auth; skipped with a warning if absent.
+KEEP_LOCAL=6
+OLD_APKS=$(cd "$ARCHIVE" && ls -1 rupee-radar-ai-*.apk 2>/dev/null | sort -Vr | tail -n +$((KEEP_LOCAL + 1)) || true)
+if [ -n "$OLD_APKS" ]; then
+  if command -v gh >/dev/null 2>&1; then
+    (cd "$ARCHIVE" && gh release upload apk-archive $OLD_APKS --repo komalkanad-ops/rupee-radar-ai --clobber) \
+      && (cd "$ARCHIVE" && for a in $OLD_APKS; do git rm -q --ignore-unmatch "$a" >/dev/null 2>&1 || rm -f "$a"; done) \
+      && echo "==> Aged $(printf '%s\n' "$OLD_APKS" | grep -c .) old APK(s) onto the GitHub apk-archive release"
+  else
+    echo "WARN: gh not found — old APKs kept in-repo. Install gh + rerun to age them onto GitHub Releases." >&2
+  fi
+fi
+
 bash "$REPO_ROOT/scripts/gen-apk-archive-index.sh"
 
 SIZE_MB=$(( $(stat -f%z "$PUB/rupee-radar-ai.apk" 2>/dev/null || stat -c%s "$PUB/rupee-radar-ai.apk") / 1048576 ))
