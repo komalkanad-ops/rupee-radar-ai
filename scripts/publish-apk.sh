@@ -15,10 +15,12 @@
 # (that one needs a CDN purge to refresh).
 #
 # EVERY release (incl. the current one) is also uploaded to the GitHub release `apk-archive` on the
-# public repo. /download's "Previous versions" list is rendered live from that release's assets, so
-# the website repo only ever carries the single current APK — no growing archive folder, no
-# separate subdomain.
+# public repo — the full history lives there. The website itself keeps only the newest KEEP_LOCAL
+# builds in web/public/ and lists them in web/public/apk-versions.json; /download renders that as
+# "Previous versions". (The GitHub archive is deliberately not surfaced on the site yet.)
 set -euo pipefail
+
+KEEP_LOCAL=4   # current build + 3 previous, shown on /download
 
 SRC="${1:-}"
 if [ -z "$SRC" ] || [ ! -f "$SRC" ]; then
@@ -41,10 +43,6 @@ if [ -z "$VN" ] || [ -z "$VC" ]; then
   exit 1
 fi
 
-# Drop the previous versioned APK from the site (only the current one + the stable pointer live here).
-find "$PUB" -maxdepth 1 -name 'rupee-radar-ai-*.apk' ! -name "rupee-radar-ai-${VN}.apk" \
-  -exec git -C "$REPO_ROOT" rm -q --ignore-unmatch {} \; -exec rm -f {} \;
-
 cp "$SRC" "$PUB/rupee-radar-ai-${VN}.apk"
 cp "$SRC" "$PUB/rupee-radar-ai.apk"
 
@@ -57,6 +55,19 @@ else
   echo "WARN: gh not found — upload rupee-radar-ai-${VN}.apk to the apk-archive release by hand." >&2
 fi
 
+# Keep only the newest KEEP_LOCAL versioned APKs on the site; the rest stay on the GitHub archive.
+(cd "$PUB" && ls -1 rupee-radar-ai-*.apk 2>/dev/null | sort -Vr | tail -n +$((KEEP_LOCAL + 1))) \
+  | while IFS= read -r old; do
+      [ -n "$old" ] || continue
+      git -C "$REPO_ROOT" rm -q --ignore-unmatch "$PUB/$old" >/dev/null 2>&1 || true
+      rm -f "$PUB/$old"
+    done
+
+# Regenerate the manifest /download reads for its "Previous versions" list (newest first).
+(cd "$PUB" && ls -1 rupee-radar-ai-*.apk 2>/dev/null | sed -E 's/^rupee-radar-ai-(.*)\.apk$/\1/' | sort -Vr \
+  | awk 'BEGIN{printf "["} {printf "%s%s\"%s\"", (NR>1?", ":""), "", $0} END{print "]"}') \
+  > "$PUB/apk-versions.json"
+
 SIZE_MB=$(( $(stat -f%z "$PUB/rupee-radar-ai.apk" 2>/dev/null || stat -c%s "$PUB/rupee-radar-ai.apk") / 1048576 ))
 
 cat <<EOF
@@ -65,7 +76,7 @@ cat <<EOF
 ==> Archived on GitHub release  apk-archive  (rendered on rupeeradarai.com/download → "Previous versions")
 
 Next:
-  git add web/public/rupee-radar-ai*.apk && git commit && git push origin main
+  git add web/public/rupee-radar-ai*.apk web/public/apk-versions.json && git commit && git push origin main
   POST /app-version { platform:"android", versionName:"${VN}", versionCode:${VC}, channel:"STABLE" }
   POST /changelog   { version:"${VN}", releaseDate:"$(date -u +%Y-%m-%d)", platforms:["android"], ... }
   purge the rupeeradarai.com CDN cache, then check the .apk content-type is

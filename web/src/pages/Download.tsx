@@ -18,30 +18,11 @@ interface LatestVersion {
   latestBeta: { versionName: string; versionCode: number; releaseNotes: string; createdAt: string } | null;
 }
 
-// Every past release is attached to the GitHub `apk-archive` release on the public repo. The
-// "Previous versions" list below is rendered live from its assets — so this repo only ever carries
-// the single current APK (no growing archive folder, no separate subdomain).
-const ARCHIVE_RELEASE_API =
-  "https://api.github.com/repos/komalkanad-ops/rupee-radar-ai/releases/tags/apk-archive";
-const ARCHIVE_RELEASE_PAGE =
-  "https://github.com/komalkanad-ops/rupee-radar-ai/releases/tag/apk-archive";
-
-interface ArchiveApk {
-  version: string;
-  url: string;
-  size: number;
-}
-
-// Descending semver-ish compare on "1.0.43" style strings.
-function cmpVersionDesc(a: string, b: string): number {
-  const pa = a.split(".").map(Number);
-  const pb = b.split(".").map(Number);
-  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-    const d = (pb[i] || 0) - (pa[i] || 0);
-    if (d) return d;
-  }
-  return 0;
-}
+// The last few builds are kept on the site itself (web/public/rupee-radar-ai-<v>.apk), listed in
+// /apk-versions.json (newest first, written by scripts/publish-apk.sh). The full history lives on
+// the GitHub `apk-archive` release but is deliberately NOT surfaced here yet — see PREVIOUS_LIMIT.
+const APK_VERSIONS_MANIFEST = "/apk-versions.json";
+const PREVIOUS_LIMIT = 3;
 
 type Brand =
   | "samsung"
@@ -153,8 +134,7 @@ export default function Download() {
   const [brand, setBrand] = useState<Brand>("samsung");
 
   const [apkSize, setApkSize] = useState<string | null>(null);
-  const [archive, setArchive] = useState<ArchiveApk[] | null>(null);
-  const [archiveFailed, setArchiveFailed] = useState(false);
+  const [manifest, setManifest] = useState<string[] | null>(null);
 
   useEffect(() => {
     api<LatestVersion>("/app-version/latest?platform=android")
@@ -163,23 +143,17 @@ export default function Download() {
   }, []);
 
   useEffect(() => {
-    fetch(ARCHIVE_RELEASE_API)
+    fetch(APK_VERSIONS_MANIFEST)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((rel: { assets?: { name: string; browser_download_url: string; size: number }[] }) => {
-        const apks = (rel.assets ?? [])
-          .filter((a) => a.name.endsWith(".apk"))
-          .map((a) => ({
-            version: a.name.replace(/^rupee-radar-ai-/, "").replace(/\.apk$/, ""),
-            url: a.browser_download_url,
-            size: a.size,
-          }))
-          .sort((a, b) => cmpVersionDesc(a.version, b.version));
-        setArchive(apks);
-      })
-      .catch(() => setArchiveFailed(true));
+      .then((v: unknown) => setManifest(Array.isArray(v) ? (v as string[]) : []))
+      .catch(() => setManifest([]));
   }, []);
 
   const stable = version?.latestStable ?? version?.latestBeta ?? null;
+  // The 3 builds before the current one, all served straight from the site.
+  const previousVersions = (manifest ?? [])
+    .filter((v) => v !== stable?.versionName)
+    .slice(0, PREVIOUS_LIMIT);
   const brandInfo = BRAND_STEPS[brand];
 
   useEffect(() => {
@@ -223,11 +197,16 @@ export default function Download() {
           )}
         </p>
         <p className="text-xs text-app-muted mt-1 text-center">
-          This link always serves the latest version. Need an older build? See{" "}
-          <a href="#previous-versions" className="underline hover:text-app-text">
-            Previous versions
-          </a>{" "}
-          below.
+          This link always serves the latest version.
+          {previousVersions.length > 0 && (
+            <>
+              {" "}Need an older build? See{" "}
+              <a href="#previous-versions" className="underline hover:text-app-text">
+                Previous versions
+              </a>{" "}
+              below.
+            </>
+          )}
         </p>
         {stable?.releaseNotes && (
           <p className="text-sm text-app-muted mt-4 border-t border-app-border pt-4">
@@ -236,51 +215,31 @@ export default function Download() {
         )}
       </div>
 
-      {/* Previous versions — rendered live from the GitHub apk-archive release */}
-      <details id="previous-versions" className="rounded-2xl border border-app-border bg-app-surface p-6 mb-10">
-        <summary className="cursor-pointer font-semibold text-app-text select-none">
-          Previous versions
-        </summary>
-        {archiveFailed ? (
-          <p className="text-sm text-app-muted mt-4">
-            Couldn't load the list right now —{" "}
-            <a href={ARCHIVE_RELEASE_PAGE} className="underline hover:text-app-text" target="_blank" rel="noreferrer">
-              see every version on GitHub
-            </a>
-            .
+      {/* Previous versions — the last few builds, served straight from the site */}
+      {previousVersions.length > 0 && (
+        <div id="previous-versions" className="rounded-2xl border border-app-border bg-app-surface p-6 mb-10">
+          <h2 className="font-semibold text-app-text">Previous versions</h2>
+          <p className="text-sm text-app-muted mt-2 mb-1">
+            Older builds are provided as-is. Install the same way as the current version.
           </p>
-        ) : !archive ? (
-          <p className="text-sm text-app-muted mt-4">Loading…</p>
-        ) : (
-          <>
-            <p className="text-sm text-app-muted mt-3 mb-1">
-              Older builds are provided as-is. Install the same way as the current version.
-            </p>
-            <ul className="divide-y divide-app-border">
-              {archive
-                .filter((v) => v.version !== stable?.versionName)
-                .map((v) => (
-                  <li key={v.version} className="flex items-center justify-between py-3">
-                    <a
-                      href={v.url}
-                      download
-                      onClick={() =>
-                        trackEvent("apk_download", {
-                          source: "download_page_archive",
-                          version: v.version,
-                        })
-                      }
-                      className="font-medium text-app-text hover:text-brand"
-                    >
-                      Version {v.version}
-                    </a>
-                    <span className="text-xs text-app-muted">{formatMb(v.size)}</span>
-                  </li>
-                ))}
-            </ul>
-          </>
-        )}
-      </details>
+          <ul className="divide-y divide-app-border">
+            {previousVersions.map((v) => (
+              <li key={v} className="flex items-center justify-between py-3">
+                <a
+                  href={apkUrlFor(v)}
+                  download
+                  onClick={() =>
+                    trackEvent("apk_download", { source: "download_page_archive", version: v })
+                  }
+                  className="font-medium text-app-text hover:text-brand"
+                >
+                  Version {v}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Common steps */}
       <h2 className="text-xl font-bold mb-3">How to install</h2>
