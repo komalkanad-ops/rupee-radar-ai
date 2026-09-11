@@ -206,6 +206,7 @@ model User {
   budgets                   Budget[]
   goals                     Goal[]
   investments               Investment[]
+  savedCoupons              SavedCoupon[]
 }
 
 // User-set monthly spend limit per category — replaces the trailing-3-month average that
@@ -259,6 +260,31 @@ model Investment {
   active          Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// A user's own coupon/voucher codes (screenshotted from email/WhatsApp/apps, parsed by AI into
+// structured fields, then hand-corrected before saving — the model never auto-saves an LLM guess).
+// Distinct from Voucher/VoucherRedemption above, which is the admin-managed rewards catalog
+// (points-cost gift-card vouchers) — a different concept entirely, don't confuse the two. The
+// source screenshot itself is never persisted; only the extracted fields are.
+model SavedCoupon {
+  id                  String    @id @default(cuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+  merchantName        String
+  title               String
+  code                String?
+  pin                 String?
+  discountDescription String?
+  category            String    @default("other")
+  expiryDate          DateTime?
+  instructions         String?  @db.Text
+  status              String    @default("ACTIVE") // ACTIVE | USED | EXPIRED | DISMISSED
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  usedAt              DateTime?
 
   @@index([userId])
 }

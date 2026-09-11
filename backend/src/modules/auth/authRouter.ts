@@ -501,6 +501,7 @@ authRouter.delete("/me", requireUser, async (req: UserRequest, res) => {
     prisma.budget.deleteMany({ where: { userId } }),
     prisma.goal.deleteMany({ where: { userId } }),
     prisma.investment.deleteMany({ where: { userId } }),
+    prisma.savedCoupon.deleteMany({ where: { userId } }),
     prisma.merchantCategoryOverride.deleteMany({ where: { userId } }),
     prisma.featureUsageEvent.deleteMany({ where: { userId } }),
     prisma.feedback.updateMany({ where: { userId }, data: { userId: null } }),

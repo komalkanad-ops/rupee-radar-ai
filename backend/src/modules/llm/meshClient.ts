@@ -9,7 +9,14 @@ const API_KEY = process.env.MESH_API_KEY;
 const BASE_URL = process.env.MESH_BASE_URL || "https://api.meshapi.ai/v1";
 const MODEL = process.env.MESH_MODEL || "anthropic/claude-sonnet-4.5";
 
-export type MeshMessage = { role: "system" | "user" | "assistant"; content: string };
+// content is usually plain text; a vision-capable caller (e.g. coupon-screenshot parsing) can pass
+// an OpenAI-compatible content-part array instead (text + a base64 data-URI image) — callMesh just
+// forwards whatever's here to mesh-api verbatim, it never inspects the string case internally, so
+// widening this is safe for every existing plain-text caller.
+export type MeshContentPart =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
+export type MeshMessage = { role: "system" | "user" | "assistant"; content: string | MeshContentPart[] };
 
 // Free string, not an enum — same convention as every other feature/type tag in this schema.
 export type MeshFeature =
@@ -18,7 +25,8 @@ export type MeshFeature =
   | "correction_summary"
   | "insight_narrative"
   | "merchant_classify"
-  | "recurring_dedupe";
+  | "recurring_dedupe"
+  | "coupon_parse";
 
 // Cost guardrails, tuned well above any legitimate use of the AI features (chat is the heaviest —
 // a PRO user sending a genuine question every minute for an hour is ~60 calls). A runaway loop or a
