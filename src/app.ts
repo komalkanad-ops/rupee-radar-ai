@@ -131,10 +131,28 @@ app.get("/health", (_req, res) => res.json({ ok: true, service: "rupee-radar-ai-
 // and 2026-08-29 outages) apart from a genuinely healthy API. Returns 503 (not 500) on failure so
 // the monitor trips without this looking like an application bug. Cheap enough to poll every
 // minute; deliberately unauthenticated.
+//
+// DB_PROBE_TIMEOUT_MS bounds how long this handler can take, independent of whether the
+// underlying `$queryRaw` ever resolves. Hostinger support traced a September 2026 outage to this
+// exact query hanging for ~5,000 SECONDS per call against a wedged DB connection — on this host's
+// Passenger-style worker model, a request that never completes ties up its worker indefinitely,
+// so every 60s poll (the Sentry uptime monitor) piles on a fresh worker until the shared hosting
+// account's 120-process ceiling is hit and EVERY app on the account starts 500ing, not just this
+// one. Racing the query against a short timeout guarantees this handler always responds quickly
+// and frees its worker, even though it can't cancel the underlying hung Prisma call itself.
+const DB_PROBE_TIMEOUT_MS = 4000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(`db probe timed out after ${ms}ms`)), ms)),
+  ]);
+}
+
 app.get("/health/db", async (_req, res) => {
   const startedAt = process.hrtime.bigint();
   try {
-    await prisma.$queryRaw`SELECT 1`;
+    await withTimeout(prisma.$queryRaw`SELECT 1`, DB_PROBE_TIMEOUT_MS);
     const connectMs = Math.round(Number(process.hrtime.bigint() - startedAt) / 1e6);
     // Feed the round-trip time into the metrics rollup as a synthetic route so the wedged-pool
     // ramp is charted, not just sampled — this is the leading indicator for both prior outages.
