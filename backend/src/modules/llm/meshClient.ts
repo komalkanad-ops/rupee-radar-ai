@@ -26,7 +26,8 @@ export type MeshFeature =
   | "insight_narrative"
   | "merchant_classify"
   | "recurring_dedupe"
-  | "coupon_parse";
+  | "coupon_parse"
+  | "quick_capture";
 
 // Cost guardrails, tuned well above any legitimate use of the AI features (chat is the heaviest —
 // a PRO user sending a genuine question every minute for an hour is ~60 calls). A runaway loop or a

@@ -139,3 +139,117 @@ describe("Merchant AI classification (/categorization/classify)", () => {
     expect(res.body.retryable).toBe(true);
   });
 });
+
+describe("Quick Capture AI dictation (/categorization/quick-capture)", () => {
+  const createdUserIds: string[] = [];
+  const originalCode = process.env.PRO_TEST_REDEEM_CODE;
+
+  beforeAll(() => {
+    process.env.PRO_TEST_REDEEM_CODE = "TEST-CODE-QUICKCAPTURE";
+  });
+
+  afterAll(async () => {
+    process.env.PRO_TEST_REDEEM_CODE = originalCode;
+    await prisma.proEntitlement.deleteMany({ where: { userId: { in: createdUserIds } } });
+    await prisma.user.deleteMany({ where: { id: { in: createdUserIds } } });
+  });
+
+  it("401s with no token", async () => {
+    const res = await request(app).post("/categorization/quick-capture").send({ text: "spent 500 on groceries" });
+    expect(res.status).toBe(401);
+  });
+
+  it("400s when text is missing or blank", async () => {
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+
+    const missing = await request(app)
+      .post("/categorization/quick-capture")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({});
+    expect(missing.status).toBe(400);
+
+    const blank = await request(app)
+      .post("/categorization/quick-capture")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({ text: "   " });
+    expect(blank.status).toBe(400);
+  });
+
+  it("free user gets proRequired without a model call", async () => {
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    const before = (callMesh as any).mock.calls.length;
+
+    const res = await request(app)
+      .post("/categorization/quick-capture")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({ text: "spent 500 on groceries, netflix is 649 a month" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.proRequired).toBe(true);
+    expect(res.body.captures).toEqual([]);
+    expect((callMesh as any).mock.calls.length).toBe(before);
+  });
+
+  it("PRO user gets parsed expense + recurring captures, never writes anything", async () => {
+    (callMesh as any).mockResolvedValueOnce(
+      JSON.stringify({
+        captures: [
+          { kind: "expense", amount: 500, merchant: "DMart", category: "groceries" },
+          { kind: "recurring", amount: 649, name: "Netflix", type: "SUBSCRIPTION", frequency: "monthly" },
+          { kind: "expense", amount: 0, merchant: "should be dropped", category: "shopping" },
+        ],
+      })
+    );
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    await grantPro(user.token);
+
+    const res = await request(app)
+      .post("/categorization/quick-capture")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({ text: "spent 500 on groceries at dmart, netflix is 649 a month" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.captures).toEqual([
+      { kind: "expense", amount: 500, merchant: "DMart", category: "groceries" },
+      { kind: "recurring", amount: 649, name: "Netflix", type: "SUBSCRIPTION", frequency: "monthly" },
+    ]);
+
+    const txnCount = await prisma.smsTransaction.count({ where: { userId: user.userId } });
+    const recurringCount = await prisma.recurringPayment.count({ where: { userId: user.userId } });
+    expect(txnCount).toBe(0);
+    expect(recurringCount).toBe(0);
+  });
+
+  it("a malformed model response is a no-op, not a 500", async () => {
+    (callMesh as any).mockResolvedValueOnce("sorry, I can't do that");
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    await grantPro(user.token);
+
+    const res = await request(app)
+      .post("/categorization/quick-capture")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({ text: "whatever" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.captures).toEqual([]);
+  });
+
+  it("returns a retryable 429 when the mesh provider is rate-limited", async () => {
+    (callMesh as any).mockRejectedValueOnce(new Error("RPM limit of 20 req/min exceeded"));
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    await grantPro(user.token);
+
+    const res = await request(app)
+      .post("/categorization/quick-capture")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({ text: "whatever" });
+
+    expect(res.status).toBe(429);
+    expect(res.body.retryable).toBe(true);
+  });
+});
