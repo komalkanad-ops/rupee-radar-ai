@@ -106,6 +106,22 @@ describe("pro-purchase routes", () => {
       purchase = { id: created.id, orderId, voucherCode: created.voucherCode! };
     });
 
+    it("rejects redeeming a sandbox-origin voucher once the backend runs in production mode", async () => {
+      const user = await createAnonymousUser();
+      createdUserIds.push(user.userId);
+      const original = process.env.CASHFREE_ENV;
+      process.env.CASHFREE_ENV = "production";
+      try {
+        const res = await request(app)
+          .post("/pro-purchase/redeem")
+          .set("Authorization", `Bearer ${user.token}`)
+          .send({ voucherCode: purchase.voucherCode, phone: "9876543210" });
+        expect(res.status).toBe(403);
+      } finally {
+        process.env.CASHFREE_ENV = original;
+      }
+    });
+
     it("rejects redemption with a non-matching email/phone", async () => {
       const user = await createAnonymousUser();
       createdUserIds.push(user.userId);

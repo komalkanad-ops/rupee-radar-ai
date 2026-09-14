@@ -148,6 +148,7 @@ proPurchaseRouter.post("/orders", proPurchaseOrderLimiter, async (req, res) => {
       email: normalizedEmail,
       phone: normalizedPhone,
       status: "CREATED",
+      sandbox: isSandbox(),
     },
   });
 
@@ -252,6 +253,13 @@ proPurchaseRouter.post("/redeem", requireUser, async (req: UserRequest, res) => 
   const purchase = await prisma.proPurchase.findUnique({ where: { voucherCode: voucherCode.trim().toUpperCase() } });
   if (!purchase || !purchase.voucherCode) return res.status(404).json({ error: "Invalid voucher code" });
   if (purchase.voucherRedeemed) return res.status(409).json({ error: "This voucher has already been redeemed" });
+  // A sandbox-origin voucher (no real money moved) must never redeem once this backend is running
+  // with CASHFREE_ENV=production — the launch step of swapping in real Cashfree keys and flipping
+  // that env var must be done atomically; this is the guard for the half-flipped window where real
+  // production traffic could still find and redeem a leftover free/test voucher.
+  if (purchase.sandbox && !isSandbox()) {
+    return res.status(403).json({ error: "This voucher was issued in test mode and can't be redeemed here" });
+  }
 
   const emailMatches = normalizedEmail && purchase.email && normalizedEmail === purchase.email;
   const phoneMatches = normalizedPhone && normalizedPhone === purchase.phone;
@@ -260,10 +268,6 @@ proPurchaseRouter.post("/redeem", requireUser, async (req: UserRequest, res) => 
   }
 
   const { days } = PLANS[purchase.plan as PlanKey];
-  const existing = await prisma.proEntitlement.findUnique({ where: { userId } });
-  const existingExpiryMs = existing?.status === "active" ? (existing.expiryAt?.getTime() ?? 0) : 0;
-  const baseMs = Math.max(existingExpiryMs, Date.now());
-  const expiryAt = new Date(baseMs + days * 24 * 60 * 60 * 1000);
 
   // Claim-then-grant, not grant-then-mark: the earlier plain findUnique + later update left a
   // window where two concurrent redeem requests for the same still-unredeemed voucher (e.g. from
@@ -273,20 +277,52 @@ proPurchaseRouter.post("/redeem", requireUser, async (req: UserRequest, res) => 
   // a conditional `updateMany` FIRST; only the request whose claim actually lands (count === 1)
   // proceeds to grant the entitlement — a second concurrent request's claim always sees count 0
   // and 409s, same as if it had arrived a full second later.
+  //
+  // The existing-entitlement lookup + expiry math ALSO happen inside this transaction (via `tx`,
+  // not the outer `prisma`) — reading them outside it left a second, narrower race: the SAME user
+  // redeeming two DIFFERENT valid vouchers concurrently could both read the same pre-redemption
+  // expiry, both compute expiryAt from it, and the second upsert would silently overwrite the
+  // first's extension instead of stacking on top of it.
   try {
     const entitlement = await prisma.$transaction(async (tx) => {
       const claimed = await tx.proPurchase.updateMany({
         where: { id: purchase.id, voucherRedeemed: false },
-        data: { voucherRedeemed: true, redeemedByUserId: userId, redeemedAt: new Date(), proExpiryAt: expiryAt },
+        data: { voucherRedeemed: true, redeemedByUserId: userId, redeemedAt: new Date() },
       });
       if (claimed.count !== 1) {
         throw Object.assign(new Error("This voucher has already been redeemed"), { alreadyRedeemed: true });
       }
-      return tx.proEntitlement.upsert({
-        where: { userId },
-        create: { userId, productId: `voucher_${purchase.plan.toLowerCase()}`, expiryAt, verifiedAt: new Date(), status: "active" },
-        update: { productId: `voucher_${purchase.plan.toLowerCase()}`, expiryAt, verifiedAt: new Date(), status: "active" },
-      });
+      const productId = `voucher_${purchase.plan.toLowerCase()}`;
+      let expiryAt: Date | null = null;
+      // Optimistic compare-and-swap, not a blind read-then-write: two DIFFERENT vouchers for the
+      // SAME user redeemed at nearly the same instant must not both compute their expiry off the
+      // same stale snapshot and have the second silently clobber the first's extension. Each
+      // attempt re-reads, then writes conditioned on the row being unchanged since that read — the
+      // underlying UPDATE's own row lock is what actually serializes two concurrent writers to the
+      // same userId; a lost race here just means "someone else updated it first," so retry with a
+      // fresh read rather than erroring the buyer out.
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const existing = await tx.proEntitlement.findUnique({ where: { userId } });
+        const existingExpiryMs = existing?.status === "active" ? (existing.expiryAt?.getTime() ?? 0) : 0;
+        expiryAt = new Date(Math.max(existingExpiryMs, Date.now()) + days * 24 * 60 * 60 * 1000);
+        if (!existing) {
+          try {
+            await tx.proEntitlement.create({ data: { userId, productId, expiryAt, verifiedAt: new Date(), status: "active" } });
+            break;
+          } catch (err: any) {
+            if (err?.code === "P2002" && attempt < 4) continue; // someone else created it first — retry as an update
+            throw err;
+          }
+        }
+        const updated = await tx.proEntitlement.updateMany({
+          where: { userId, expiryAt: existing.expiryAt, status: existing.status },
+          data: { productId, expiryAt, verifiedAt: new Date(), status: "active" },
+        });
+        if (updated.count === 1) break;
+        if (attempt === 4) throw new Error("Could not extend PRO entitlement due to a concurrent update — please retry");
+      }
+      await tx.proPurchase.update({ where: { id: purchase.id }, data: { proExpiryAt: expiryAt! } });
+      return tx.proEntitlement.findUniqueOrThrow({ where: { userId } });
     });
     res.json(entitlement);
   } catch (err: any) {
