@@ -54,6 +54,24 @@ describe("cashfreeClient webhook signature verification (deterministic, no live 
   });
 });
 
+describe("POST /pro-purchase/webhook always ACKs 200 (Cashfree's dashboard 'Test' sends an unsigned connectivity probe)", () => {
+  it("200s a request with no signature headers at all", async () => {
+    const res = await request(app).post("/pro-purchase/webhook").send({ ping: true });
+    expect(res.status).toBe(200);
+    expect(res.body.acted).toBe(false);
+  });
+
+  it("200s a request with a garbage signature", async () => {
+    const res = await request(app)
+      .post("/pro-purchase/webhook")
+      .set("x-webhook-signature", "not-a-real-signature")
+      .set("x-webhook-timestamp", "1700000000")
+      .send({ data: { order: { order_id: "does-not-exist" } } });
+    expect(res.status).toBe(200);
+    expect(res.body.acted).toBe(false);
+  });
+});
+
 describe("pro-purchase routes", () => {
   const createdOrderIds: string[] = [];
   const createdUserIds: string[] = [];

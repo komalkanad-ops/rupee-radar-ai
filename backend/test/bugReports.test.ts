@@ -17,11 +17,12 @@ describe("Bug Reports (/bug-reports)", () => {
   const createdReportIds: string[] = [];
 
   afterAll(async () => {
+    await prisma.coinLedgerEntry.deleteMany({ where: { userId: { in: createdUserIds } } });
     await prisma.bugReport.deleteMany({ where: { id: { in: createdReportIds } } });
     await prisma.user.deleteMany({ where: { id: { in: createdUserIds } } });
   });
 
-  it("an authenticated submission records type, message, and screen context", async () => {
+  it("an authenticated submission records type, message, screen context, and awards 100 coins", async () => {
     const user = await createAnonymousUser();
     createdUserIds.push(user.userId);
 
@@ -40,7 +41,11 @@ describe("Bug Reports (/bug-reports)", () => {
 
     expect(res.status).toBe(201);
     expect(res.body.id).toBeTruthy();
+    expect(res.body.coinsAwarded).toBe(100);
     createdReportIds.push(res.body.id);
+
+    const balanceRes = await request(app).get("/rewards/balance").set("Authorization", `Bearer ${user.token}`);
+    expect(balanceRes.body.balance).toBe(100);
   });
 
   it("rejects an unauthenticated submission", async () => {
