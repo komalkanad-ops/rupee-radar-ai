@@ -28,9 +28,9 @@ function isSandbox(): boolean {
 }
 
 const PLANS = {
-  WEEKLY: { amountInr: 200, days: 7 },
-  MONTHLY: { amountInr: 500, days: 30 },
-  YEARLY: { amountInr: 3000, days: 365 },
+  WEEKLY: { amountInr: 199, days: 7 },
+  MONTHLY: { amountInr: 499, days: 30 },
+  YEARLY: { amountInr: 2999, days: 365 },
 } as const;
 type PlanKey = keyof typeof PLANS;
 
