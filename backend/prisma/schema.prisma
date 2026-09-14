@@ -424,6 +424,10 @@ model ProPurchase {
   amountInr        Int
   email            String?
   phone            String
+  // Whether CASHFREE_ENV was NOT "production" at order-creation time — no real money moved. Guards
+  // against the half-flipped-launch scenario: if the backend later runs with CASHFREE_ENV=production
+  // (real keys), a still-unredeemed sandbox-origin voucher must not silently grant real, free PRO.
+  sandbox          Boolean   @default(true)
   status           String    @default("CREATED")
   voucherCode      String?   @unique
   voucherRedeemed  Boolean   @default(false)

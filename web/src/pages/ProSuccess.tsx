@@ -28,8 +28,13 @@ export default function ProSuccess() {
   const [order, setOrder] = useState<OrderStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [sandbox, setSandbox] = useState(false);
   const pollsRef = useRef(0);
   const trackedRef = useRef(false);
+
+  useEffect(() => {
+    api<{ sandbox: boolean }>("/pro-purchase/config").then((c) => setSandbox(c.sandbox)).catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!orderId) {
@@ -85,6 +90,11 @@ export default function ProSuccess() {
 
   return (
     <div className="max-w-lg mx-auto px-6 py-20 text-center">
+      {sandbox && (
+        <div className="mb-8 rounded-xl border border-danger/40 bg-danger/10 text-danger text-sm text-center px-4 py-3">
+          Test mode — no real money was charged for this purchase.
+        </div>
+      )}
       {order?.voucherCode ? (
         <>
           <div className="text-5xl mb-4">🎉</div>

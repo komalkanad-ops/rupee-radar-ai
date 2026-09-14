@@ -93,13 +93,23 @@ export default function Pricing() {
         { plan: selected, phone: digits, email: email.trim() || undefined },
       );
       const cashfree = await load({ mode: import.meta.env.VITE_CASHFREE_MODE === "production" ? "production" : "sandbox" });
-      await cashfree.checkout({
+      // redirectTarget: "_self" means checkout() itself navigates the page to Cashfree's hosted
+      // checkout — the return_url set at order-creation time (order_meta.return_url, server-side)
+      // is what brings the buyer back to /pro/success once they actually pay. Confirmed via a real
+      // browser run: checkout()'s promise resolves as soon as the navigation is *triggered*, not
+      // once it completes — an unconditional redirect placed after the await here raced Cashfree's
+      // own in-flight navigation and won, bouncing every buyer straight to "Confirming your
+      // payment…" before they ever saw a payment form. Only redirect ourselves on a genuine
+      // failure (result.error) — a real redirect never reaches this line at all.
+      const result = await cashfree.checkout({
         paymentSessionId: order.paymentSessionId,
+        returnUrl: `${window.location.origin}/pro/success?order_id={order_id}`,
         redirectTarget: "_self",
       });
-      // Cashfree's own redirect (return_url) takes over from here — this line only runs if
-      // checkout() resolves without redirecting (rare, e.g. popup blocked).
-      window.location.href = `/pro/success?order_id=${encodeURIComponent(order.orderId)}`;
+      if (result?.error) {
+        setError(result.error.message || "Payment was cancelled or failed — try again");
+        setStep("form");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not start checkout — try again");
       setStep("form");
