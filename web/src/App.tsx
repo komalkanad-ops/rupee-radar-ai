@@ -7,6 +7,7 @@ import Cards from "./pages/Cards";
 import CardDetail from "./pages/CardDetail";
 import BestCreditCards from "./pages/BestCreditCards";
 import WhyRupeeRadarAiPage from "./pages/WhyRupeeRadarAiPage";
+import ProblemsWeSolve from "./pages/ProblemsWeSolve";
 import StatementAnalyzer from "./pages/StatementAnalyzer";
 import EmiCalculator from "./pages/EmiCalculator";
 import FeedbackPage from "./pages/FeedbackPage";
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/cards/:id" element={<CardDetail />} />
           <Route path="/best-credit-cards/:category" element={<BestCreditCards />} />
           <Route path="/why-rupee-radar-ai" element={<WhyRupeeRadarAiPage />} />
+          <Route path="/problems-we-solve" element={<ProblemsWeSolve />} />
           <Route path="/statement-analyzer" element={<StatementAnalyzer />} />
           <Route path="/emi-calculator" element={<EmiCalculator />} />
           <Route path="/feedback" element={<FeedbackPage />} />
