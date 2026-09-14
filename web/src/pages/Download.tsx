@@ -286,6 +286,35 @@ export default function Download() {
         </ol>
       </div>
 
+      {/* Play Protect — the harder block, distinct from the routine "unknown sources" prompt above */}
+      <div className="rounded-2xl border border-app-border bg-app-surface p-6 mt-8">
+        <h3 className="text-lg font-bold mb-3">"Play Protect blocked this app" — what to do</h3>
+        <p className="text-sm text-app-muted mb-3">
+          Because Rupee Radar AI isn't on the Play Store yet, Google Play Protect scans it fresh on
+          your phone and — since it hasn't seen many installs of this exact file yet — can show a
+          stronger warning than the usual "unknown sources" prompt, sometimes without an obvious
+          "Install anyway" button. This happens to every new app distributed outside the Play
+          Store; it isn't specific to this one. Here's how to get past it:
+        </p>
+        <ol className="list-decimal list-inside space-y-2 text-sm text-app-muted mb-3">
+          <li>
+            <Rich text="If you see a warning screen, look for **“More details”** — tapping it usually reveals an **“Install anyway”** option even when the first screen doesn't show one." />
+          </li>
+          <li>
+            <Rich text="If there's genuinely no override: go to **Settings → Security & privacy → More security & privacy → Google Play Protect** (naming varies slightly by phone), tap the **gear icon**, and turn **off** **“Scan apps with Play Protect.”** Install the app, then you can turn scanning back on." />
+          </li>
+          <li>
+            <Rich text="This is a one-time thing per install — once the app is installed, Play Protect goes back to scanning everything else on your phone normally." />
+          </li>
+        </ol>
+        <p className="text-xs text-app-muted">
+          We're in the process of registering Rupee Radar AI with Google's app-verification
+          program, which should reduce this warning for everyone over time — it's not something a
+          single app update can fix instantly. If you'd rather wait, the app will also be
+          available directly on the Play Store; we'll update this page the moment that happens.
+        </p>
+      </div>
+
       <div className="mt-8 text-sm text-app-muted space-y-2">
         <p>
           <strong className="text-app-text">Is this safe?</strong> Yes. The “unknown apps”
