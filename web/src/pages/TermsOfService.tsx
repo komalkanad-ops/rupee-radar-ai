@@ -1,7 +1,7 @@
 import { useSeo } from "../lib/useSeo";
 
 const SUPPORT_EMAIL = "support@rupeeradarai.com";
-const LAST_UPDATED = "22 August 2026";
+const LAST_UPDATED = "14 September 2026";
 
 interface Section {
   heading: string;
@@ -43,10 +43,14 @@ const sections: Section[] = [
     ],
   },
   {
-    heading: "Rupee Radar AI PRO (subscriptions)",
+    heading: "Rupee Radar AI PRO (subscriptions and vouchers)",
     body: [
-      "Some features (currently including the job-loss runway calculator, the predictive cash-flow calendar, tax-saving nudges, Family Vault, AI-assisted SMS parsing, and quarterly narrative summaries) require a PRO subscription, billed and processed entirely through Google Play Billing — we never see or store your payment card details.",
-      "Subscription pricing is shown in the app before purchase and may change; we'll give reasonable notice of price changes for existing subscribers where required by law. Subscriptions renew automatically until cancelled. You can cancel any time from Google Play's subscription settings — cancelling stops future renewals but doesn't refund the current billing period. Refunds are handled per Google Play's own refund policy, not directly by us.",
+      "PRO unlocks features like the job-loss runway calculator, the predictive cash-flow calendar, tax-saving nudges, Family Vault, AI-assisted SMS parsing, and quarterly narrative summaries. You can get PRO two ways: (1) an in-app subscription billed and processed entirely through Google Play Billing, or (2) a one-time Weekly/Monthly/Yearly voucher purchased on rupeeradarai.com/pricing and redeemed in the app. In neither case do we ever see, receive, or store your card, UPI, or bank account details.",
+      "Website voucher purchases are processed entirely by Cashfree Payments Private Limited (\"Cashfree\"), an RBI-authorised, independent third-party payment gateway — not by Rupee Radar AI. We only receive confirmation that a payment succeeded (and the phone/email you provided at checkout) from Cashfree; your card, UPI ID, netbanking credentials, and any other payment-instrument details are entered directly on Cashfree's own checkout page and are never transmitted to or stored by Rupee Radar AI. Rupee Radar AI is not responsible for, and disclaims all liability arising from, any loss, unauthorised transaction, fraud, or security incident involving your payment instrument, bank account, or card — for any such issue, or any dispute about a specific payment (a failed charge, a duplicate charge, an unauthorised transaction, or a refund), contact Cashfree directly using the details on your payment receipt or at cashfree.com, in addition to reaching us at " +
+        SUPPORT_EMAIL +
+        " if you also need help on our side (e.g. a voucher that didn't redeem correctly).",
+      "A website voucher is a one-time code tied to the phone number and/or email you provide at checkout, redeemable exactly once for the purchased duration of PRO access. It has no cash value, isn't transferable once redeemed, and isn't refundable except where required by law or at our discretion for a demonstrable technical failure on our side.",
+      "Subscription pricing is shown before purchase and may change; we'll give reasonable notice of price changes for existing subscribers where required by law. Play Store subscriptions renew automatically until cancelled from Google Play's subscription settings — cancelling stops future renewals but doesn't refund the current billing period, and Play Store refunds follow Google Play's own refund policy, not ours.",
     ],
   },
   {
@@ -64,7 +68,7 @@ const sections: Section[] = [
   {
     heading: "Third-party services",
     body: [
-      "The Service integrates with third-party providers to deliver specific features — Google (sign-in, Play Billing, Places API), Setu (optional bank account linking), Razorpay (in-app bill payments), meshapi.ai (PRO SMS parsing), and Firebase (push notifications). Your use of features backed by these providers is also subject to their own terms. We aren't responsible for the availability or accuracy of third-party services.",
+      "The Service integrates with third-party providers to deliver specific features — Google (sign-in, Play Billing, Places API), Setu (optional bank account linking), Razorpay (in-app bill payments), Cashfree Payments (website PRO-voucher purchases — see the section above), meshapi.ai (PRO SMS parsing), and Firebase (push notifications). Your use of features backed by these providers is also subject to their own terms, including Cashfree's own terms of service and privacy policy at cashfree.com. We aren't responsible for the availability, accuracy, or security of third-party services, including any payment gateway.",
       "Card details, bank names, fees, and reward terms shown in the credit card catalog are sourced from publicly available information and kept reasonably up to date, but issuers can change terms at any time without notice to us — always verify current terms directly with your card issuer before relying on them.",
     ],
   },
@@ -72,7 +76,7 @@ const sections: Section[] = [
     heading: "Disclaimers and limitation of liability",
     body: [
       "The Service is provided \"as is\" and \"as available,\" without warranties of any kind, express or implied, including accuracy, reliability, or fitness for a particular purpose. SMS parsing is heuristic and can occasionally misread an amount, merchant, or category — always cross-check important figures against your actual bank statement.",
-      "To the fullest extent permitted by law, Rupee Radar AI and its operator won't be liable for any indirect, incidental, or consequential damages arising from your use of the Service, including financial decisions made based on information the app shows you. Our total liability for any claim relating to the Service is limited to the amount you paid us (if any) in the 12 months before the claim arose.",
+      "To the fullest extent permitted by law, Rupee Radar AI and its operator won't be liable for any indirect, incidental, or consequential damages arising from your use of the Service, including financial decisions made based on information the app shows you, or any loss, unauthorised transaction, or fraud connected to a payment made through a third-party gateway (see \"Rupee Radar AI PRO\" above — Cashfree and Google Play Billing are independent, regulated payment processors, and payment-instrument security is between you and them). Our total liability for any claim relating to the Service is limited to the amount you paid us (if any) in the 12 months before the claim arose.",
     ],
   },
   {

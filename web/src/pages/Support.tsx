@@ -16,6 +16,10 @@ const faqs = [
     a: "PRO unlocks the job-loss runway calculator, smarter AI-assisted SMS parsing, insight narrative summaries, the predictive cash-flow calendar, tax-saving nudges, Family Vault, and Live Offers. Core expense tracking, budgets, and your health score are always free.",
   },
   {
+    q: "I paid for PRO on the website but something went wrong — what do I do?",
+    a: `Email us at ${SUPPORT_EMAIL} with your order id or the phone/email you paid with and we'll sort it out. Note that payments on rupeeradarai.com/pricing are processed entirely by Cashfree Payments, an independent, RBI-authorised third-party gateway — we never see or store your card, UPI, or bank details. For a specific transaction problem (a failed charge, a duplicate charge, an unauthorised transaction, or a refund), please also contact Cashfree directly via your payment receipt or their grievance redressal page at cashfree.com — Rupee Radar AI isn't able to see or act on the payment-instrument side of a transaction, only on whether your PRO voucher redeemed correctly.`,
+  },
+  {
     q: "How do referral coins and vouchers work?",
     a: "Share your referral code from the app's Rewards screen — when a friend signs up with it, you both get coins. Coins can be redeemed for vouchers in the same screen; redemptions are reviewed and fulfilled by our team, and you'll be notified once yours is ready.",
   },

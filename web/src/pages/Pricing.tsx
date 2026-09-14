@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { load } from "@cashfreepayments/cashfree-js";
 import { api, apiPost } from "../lib/api";
 import { trackEvent } from "../lib/analytics";
 import { useSeo } from "../lib/useSeo";
+
+const SUPPORT_EMAIL = "support@rupeeradarai.com";
 
 type PlanKey = "WEEKLY" | "MONTHLY" | "YEARLY";
 
@@ -264,10 +267,61 @@ export default function Pricing() {
         </div>
       </div>
 
-      <p className="text-center text-xs text-app-muted">
+      <p className="text-center text-xs text-app-muted mb-10">
         After payment you'll get a one-time PRO code — enter it in the app (PRO → Bought PRO on the
         website?) with the same phone number or email to activate.
       </p>
+
+      {/* Payment support + liability disclaimer — deliberately visible on this page, not just in
+          the Terms/Privacy docs, since this is where a buyer is actually about to hand over card/
+          UPI/bank details. */}
+      <div className="max-w-2xl mx-auto rounded-2xl border border-app-border bg-app-surface p-6 text-center">
+        <h3 className="font-semibold text-app-text mb-2">Having trouble with a payment?</h3>
+        <p className="text-sm text-app-muted mb-3">
+          Email us at{" "}
+          <a href={`mailto:${SUPPORT_EMAIL}`} className="text-brand hover:underline">
+            {SUPPORT_EMAIL}
+          </a>{" "}
+          and we'll help sort it out, or see our{" "}
+          <Link to="/support" className="text-brand hover:underline">
+            Support &amp; FAQ
+          </Link>{" "}
+          page.
+        </p>
+        <p className="text-xs text-app-muted/80 leading-relaxed">
+          Payments on this page are processed entirely by{" "}
+          <a
+            href="https://www.cashfree.com"
+            target="_blank"
+            rel="noreferrer"
+            className="underline hover:text-app-muted"
+          >
+            Cashfree Payments
+          </a>
+          , an RBI-authorised, independent third-party payment gateway — Rupee Radar AI never sees
+          or stores your card, UPI, or bank account details. Rupee Radar AI is not responsible for
+          any loss, unauthorised transaction, or fraud involving your payment instrument or
+          account; for a failed charge, unauthorised transaction, duplicate charge, or refund,
+          please also contact Cashfree directly via your payment receipt or at{" "}
+          <a
+            href="https://www.cashfree.com/grievance-redressal-policy"
+            target="_blank"
+            rel="noreferrer"
+            className="underline hover:text-app-muted"
+          >
+            their grievance redressal page
+          </a>
+          . By purchasing, you agree to our{" "}
+          <Link to="/terms" className="underline hover:text-app-muted">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link to="/privacy" className="underline hover:text-app-muted">
+            Privacy Policy
+          </Link>
+          .
+        </p>
+      </div>
     </div>
   );
 }

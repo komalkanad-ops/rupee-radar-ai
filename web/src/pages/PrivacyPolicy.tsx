@@ -1,7 +1,7 @@
 import { useSeo } from "../lib/useSeo";
 
 const SUPPORT_EMAIL = "support@rupeeradarai.com";
-const LAST_UPDATED = "3 September 2026";
+const LAST_UPDATED = "14 September 2026";
 
 interface Section {
   heading: string;
@@ -62,6 +62,7 @@ const sections: Section[] = [
       "• meshapi.ai — PRO-tier AI-assisted SMS parsing (see above).",
       "• Setu — if you choose to link a bank account, to securely fetch your account-level transaction data with your consent.",
       "• Razorpay — if you make an in-app bill payment, to process that payment.",
+      "• Cashfree Payments Private Limited — if you buy a PRO voucher on rupeeradarai.com/pricing, to process that payment. We send Cashfree the phone number and/or email you enter at checkout so it can create the payment; we never see, receive, or store your card, UPI ID, netbanking, or bank account details — those are entered directly on Cashfree's own checkout page and held only by Cashfree, subject to its own privacy policy.",
       "• Google Play Billing — if you subscribe to Rupee Radar AI PRO, to process and verify that subscription.",
       "• Google — for sign-in, and for the Places API used by the Nearby feature.",
       "• Firebase (Google) — to deliver push notifications, if enabled.",

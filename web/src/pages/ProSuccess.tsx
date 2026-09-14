@@ -4,6 +4,8 @@ import { api } from "../lib/api";
 import { trackEvent } from "../lib/analytics";
 import { useSeo } from "../lib/useSeo";
 
+const SUPPORT_EMAIL = "support@rupeeradarai.com";
+
 interface OrderStatus {
   status: string;
   plan: string;
@@ -178,6 +180,17 @@ export default function ProSuccess() {
           <p className="text-app-muted text-sm">This usually takes a few seconds.</p>
         </>
       )}
+
+      <p className="text-xs text-app-muted/80 mt-12 pt-6 border-t border-app-border leading-relaxed">
+        Having trouble with a payment? Email{" "}
+        <a href={`mailto:${SUPPORT_EMAIL}`} className="underline hover:text-app-muted">
+          {SUPPORT_EMAIL}
+        </a>
+        . Payments are processed entirely by Cashfree Payments, an independent third-party gateway
+        — Rupee Radar AI never sees your card, UPI, or bank details and isn't responsible for loss
+        or fraud involving your payment instrument; for a specific transaction issue, also contact
+        Cashfree directly via your payment receipt.
+      </p>
     </div>
   );
 }
