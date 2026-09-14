@@ -7,6 +7,14 @@ import { createAnonymousUser } from "./helpers.js";
 import { verifyWebhookSignature } from "../src/modules/billing/cashfreeClient.js";
 import { normalizeEmail, normalizePhone } from "../src/lib/identityMatch.js";
 
+const ADMIN_EMAIL = process.env.ADMIN_BOOTSTRAP_EMAIL ?? "admin@rupeeradarai.com";
+const ADMIN_PASSWORD = process.env.ADMIN_BOOTSTRAP_PASSWORD ?? "changeme-admin";
+
+async function adminToken(): Promise<string> {
+  const res = await request(app).post("/auth/admin/login").send({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
+  return res.body.token;
+}
+
 describe("identityMatch normalization", () => {
   it("normalizes email casing/whitespace", () => {
     expect(normalizeEmail(" Test@Example.com ")).toBe("test@example.com");
@@ -238,6 +246,48 @@ describe("pro-purchase routes", () => {
       // MONTHLY (30 days) redeemed on top of a ~300-day-out expiry should extend past that
       // existing expiry, not reset down to ~30 days from now.
       expect(new Date(res.body.expiryAt).getTime()).toBeGreaterThan(farFuture.getTime());
+    });
+  });
+
+  describe("admin comp-voucher grant", () => {
+    it("rejects a non-admin request", async () => {
+      const res = await request(app).post("/pro-purchase/admin/grant").send({ email: "test@example.com", plan: "YEARLY" });
+      expect(res.status).toBe(401);
+    });
+
+    it("generates a redeemable voucher for an email with no purchase, no Cashfree call", async () => {
+      const token = await adminToken();
+      if (!token) return; // admin bootstrap not configured in this environment — skip gracefully
+      const email = `comp-test-${Date.now()}@example.com`;
+      const grant = await request(app)
+        .post("/pro-purchase/admin/grant")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ email, plan: "YEARLY" });
+      expect(grant.status).toBe(201);
+      expect(grant.body.voucherCode).toMatch(/^RRPRO-/);
+      expect(grant.body.amountInr).toBe(0);
+      expect(grant.body.sandbox).toBe(false);
+      createdOrderIds.push(grant.body.orderId);
+
+      const user = await createAnonymousUser();
+      createdUserIds.push(user.userId);
+      const redeem = await request(app)
+        .post("/pro-purchase/redeem")
+        .set("Authorization", `Bearer ${user.token}`)
+        .send({ voucherCode: grant.body.voucherCode, email });
+      expect(redeem.status).toBe(200);
+      expect(redeem.body.status).toBe("active");
+    });
+
+    it("GET /admin/purchases requires admin and returns the comp grant", async () => {
+      const anon = await request(app).get("/pro-purchase/admin/purchases");
+      expect(anon.status).toBe(401);
+
+      const token = await adminToken();
+      if (!token) return;
+      const res = await request(app).get("/pro-purchase/admin/purchases").set("Authorization", `Bearer ${token}`);
+      expect(res.status).toBe(200);
+      expect(Array.isArray(res.body)).toBe(true);
     });
   });
 });

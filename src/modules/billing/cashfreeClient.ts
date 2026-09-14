@@ -106,6 +106,36 @@ export async function fetchOrder(orderId: string): Promise<CashfreeOrder> {
   return data as CashfreeOrder;
 }
 
+export interface CashfreePayment {
+  cf_payment_id: string;
+  payment_status: "SUCCESS" | "FAILED" | "PENDING" | "NOT_ATTEMPTED" | "USER_DROPPED" | "VOID" | "CANCELLED";
+  payment_time?: string;
+}
+
+// GET /orders/{order_id}/payments — every payment ATTEMPT on this order, distinct from the order's
+// own order_status (which stays "ACTIVE"/retriable even after a failed/abandoned attempt — a
+// declined card or an abandoned checkout does NOT expire the order, so order_status alone can't
+// tell a genuinely-failed attempt apart from "buyer is still filling the form"). An empty array
+// means no payment method was ever selected yet — NOT the same as a failed attempt, per Cashfree's
+// own docs (their checkout only creates a payment object once a method is chosen).
+export async function fetchOrderPayments(orderId: string): Promise<CashfreePayment[]> {
+  requireConfig();
+  const res = await fetch(`${baseUrl()}/orders/${encodeURIComponent(orderId)}/payments`, {
+    method: "GET",
+    headers: headers(),
+  });
+  let data: any;
+  try {
+    data = await res.json();
+  } catch (err: any) {
+    throw new Error(`Invalid JSON response from Cashfree: ${err.message}`);
+  }
+  if (!res.ok) {
+    throw new Error(data?.message || JSON.stringify(data));
+  }
+  return Array.isArray(data) ? (data as CashfreePayment[]) : [];
+}
+
 // Webhook signature: Base64(HMACSHA256(timestamp + rawBody, secretKey)), compared against the
 // x-webhook-signature header. Uses CASHFREE_SECRET_KEY — Cashfree's PG webhooks are signed with the
 // same client secret (no separate webhook secret, unlike Razorpay).

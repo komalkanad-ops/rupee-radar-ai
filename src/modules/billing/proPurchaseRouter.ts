@@ -14,10 +14,10 @@ import * as Sentry from "@sentry/node";
 import { randomBytes } from "node:crypto";
 import { Router } from "express";
 import { prisma } from "../../lib/prisma.js";
-import { requireUser, type UserRequest } from "../auth/authMiddleware.js";
+import { requireAdmin, requireUser, type UserRequest } from "../auth/authMiddleware.js";
 import { proPurchaseOrderLimiter, proPurchaseStatusLimiter } from "../../lib/rateLimiters.js";
 import { normalizeEmail, normalizePhone } from "../../lib/identityMatch.js";
-import { createOrder, fetchOrder, isCashfreeConfigured, verifyWebhookSignature } from "./cashfreeClient.js";
+import { createOrder, fetchOrder, fetchOrderPayments, isCashfreeConfigured, verifyWebhookSignature } from "./cashfreeClient.js";
 
 export const proPurchaseRouter = Router();
 
@@ -47,6 +47,24 @@ function generateVoucherCode(): string {
 // voucherCode + voucherRedeemed, not this field.
 const TERMINAL_UNPAID = new Set(["EXPIRED", "TERMINATED", "TERMINATION_REQUESTED"]);
 
+// A declined card or an abandoned checkout does NOT expire/terminate the ORDER (order_status stays
+// "ACTIVE", retriable) — only the individual payment ATTEMPT fails. Without checking the attempt
+// list separately, the success page had no way to tell "buyer is still filling the form" apart from
+// "buyer's card was declined 90 seconds ago" — both looked identical (order_status: ACTIVE) and both
+// kept polling/spinning "Confirming your payment…" for the full ~100s before giving up with a vague
+// message. This resolves that: a FAILED/USER_DROPPED/VOID/CANCELLED attempt with nothing newer
+// pending means the payment genuinely didn't go through, distinct from "still ACTIVE, no attempt
+// yet" (an empty payments array — per Cashfree's own docs, NOT the same as a failed attempt).
+const FAILED_ATTEMPT_STATUSES = new Set(["FAILED", "USER_DROPPED", "VOID", "CANCELLED"]);
+
+async function latestFailedAttempt(orderId: string): Promise<string | null> {
+  const payments = await fetchOrderPayments(orderId);
+  if (payments.length === 0) return null;
+  const sorted = [...payments].sort((a, b) => (b.payment_time ?? "").localeCompare(a.payment_time ?? ""));
+  const latest = sorted[0];
+  return FAILED_ATTEMPT_STATUSES.has(latest.payment_status) ? latest.payment_status : null;
+}
+
 // Idempotent AND race-safe: the poll and the webhook can both call this for the same order at
 // nearly the same instant. The claiming write is a conditional `updateMany({ where: { voucherCode:
 // null } })`, not a plain `update` — only the caller whose write actually lands (count === 1) is
@@ -69,6 +87,11 @@ async function issueVoucherIfPaid(purchaseId: string): Promise<{ status: string;
         data: { status: order.order_status },
       });
     }
+    // The order itself stays ACTIVE/retriable after a declined card or an abandoned checkout — only
+    // the individual attempt is a dead end. Best-effort: a failure here (e.g. Cashfree transiently
+    // unreachable) must not break the whole status poll, just fall back to the plain order status.
+    const failedAttempt = await latestFailedAttempt(purchase.orderId).catch(() => null);
+    if (failedAttempt) return { status: `PAYMENT_${failedAttempt}`, voucherCode: null };
     return { status: order.order_status, voucherCode: null };
   }
 
@@ -329,4 +352,58 @@ proPurchaseRouter.post("/redeem", requireUser, async (req: UserRequest, res) => 
     if (err?.alreadyRedeemed) return res.status(409).json({ error: "This voucher has already been redeemed" });
     throw err;
   }
+});
+
+// GET /pro-purchase/admin/purchases — requireAdmin. Support/refund lookup over every ProPurchase
+// row (real buyer purchases AND admin-granted comp vouchers below both live in the same table) —
+// newest first, capped at 200 since there's no pagination UI for this yet.
+proPurchaseRouter.get("/admin/purchases", requireAdmin, async (_req, res) => {
+  const purchases = await prisma.proPurchase.findMany({ orderBy: { createdAt: "desc" }, take: 200 });
+  res.json(purchases);
+});
+
+// POST /pro-purchase/admin/grant — requireAdmin — { email?, phone?, plan } — generates a real
+// voucher code for a specific identity WITHOUT going through Cashfree (amountInr: 0, status "PAID"
+// immediately). Redeemed through the exact same POST /redeem path a real buyer uses — this is a
+// comp/test grant, not a parallel mechanism, so it also doubles as a way to exercise the real
+// redemption flow. `sandbox: false` unconditionally: an admin-granted voucher must always redeem
+// regardless of whether CASHFREE_ENV happens to be "production" or not (see the `sandbox` guard on
+// /redeem above, which only exists to catch REAL sandbox-origin Cashfree purchases).
+proPurchaseRouter.post("/admin/grant", requireAdmin, async (req, res) => {
+  const { email, phone, plan } = req.body ?? {};
+  if (!isPlanKey(plan)) {
+    return res.status(400).json({ error: `plan must be one of ${Object.keys(PLANS).join(", ")}` });
+  }
+  const normalizedEmail = normalizeEmail(email);
+  const normalizedPhone = normalizePhone(phone);
+  if (!normalizedEmail && !normalizedPhone) {
+    return res.status(400).json({ error: "email or phone is required" });
+  }
+
+  const orderId = `comp_${plan.toLowerCase()}_${Date.now()}_${randomBytes(4).toString("hex")}`;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const voucherCode = generateVoucherCode();
+    try {
+      const purchase = await prisma.proPurchase.create({
+        data: {
+          orderId,
+          plan,
+          amountInr: 0,
+          email: normalizedEmail,
+          // ProPurchase.phone is NOT NULL (Cashfree mandates a phone on every real order) — a
+          // comp grant with only an email still needs a placeholder here; it can never match a
+          // real phone at redemption since it isn't a valid 10-digit number.
+          phone: normalizedPhone ?? "0000000000",
+          status: "PAID",
+          voucherCode,
+          sandbox: false,
+        },
+      });
+      return res.status(201).json(purchase);
+    } catch (err: any) {
+      if (err?.code === "P2002" && attempt < 2) continue;
+      throw err;
+    }
+  }
+  res.status(500).json({ error: "Could not generate a unique voucher code" });
 });
