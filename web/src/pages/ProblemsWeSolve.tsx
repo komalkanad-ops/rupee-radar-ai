@@ -147,7 +147,7 @@ export default function ProblemsWeSolve() {
       <section className="max-w-3xl mx-auto px-6 pb-20 text-center">
         <p className="text-app-muted mb-6">
           Everything above except the items marked PRO is completely free. Try PRO from{" "}
-          <Link to="/pricing" className="text-brand hover:underline">₹200/week</Link>, cancel anytime.
+          <Link to="/pricing" className="text-brand hover:underline">₹199/week</Link>, cancel anytime.
         </p>
         <Link to="/download" className="bg-brand text-black px-6 py-3 rounded-full font-semibold hover:bg-brand-dark">
           Download the app

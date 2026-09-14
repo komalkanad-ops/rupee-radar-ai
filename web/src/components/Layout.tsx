@@ -7,10 +7,9 @@ const navLinks = [
   { to: "/cards", label: "Credit Cards" },
   { to: "/statement-analyzer", label: "Statement Analyzer" },
   { to: "/emi-calculator", label: "EMI Calculator" },
-  { to: "/why-rupee-radar-ai", label: "Why Rupee Radar AI" },
+  { to: "/why-rupee-radar-ai", label: "Why This App" },
   { to: "/problems-we-solve", label: "Problems We Solve" },
   { to: "/pricing", label: "PRO" },
-  { to: "/download", label: "Download" },
 ];
 
 export default function Layout() {

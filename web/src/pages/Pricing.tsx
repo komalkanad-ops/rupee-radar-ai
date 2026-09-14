@@ -14,16 +14,16 @@ interface Plan {
   label: string;
   priceInr: number;
   // What it would cost at the weekly rate for the same span — shown crossed out next to the
-  // discounted price, per the owner's ask ("actual amount based on calculation of 200 per week").
+  // discounted price, per the owner's ask ("actual amount based on calculation of 199 per week").
   actualInr: number | null;
   per: string;
   badge?: string;
 }
 
 const PLANS: Plan[] = [
-  { key: "WEEKLY", label: "Weekly", priceInr: 200, actualInr: null, per: "/ week" },
-  { key: "MONTHLY", label: "Monthly", priceInr: 500, actualInr: 200 * 4, per: "/ month", badge: "Most popular" },
-  { key: "YEARLY", label: "Yearly", priceInr: 3000, actualInr: 200 * 52, per: "/ year", badge: "Best value" },
+  { key: "WEEKLY", label: "Weekly", priceInr: 199, actualInr: null, per: "/ week" },
+  { key: "MONTHLY", label: "Monthly", priceInr: 499, actualInr: 199 * 4, per: "/ month", badge: "Most popular" },
+  { key: "YEARLY", label: "Yearly", priceInr: 2999, actualInr: 199 * 52, per: "/ year", badge: "Best value" },
 ];
 
 // The 16 PRO-only screens as of 2026-09-14 (grepped from every ProLockedCard(title=...) call in
@@ -191,7 +191,7 @@ export default function Pricing() {
         ))}
       </div>
       <p className="text-xs text-app-muted text-center mb-10">
-        Priced off ₹200/week — Monthly and Yearly are discounted against that baseline.
+        Priced off ₹199/week — Monthly and Yearly are discounted against that baseline.
       </p>
 
       {/* Checkout box */}
