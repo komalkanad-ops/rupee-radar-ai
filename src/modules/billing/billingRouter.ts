@@ -3,6 +3,7 @@ import { Router } from "express";
 import { google } from "googleapis";
 import { prisma } from "../../lib/prisma.js";
 import { requireAdmin, requireUser, type UserRequest } from "../auth/authMiddleware.js";
+import { trialCodeLimiter } from "../../lib/rateLimiters.js";
 
 export const billingRouter = Router();
 
@@ -155,4 +156,88 @@ billingRouter.post("/admin/revoke", requireAdmin, async (req, res) => {
     update: { status: "inactive" },
   });
   res.json(entitlement);
+});
+
+function normalizeTrialCode(raw: string): string {
+  return raw.trim().toUpperCase();
+}
+
+// GET /billing/trial-code/status — public, never leaks the code itself — just whether one is
+// currently configured and turned on, so the app knows whether to show the "have a trial code?"
+// box at all.
+billingRouter.get("/trial-code/status", async (_req, res) => {
+  const row = await prisma.trialPromoCode.findUnique({ where: { id: "singleton" } });
+  res.json({ available: !!row?.active });
+});
+
+// POST /billing/redeem-trial-code — { code } — the one, shared, admin-set code that grants any
+// signed-in account exactly 1 day of PRO, once per account ever. Lower-stakes replacement for the
+// retired redeem-test-code (1 year, no per-account guard at all): the one-time claim below is
+// atomic (conditional updateMany, same shape as ProPurchase voucher redemption in
+// proPurchaseRouter.ts) so two concurrent taps can't both succeed, and an existing active
+// subscriber is turned away rather than having their real entitlement overwritten down to 1 day.
+billingRouter.post("/redeem-trial-code", trialCodeLimiter, requireUser, async (req: UserRequest, res) => {
+  const { code } = req.body ?? {};
+  if (!code || typeof code !== "string") return res.status(400).json({ error: "code is required" });
+  const userId = req.userId!;
+
+  const row = await prisma.trialPromoCode.findUnique({ where: { id: "singleton" } });
+  if (!row?.active) {
+    return res.status(501).json({ error: "No trial code is currently available." });
+  }
+  if (normalizeTrialCode(code) !== row.code) {
+    return res.status(403).json({ error: "Invalid code" });
+  }
+
+  const existing = await prisma.proEntitlement.findUnique({ where: { userId } });
+  if (existing?.status === "active" && existing.expiryAt && existing.expiryAt.getTime() > Date.now()) {
+    return res.status(409).json({ error: "You already have PRO — the trial code is for new PRO access only." });
+  }
+
+  const entitlement = await prisma.$transaction(async (tx) => {
+    const claimed = await tx.user.updateMany({
+      where: { id: userId, trialCodeRedeemedAt: null },
+      data: { trialCodeRedeemedAt: new Date() },
+    });
+    if (claimed.count === 0) {
+      throw Object.assign(new Error("ALREADY_REDEEMED"), { code: "ALREADY_REDEEMED" });
+    }
+    const expiryAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    return tx.proEntitlement.upsert({
+      where: { userId },
+      create: { userId, productId: "trial_code", expiryAt, verifiedAt: new Date(), status: "active" },
+      update: { productId: "trial_code", expiryAt, verifiedAt: new Date(), status: "active" },
+    });
+  }).catch((err) => {
+    if (err?.code === "ALREADY_REDEEMED") return null;
+    throw err;
+  });
+
+  if (!entitlement) {
+    return res.status(409).json({ error: "This account has already used a trial code." });
+  }
+  res.json(entitlement);
+});
+
+// GET/PUT /billing/admin/trial-code — admin console manages the one shared code + whether it's
+// currently switched on, no Hostinger env-var edit ever needed for this.
+billingRouter.get("/admin/trial-code", requireAdmin, async (_req, res) => {
+  const row = await prisma.trialPromoCode.findUnique({ where: { id: "singleton" } });
+  res.json({ code: row?.code ?? null, active: row?.active ?? false });
+});
+
+billingRouter.put("/admin/trial-code", requireAdmin, async (req, res) => {
+  const { code, active } = req.body ?? {};
+  if (code !== undefined && (typeof code !== "string" || !code.trim())) {
+    return res.status(400).json({ error: "code must be a non-empty string" });
+  }
+  const row = await prisma.trialPromoCode.upsert({
+    where: { id: "singleton" },
+    create: { id: "singleton", code: code ? normalizeTrialCode(code) : "TRIAL", active: active ?? true },
+    update: {
+      ...(code !== undefined ? { code: normalizeTrialCode(code) } : {}),
+      ...(active !== undefined ? { active: !!active } : {}),
+    },
+  });
+  res.json({ code: row.code, active: row.active });
 });

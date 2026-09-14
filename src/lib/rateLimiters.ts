@@ -83,3 +83,14 @@ export const proPurchaseStatusLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Too many status checks — please wait a moment and try again" },
 });
+
+// POST /billing/redeem-trial-code is requireUser but is still a shared-secret guess surface (one
+// code string, checked against every signed-in account) — keep the brute-force budget tight and
+// IP-keyed, independent of generalLimiter.
+export const trialCodeLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many attempts — please wait a few minutes and try again" },
+});

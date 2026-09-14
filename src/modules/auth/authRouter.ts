@@ -343,6 +343,7 @@ function serializeUser(user: {
   incomeBracket: string | null;
   salaryDayOfMonth: number | null;
   gender: string | null;
+  ageGroup: string | null;
   persona: string | null;
   serviceOrderJson: string | null;
   quickActionRoutesJson: string | null;
@@ -360,6 +361,9 @@ function serializeUser(user: {
     incomeBracket: user.incomeBracket,
     salaryDayOfMonth: user.salaryDayOfMonth,
     gender: user.gender,
+    // One of AGE_GROUPS below, self-reported, optional — never a birthdate. Used only for
+    // peer-benchmarking/persona framing, never shared with a third party (see Privacy Policy).
+    ageGroup: user.ageGroup,
     // "SALARIED" | "BUSINESS" | "CREATOR" | "OTHER" — drives persona-aware copy on the client
     // (salary vs revenue vs avg income, job-loss vs business-loss runway framing) and which
     // services are shown. Column is NOT NULL default "SALARIED", so this is never actually null
@@ -380,18 +384,24 @@ authRouter.get("/me", requireUser, async (req: UserRequest, res) => {
   res.json(serializeUser(user));
 });
 
-// PATCH /auth/me — { name?, email?, gender?, persona?, city?, incomeBracket?, salaryDayOfMonth?,
+// PATCH /auth/me — { name?, email?, gender?, ageGroup?, persona?, city?, incomeBracket?, salaryDayOfMonth?,
 // serviceOrder?, quickActionRoutes? } — lets Profile/Settings edit the fields peer benchmarking
 // and the cash-flow calendar depend on, (name/email/gender/persona) the phone-login profile-
 // completion form + onboarding persona step, and (serviceOrder/quickActionRoutes) the Arrange
 // Services screen's own save action.
 const PERSONAS = ["SALARIED", "BUSINESS", "CREATOR", "OTHER"];
+// Fixed bucket strings, never free text — keeps this a coarse demographic bucket rather than a
+// de-facto birthdate field. Must match Android's AGE_GROUPS (ui/profile) and the Privacy Policy.
+const AGE_GROUPS = ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
 
 authRouter.patch("/me", requireUser, async (req: UserRequest, res) => {
-  const { name, email, gender, persona, city, incomeBracket, salaryDayOfMonth, serviceOrder, quickActionRoutes, layoutQuiz } = req.body ?? {};
+  const { name, email, gender, ageGroup, persona, city, incomeBracket, salaryDayOfMonth, serviceOrder, quickActionRoutes, layoutQuiz } = req.body ?? {};
 
   if (persona !== undefined && !PERSONAS.includes(persona)) {
     return res.status(400).json({ error: `persona must be one of ${PERSONAS.join(", ")}` });
+  }
+  if (ageGroup !== undefined && ageGroup !== null && !AGE_GROUPS.includes(ageGroup)) {
+    return res.status(400).json({ error: `ageGroup must be one of ${AGE_GROUPS.join(", ")}, or null` });
   }
   if (serviceOrder !== undefined && !Array.isArray(serviceOrder)) {
     return res.status(400).json({ error: "serviceOrder must be an array of route keys" });
@@ -414,6 +424,7 @@ authRouter.patch("/me", requireUser, async (req: UserRequest, res) => {
         name,
         email,
         gender,
+        ageGroup,
         persona,
         city,
         incomeBracket,
