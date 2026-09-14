@@ -13,8 +13,27 @@ interface OrderStatus {
 
 // Cashfree order_status values that will never turn into a voucher — stop polling on these.
 const TERMINAL_UNPAID = new Set(["EXPIRED", "TERMINATED", "TERMINATION_REQUESTED"]);
+// The backend prefixes a genuinely-failed payment ATTEMPT with "PAYMENT_" (e.g. "PAYMENT_FAILED",
+// "PAYMENT_USER_DROPPED") — distinct from the order's own order_status, which stays ACTIVE/retriable
+// even after a declined card. Without this, a failed/abandoned payment looked identical to "buyer
+// is still filling the form" and this page just kept spinning "Confirming your payment…" for the
+// full ~100s poll window before giving up with a vague message.
+const FAILED_STATUS_PREFIX = "PAYMENT_";
 const POLL_MS = 2500;
 const MAX_POLLS = 40; // ~100s — generous for a redirect-based checkout that already completed
+
+function friendlyFailureReason(status: string): string {
+  const reason = status.slice(FAILED_STATUS_PREFIX.length);
+  switch (reason) {
+    case "USER_DROPPED":
+      return "the checkout was closed before completing";
+    case "VOID":
+    case "CANCELLED":
+      return "it was cancelled";
+    default:
+      return "it didn't go through";
+  }
+}
 
 export default function ProSuccess() {
   useSeo({
@@ -27,6 +46,7 @@ export default function ProSuccess() {
   const orderId = params.get("order_id");
   const [order, setOrder] = useState<OrderStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [failedStatus, setFailedStatus] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [sandbox, setSandbox] = useState(false);
   const pollsRef = useRef(0);
@@ -55,6 +75,11 @@ export default function ProSuccess() {
             trackEvent("pro_purchase_completed", { plan: result.plan, amountInr: result.amountInr });
           }
           return; // done, stop polling
+        }
+        if (result.status.startsWith(FAILED_STATUS_PREFIX)) {
+          trackEvent("pro_purchase_failed", { status: result.status });
+          setFailedStatus(result.status);
+          return; // done, this attempt genuinely failed — stop polling immediately
         }
         if (TERMINAL_UNPAID.has(result.status)) return; // done, payment won't complete
         pollsRef.current += 1;
@@ -114,11 +139,25 @@ export default function ProSuccess() {
             </button>
           </div>
           <p className="text-sm text-app-muted mb-8">
-            Open Rupee Radar AI → Profile → <strong className="text-app-text">Have a promo code?</strong> → enter this
-            code with the same phone number or email you used to pay.
+            Open Rupee Radar AI → PRO → <strong className="text-app-text">Bought PRO on the website?</strong> →
+            enter this code with the same phone number or email you paid with.
           </p>
           <Link to="/download" className="text-brand hover:underline text-sm">
             Don't have the app yet? Download it →
+          </Link>
+        </>
+      ) : failedStatus ? (
+        <>
+          <div className="text-5xl mb-4">😕</div>
+          <h1 className="text-2xl font-bold mb-2">Payment didn't go through</h1>
+          <p className="text-app-muted mb-8">
+            Your payment attempt failed — {friendlyFailureReason(failedStatus)}. You haven't been charged.
+          </p>
+          <Link
+            to="/pricing"
+            className="inline-block rounded-xl bg-gold text-black font-bold px-6 py-3 hover:opacity-90 transition-opacity"
+          >
+            Try again
           </Link>
         </>
       ) : error ? (

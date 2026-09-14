@@ -77,11 +77,19 @@ billingRouter.post("/verify", requireUser, async (req: UserRequest, res) => {
   res.json(entitlement);
 });
 
-// POST /billing/redeem-test-code — { userId, code } -> grants a PRO entitlement for a year without
-// going through Play Billing. Exists purely so PRO features (job-loss runway, LLM SMS fallback,
-// insight narratives) can be QA'd before the Play Console app + real subscription products exist.
-// Gated behind PRO_TEST_REDEEM_CODE in .env — unset it (or delete this route) before a public launch.
+// POST /billing/redeem-test-code — RETIRED FROM PRODUCTION 2026-09-14. Used to grant a year of PRO
+// for one shared static string with no per-code accounting or rate limiting — exactly the "unsafe
+// as a public feature (a leaked code = free PRO forever)" risk flagged in review when it shipped.
+// Superseded by real, single-use, identity-matched vouchers: POST /pro-purchase/admin/grant (admin
+// console → PRO Vouchers) for comp grants, and the real Cashfree purchase flow for paying
+// customers. Kept alive ONLY under `NODE_ENV === "test"` — Vitest sets this automatically, Hostinger
+// never does — so the ~9 existing test files that use this as their "grant this test user PRO"
+// helper keep working unchanged, while the route is categorically unreachable in production
+// regardless of what PRO_TEST_REDEEM_CODE is set to.
 billingRouter.post("/redeem-test-code", requireUser, async (req: UserRequest, res) => {
+  if (process.env.NODE_ENV !== "test") {
+    return res.status(501).json({ error: "This has been retired — use a real PRO voucher from rupeeradarai.com/pricing or the admin console." });
+  }
   const { code } = req.body ?? {};
   if (!code) return res.status(400).json({ error: "code is required" });
   const userId = req.userId!;
@@ -108,26 +116,18 @@ billingRouter.get("/status", requireUser, async (req: UserRequest, res) => {
   res.json({ isPro: entitlement?.status === "active" && (entitlement.expiryAt?.getTime() ?? 0) > Date.now() });
 });
 
-// POST /billing/beta-unlock — while the app is in free beta (no real Play Billing customers yet),
-// any signed-in user can flip PRO on with one tap, no code to type or get wrong. Gated on the same
-// PRO_TEST_REDEEM_CODE env var being present as the "we're in free-beta mode" signal — unset that
-// var (the documented launch step) and this 501s, existing entitlements untouched. Every unlock is
-// still a real ProEntitlement row so it can be seen / revoked from the admin console.
+// POST /billing/beta-unlock and GET /billing/beta-status — RETIRED 2026-09-14, the free beta has
+// ended. Hardcoded off (not env-var-gated) so this can't come back on by an env var being present/
+// re-added later — the only way to grant PRO without a real purchase now is
+// POST /billing/admin/grant (by userId) or POST /pro-purchase/admin/grant (a real voucher for an
+// email/phone, admin console → PRO Vouchers). Existing entitlements anyone already got from the
+// beta are untouched — this only stops NEW free unlocks.
 billingRouter.get("/beta-status", async (_req, res) => {
-  res.json({ betaFreeProAvailable: !!process.env.PRO_TEST_REDEEM_CODE });
+  res.json({ betaFreeProAvailable: false });
 });
 
-billingRouter.post("/beta-unlock", requireUser, async (req: UserRequest, res) => {
-  if (!process.env.PRO_TEST_REDEEM_CODE) {
-    return res.status(501).json({ error: "Free beta PRO has ended — subscribe through Google Play." });
-  }
-  const expiryAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
-  const entitlement = await prisma.proEntitlement.upsert({
-    where: { userId: req.userId! },
-    create: { userId: req.userId!, productId: "beta_free", expiryAt, verifiedAt: new Date(), status: "active" },
-    update: { productId: "beta_free", expiryAt, verifiedAt: new Date(), status: "active" },
-  });
-  res.json(entitlement);
+billingRouter.post("/beta-unlock", requireUser, async (_req: UserRequest, res) => {
+  res.status(501).json({ error: "Free beta PRO has ended — subscribe at rupeeradarai.com/pricing." });
 });
 
 // POST /billing/admin/grant — { userId, months } — admin-only manual PRO grant (support/comp cases),

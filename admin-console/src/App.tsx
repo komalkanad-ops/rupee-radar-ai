@@ -11,6 +11,7 @@ import SubscriptionProviders from "./pages/SubscriptionProviders";
 import Challenges from "./pages/Challenges";
 import MerchantOffers from "./pages/MerchantOffers";
 import Vouchers from "./pages/Vouchers";
+import ProVouchers from "./pages/ProVouchers";
 import RedemptionQueue from "./pages/RedemptionQueue";
 import Feedback from "./pages/Feedback";
 import UserDiagnostics from "./pages/UserDiagnostics";
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="/challenges" element={<Challenges />} />
         <Route path="/merchant-offers" element={<MerchantOffers />} />
         <Route path="/vouchers" element={<Vouchers />} />
+        <Route path="/pro-vouchers" element={<ProVouchers />} />
         <Route path="/redemptions" element={<RedemptionQueue />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/bug-reports" element={<BugReports />} />

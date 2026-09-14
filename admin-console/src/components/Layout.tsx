@@ -34,6 +34,7 @@ import {
   Images,
   Menu,
   X,
+  Ticket,
 } from "lucide-react";
 import { clearToken, getRole } from "../lib/api";
 import { applyTheme, getStoredTheme, type Theme } from "../lib/theme";
@@ -65,6 +66,7 @@ const navGroups = [
       { to: "/bug-reports", label: "Bug Reports", icon: Bug },
       { to: "/users", label: "Users", icon: Users },
       { to: "/push", label: "Push Notifications", icon: Bell },
+      { to: "/pro-vouchers", label: "PRO Vouchers", icon: Ticket },
     ],
   },
   {
