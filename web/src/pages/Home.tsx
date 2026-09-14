@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "../lib/api";
 import { trackEvent } from "../lib/analytics";
 import { useSeo } from "../lib/useSeo";
 import { Gauge } from "../components/charts/Gauge";
@@ -17,12 +15,6 @@ const organizationJsonLd = {
   description:
     "Rupee Radar AI tracks your expenses from SMS, tells you which credit card to use where, and shows your true net worth.",
 };
-
-interface AppLink {
-  key: string;
-  label: string;
-  url: string;
-}
 
 const features = [
   { title: "SMS expense manager", desc: "Auto-tracks spends from bank SMS — search, filter by category, and a smart nudge to categorize anything auto-parsing couldn't handle. Correct a merchant once and it learns that category for good." },
@@ -51,8 +43,6 @@ const sampleChallenges = [
 ];
 
 export default function Home() {
-  const [playStoreUrl, setPlayStoreUrl] = useState("https://play.google.com/store/apps");
-
   useSeo({
     title: "Rupee Radar AI — Track spends, maximise credit card rewards",
     description:
@@ -61,14 +51,10 @@ export default function Home() {
     jsonLd: organizationJsonLd,
   });
 
-  useEffect(() => {
-    api<AppLink[]>("/config/links")
-      .then((links) => {
-        const playStore = links.find((l) => l.key === "play_store");
-        if (playStore) setPlayStoreUrl(playStore.url);
-      })
-      .catch(() => {});
-  }, []);
+  // Deliberately hardcoded to /download, not a play_store link from /config/links — that admin
+  // entry already points at a real-looking but not-yet-live Play Store URL (the app isn't
+  // published there yet), which was sending real visitors to a 404. Once the app is actually live
+  // on Play, repoint these two CTAs (and the one below) to the real listing.
 
   return (
     <div>
@@ -92,15 +78,13 @@ export default function Home() {
           style={{ animationDelay: "240ms" }}
           id="download"
         >
-          <a
-            href={playStoreUrl}
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to="/download"
             onClick={() => trackEvent("download_app_click", { location: "home_hero" })}
             className="bg-brand text-black px-6 py-3 rounded-full font-semibold hover:bg-brand-dark transition hover:scale-105 active:scale-95"
           >
-            Download on Google Play
-          </a>
+            Download the app
+          </Link>
           <Link to="/cards" className="text-app-text font-medium hover:text-brand transition-colors">
             Browse credit cards →
           </Link>
@@ -176,7 +160,7 @@ export default function Home() {
             👑
           </div>
           <h2 className="text-2xl font-bold mb-1">Rupee Radar AI PRO</h2>
-          <p className="text-gold font-bold text-lg mb-4">₹149/month or ₹999/year</p>
+          <p className="text-gold font-bold text-lg mb-4">From ₹200/week — ₹3,000/year</p>
           <ul className="text-sm text-app-muted space-y-1.5 mb-6 max-w-sm mx-auto text-left">
             {proFeatures.map((f) => (
               <li key={f} className="flex gap-2">
@@ -185,14 +169,12 @@ export default function Home() {
               </li>
             ))}
           </ul>
-          <a
-            href={playStoreUrl}
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to="/pricing"
             className="inline-block bg-gold text-black px-6 py-3 rounded-full font-semibold hover:opacity-90 transition hover:scale-105 active:scale-95"
           >
-            Get PRO in the app →
-          </a>
+            See PRO pricing →
+          </Link>
         </Reveal>
       </section>
 

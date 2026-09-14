@@ -1,13 +1,6 @@
-import { useEffect, useState } from "react";
-import { api } from "../lib/api";
+import { Link } from "react-router-dom";
 import { useSeo } from "../lib/useSeo";
 import WhyRupeeRadarAI from "../components/WhyRupeeRadarAI";
-
-interface AppLink {
-  key: string;
-  label: string;
-  url: string;
-}
 
 const comparisons = [
   { manual: "Manually copy every transaction into a spreadsheet", app: "Bank SMS auto-tracked, on-device" },
@@ -17,17 +10,6 @@ const comparisons = [
 ];
 
 export default function WhyRupeeRadarAiPage() {
-  const [playStoreUrl, setPlayStoreUrl] = useState("https://play.google.com/store/apps");
-
-  useEffect(() => {
-    api<AppLink[]>("/config/links")
-      .then((links) => {
-        const playStore = links.find((l) => l.key === "play_store");
-        if (playStore) setPlayStoreUrl(playStore.url);
-      })
-      .catch(() => {});
-  }, []);
-
   useSeo({
     title: "Credit Card & Expense Tracker App — Rupee Radar AI vs Manual Tracking",
     description:
@@ -45,14 +27,12 @@ export default function WhyRupeeRadarAiPage() {
           Rupee Radar AI replaces the spreadsheet — expenses, credit card recommendations, and net
           worth, tracked automatically from your bank SMS.
         </p>
-        <a
-          href={playStoreUrl}
-          target="_blank"
-          rel="noreferrer"
+        <Link
+          to="/download"
           className="bg-brand text-black px-6 py-3 rounded-full font-semibold hover:bg-brand-dark"
         >
-          Download on Google Play
-        </a>
+          Download the app
+        </Link>
       </section>
 
       <section className="max-w-3xl mx-auto px-6 py-8">

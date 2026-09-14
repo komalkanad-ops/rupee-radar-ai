@@ -68,7 +68,11 @@ export default function Pricing() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [sandbox, setSandbox] = useState(false);
+  // Defaults true (sandbox) until /pro-purchase/config actually answers — same "unsure? assume
+  // sandbox" safe default the backend itself uses. Defaulting false here would mean a buyer who
+  // clicks fast enough (or a slow network) could initialize the Cashfree SDK in production mode
+  // before this ever resolves, even while the backend is genuinely still in sandbox.
+  const [sandbox, setSandbox] = useState(true);
 
   useEffect(() => {
     api<{ sandbox: boolean; configured: boolean }>("/pro-purchase/config")
@@ -92,7 +96,15 @@ export default function Pricing() {
         "/pro-purchase/orders",
         { plan: selected, phone: digits, email: email.trim() || undefined },
       );
-      const cashfree = await load({ mode: import.meta.env.VITE_CASHFREE_MODE === "production" ? "production" : "sandbox" });
+      // Derived from the SAME /pro-purchase/config call that drives the "test mode" banner above —
+      // never a separate client-side build flag. A previous version read import.meta.env.
+      // VITE_CASHFREE_MODE, which was never actually set anywhere (no .env.production entry, no
+      // Hostinger build config), so it silently defaulted to "sandbox" always. If the backend were
+      // ever flipped to CASHFREE_ENV=production without someone remembering to also configure that
+      // separate, undocumented client var, the SDK would still init in sandbox mode against a
+      // payment_session_id created by a production order — checkout would fail outright. Reading
+      // the same boolean the backend already exposes makes that drift impossible by construction.
+      const cashfree = await load({ mode: sandbox ? "sandbox" : "production" });
       // redirectTarget: "_self" means checkout() itself navigates the page to Cashfree's hosted
       // checkout — the return_url set at order-creation time (order_meta.return_url, server-side)
       // is what brings the buyer back to /pro/success once they actually pay. Confirmed via a real
@@ -253,8 +265,8 @@ export default function Pricing() {
       </div>
 
       <p className="text-center text-xs text-app-muted">
-        After payment you'll get a one-time PRO code — enter it in the app (Profile → Have a promo
-        code?) with the same phone number or email to activate.
+        After payment you'll get a one-time PRO code — enter it in the app (PRO → Bought PRO on the
+        website?) with the same phone number or email to activate.
       </p>
     </div>
   );
