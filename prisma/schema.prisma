@@ -870,6 +870,7 @@ enum CoinLedgerReason {
   ADMIN_ADJUSTMENT
   BILL_PAYMENT_BONUS
   FEEDBACK_BONUS
+  BUG_REPORT_BONUS
 }
 
 // Append-only ledger — a user's coin balance is SUM(delta), computed on read rather than cached,
@@ -1077,6 +1078,7 @@ model BugReport {
   deviceModel    String?
   androidSdkInt  Int?
   status         FeedbackStatus  @default(NEW)
+  coinsAwarded   Int?
   createdAt      DateTime        @default(now())
 
   @@index([userId])

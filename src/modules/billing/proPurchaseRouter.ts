@@ -210,46 +210,58 @@ proPurchaseRouter.get("/orders/:orderId", proPurchaseStatusLimiter, async (req, 
 // IP-keyed budget across every webhook delivery for every purchase would be the wrong shape of
 // protection here). Best-effort fast path; the GET poll above is what actually guarantees a
 // voucher gets issued (see module comment).
+//
+// ALWAYS acknowledge 200, even for a request that fails every check below. Two independent reasons:
+// (1) Cashfree's dashboard "Add Webhook Endpoint" sends an unsigned connectivity-test POST and
+// permanently flags the endpoint as broken in the UI if it gets anything but a 200 (confirmed
+// against Cashfree's own docs — this is exactly what a non-2xx here was doing). (2) it's correct
+// webhook hygiene regardless: signature verification decides whether to ACT on a payload, not what
+// HTTP status to return — returning 4xx for "wasn't a real signed event" just invites Cashfree's own
+// retry policy to keep hammering an endpoint that was never going to accept it. Nothing below this
+// point ever throws past the outer catch, so every code path reaches the 200 at the end.
 proPurchaseRouter.post("/webhook", async (req, res) => {
-  const signature = req.headers["x-webhook-signature"];
-  const timestamp = req.headers["x-webhook-timestamp"];
-  const rawBody = (req as any).rawBody as string | undefined;
-  if (typeof signature !== "string" || typeof timestamp !== "string" || !rawBody) {
-    return res.status(400).json({ error: "Missing signature, timestamp, or raw body" });
-  }
-
-  let valid: boolean;
   try {
-    valid = verifyWebhookSignature(timestamp, rawBody, signature);
-  } catch (err) {
-    return res.status(501).json({ error: (err as Error).message });
-  }
-  if (!valid) return res.status(400).json({ error: "Invalid webhook signature" });
-
-  const body = JSON.parse(rawBody);
-  const orderId = body?.data?.order?.order_id;
-  const paymentStatus = body?.data?.payment?.payment_status;
-  if (!orderId) return res.status(400).json({ error: "Missing order_id in webhook payload" });
-
-  const purchase = await prisma.proPurchase.findUnique({ where: { orderId } });
-  if (!purchase) return res.status(404).json({ error: "Unknown order" });
-
-  if (paymentStatus === "SUCCESS") {
-    try {
-      await issueVoucherIfPaid(purchase.id);
-    } catch (err) {
-      Sentry.captureException(err, { tags: { route: "POST /pro-purchase/webhook" } });
+    const signature = req.headers["x-webhook-signature"];
+    const timestamp = req.headers["x-webhook-timestamp"];
+    const rawBody = (req as any).rawBody as string | undefined;
+    if (typeof signature !== "string" || typeof timestamp !== "string" || !rawBody) {
+      return res.status(200).json({ ok: true, acted: false, reason: "missing signature/timestamp/body" });
     }
-  } else if (paymentStatus && purchase.status !== paymentStatus) {
-    // Never overwrite status on a purchase that already has a voucher — see the matching guard in
-    // issueVoucherIfPaid for why (a stale/out-of-order webhook event must not make an already-paid,
-    // already-voucher'd purchase look unpaid).
-    await prisma.proPurchase
-      .updateMany({ where: { id: purchase.id, voucherCode: null }, data: { status: paymentStatus } })
-      .catch(() => {});
-  }
 
-  res.status(200).json({ ok: true });
+    let valid: boolean;
+    try {
+      valid = verifyWebhookSignature(timestamp, rawBody, signature);
+    } catch {
+      return res.status(200).json({ ok: true, acted: false, reason: "cashfree not configured" });
+    }
+    if (!valid) {
+      return res.status(200).json({ ok: true, acted: false, reason: "invalid signature" });
+    }
+
+    const body = JSON.parse(rawBody);
+    const orderId = body?.data?.order?.order_id;
+    const paymentStatus = body?.data?.payment?.payment_status;
+    if (!orderId) return res.status(200).json({ ok: true, acted: false, reason: "missing order_id" });
+
+    const purchase = await prisma.proPurchase.findUnique({ where: { orderId } });
+    if (!purchase) return res.status(200).json({ ok: true, acted: false, reason: "unknown order" });
+
+    if (paymentStatus === "SUCCESS") {
+      await issueVoucherIfPaid(purchase.id);
+    } else if (paymentStatus && purchase.status !== paymentStatus) {
+      // Never overwrite status on a purchase that already has a voucher — see the matching guard in
+      // issueVoucherIfPaid for why (a stale/out-of-order webhook event must not make an already-paid,
+      // already-voucher'd purchase look unpaid).
+      await prisma.proPurchase
+        .updateMany({ where: { id: purchase.id, voucherCode: null }, data: { status: paymentStatus } })
+        .catch(() => {});
+    }
+
+    res.status(200).json({ ok: true, acted: true });
+  } catch (err) {
+    Sentry.captureException(err, { tags: { route: "POST /pro-purchase/webhook" } });
+    res.status(200).json({ ok: true, acted: false, reason: "internal error, logged" });
+  }
 });
 
 // POST /pro-purchase/redeem — { voucherCode, email?, phone? } — requireUser: the signed-in app
