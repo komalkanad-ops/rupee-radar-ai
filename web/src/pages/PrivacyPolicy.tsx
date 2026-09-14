@@ -12,8 +12,9 @@ const sections: Section[] = [
   {
     heading: "What we collect from SMS, and what we don't",
     body: [
+      "In short: reading and analyzing your bank/card SMS and notifications happens entirely on your phone, using on-device logic — the raw message text never leaves your device or reaches our servers. What does sync to your account (so it's available across your devices and after a reinstall) is the small set of details described below: the parsed transaction amount, merchant, category and payment method, plus your account info, and — only if you turn them on — a push-notification token and crash diagnostics. The one narrow exception, covered in the next paragraph, is a PRO-only fallback for the rare SMS our on-device rules can't read.",
       "Rupee Radar AI's core feature is reading bank and card transaction SMS on your device to automatically detect your expenses. On-device rule-based parsing extracts the amount, merchant name, category, and payment method (card, UPI, bank transfer, or wallet) from a message — that's what syncs to your account. The raw text of your SMS messages is never uploaded or stored on our servers.",
-      "The one exception: if you're on Rupee Radar AI PRO and a message doesn't match our fast on-device rules (an unusual bank SMS format, for example), the app can send that single message to our backend, which forwards it to a third-party AI service (currently meshapi.ai, which proxies to an underlying language model) to extract the same amount/merchant/category fields. That message's text is used only to parse it and is not stored by our backend afterward. This only happens for messages that already look like bank/card transaction alerts — we don't scan or transmit your other SMS messages, personal conversations, or OTPs.",
+      "The one exception: if you're on Rupee Radar AI PRO and a message doesn't match our fast on-device rules (an unusual bank SMS format, for example), the app can send that single message to our backend, which forwards it to a third-party AI service (currently meshapi.ai, which proxies to an underlying language model) to extract the same amount/merchant/category fields. That message's text is used only to parse it and is not stored by our backend afterward. This is the only case where message text is processed off your device, and it may involve processing outside India by that third-party provider. This only happens for messages that already look like bank/card transaction alerts — we don't scan or transmit your other SMS messages, personal conversations, or OTPs.",
       "We only ever request SMS access to detect financial transactions — this is core to the app's purpose as an SMS-based budgeting and expense tracker.",
     ],
   },
@@ -27,6 +28,12 @@ const sections: Section[] = [
     heading: "Account information",
     body: [
       "Rupee Radar AI requires an account so your data is protected and can sync across your devices and reinstalls. When you sign in with Google or your phone number, we store your name, email or phone number, and a unique account ID. SMS and notification parsing still happens on your device regardless.",
+    ],
+  },
+  {
+    heading: "Optional profile details",
+    body: [
+      "From Profile you can optionally tell us your city, income bracket, gender, and a broad age group (a 10-year bucket like \"25-34\" — never your date of birth). These are entirely optional, editable and deletable at any time, and are used only to power features like peer spending comparisons and persona-aware guidance within the app. We never share these details with any third party, and they're erased immediately when you delete your account.",
     ],
   },
   {
@@ -70,10 +77,27 @@ const sections: Section[] = [
     ],
   },
   {
+    heading: "How long we keep your data",
+    body: [
+      "Account information (name, email/phone, city, income bracket, gender, age group) and synced transaction details are kept for as long as your account is active, so the app keeps working across devices and reinstalls. Push-notification device tokens are kept only while notifications are enabled. Crash and diagnostic reports are retained for at most 90 days. Website PRO-purchase order records (needed for payment audit and support) are kept as required by applicable Indian tax and accounting law even after a purchase is complete.",
+      "Deleting your account (Settings → Delete account, or rupeeradarai.com/delete-account) erases the data described above immediately, except: your bug reports and feedback, which are kept but disowned (no longer linked to you), and anything we're legally required to retain (e.g. payment records) for the period the law requires.",
+    ],
+  },
+  {
     heading: "Your rights",
     body: [
       "You can permanently delete your account and all associated data at any time from inside the app: Settings → Delete account. This erases everything immediately and signs you out.",
       `If you can't access the app, email ${SUPPORT_EMAIL} from the address (or with the phone number) associated with your account and we'll process the deletion — always within 30 days. Full details, including exactly what is deleted and what is retained, are at rupeeradarai.com/delete-account.`,
+      "Under India's Digital Personal Data Protection Act, 2023, you also have the right to access a summary of the personal data we hold about you and how it's been processed, to correct or update inaccurate or incomplete data, and to withdraw any consent you've given (e.g. for optional profile details or notifications) at any time — withdrawing consent doesn't affect the legality of anything already done based on it. Reach us at the contact below for any of these requests.",
+    ],
+  },
+  {
+    heading: "Grievance officer",
+    body: [
+      "In accordance with the Digital Personal Data Protection Act, 2023 and applicable Indian IT rules, our Grievance Officer is Kanad Jadhav. You can reach the Grievance Officer at " +
+        SUPPORT_EMAIL +
+        " for any complaint or grievance about how your personal data is handled. We aim to acknowledge grievances within 48 hours and resolve them within 30 days.",
+      "If you're not satisfied with our response, you have the right to file a complaint with the Data Protection Board of India under the DPDP Act, 2023.",
     ],
   },
   {

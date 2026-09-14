@@ -81,6 +81,8 @@ const ADMIN_ROUTES: Route[] = [
   // billing (admin grant/revoke)
   { method: "post", path: "/billing/admin/grant" },
   { method: "post", path: "/billing/admin/revoke" },
+  { method: "get", path: "/billing/admin/trial-code" },
+  { method: "put", path: "/billing/admin/trial-code" },
   // config links
   { method: "post", path: "/config/links" },
   { method: "delete", path: "/config/links/x" },

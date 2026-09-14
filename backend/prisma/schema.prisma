@@ -156,6 +156,14 @@ model User {
   // Self-reported, settable from the phone-login profile-completion form (Google sign-in already
   // supplies name/email from the ID token, so it never needs this form) or from Settings.
   gender               String?
+  // Self-reported bucket, one of AGE_GROUPS in authRouter.ts (e.g. "18-24") — never a birthdate.
+  // Optional, settable from Profile's "About you" section. Used only for peer-benchmarking/persona
+  // framing, disclosed in the Privacy Policy, never shared with a third party.
+  ageGroup             String?
+  // Set the first (and only) time this account redeems the shared trial promo code — the
+  // one-time-per-account guard for POST /billing/redeem-trial-code. Claimed atomically via a
+  // conditional updateMany, same pattern as ProPurchase voucher redemption.
+  trialCodeRedeemedAt  DateTime?
   // "SALARIED" | "BUSINESS" | "CREATOR" | "OTHER" — set in onboarding / Profile, drives
   // persona-aware labels (salary vs revenue vs avg income), the net-worth runway framing, and
   // which services are hidden. Defaults to SALARIED so pre-persona rows behave as before.
@@ -408,6 +416,18 @@ model ProEntitlement {
   expiryAt          DateTime?
   verifiedAt        DateTime?
   status            String    @default("inactive")
+}
+
+// A single, admin-managed, shared promo code that grants any signed-in account exactly 1 day of
+// PRO — a lower-stakes, per-account-guarded replacement for the retired redeem-test-code (which
+// granted a full year, per string match, with no per-account accounting at all — see
+// billingRouter.ts). Singleton row, id fixed to "singleton"; `code` stored normalized
+// (trim+uppercase) so comparisons are case/whitespace-insensitive.
+model TrialPromoCode {
+  id        String   @id @default("singleton")
+  code      String
+  active    Boolean  @default(true)
+  updatedAt DateTime @updatedAt
 }
 
 // A website-purchased Cashfree order for a PRO voucher (weekly/monthly/yearly), independent of

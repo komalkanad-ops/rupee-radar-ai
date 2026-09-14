@@ -1,8 +1,93 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Gift } from "lucide-react";
+import { Gift, Ticket } from "lucide-react";
 import { api } from "../lib/api";
 import { useToast } from "../components/Toast";
 import { SkeletonRows } from "../components/Skeleton";
+
+interface TrialCodeState {
+  code: string | null;
+  active: boolean;
+}
+
+function TrialCodeCard() {
+  const [state, setState] = useState<TrialCodeState>({ code: null, active: false });
+  const [codeInput, setCodeInput] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const toast = useToast();
+
+  function reload() {
+    setLoading(true);
+    api<TrialCodeState>("/billing/admin/trial-code")
+      .then((s) => {
+        setState(s);
+        setCodeInput(s.code ?? "");
+      })
+      .finally(() => setLoading(false));
+  }
+
+  useEffect(reload, []);
+
+  async function save(next: Partial<{ code: string; active: boolean }>) {
+    setSaving(true);
+    try {
+      const updated = await api<TrialCodeState>("/billing/admin/trial-code", {
+        method: "PUT",
+        body: JSON.stringify(next),
+      });
+      setState(updated);
+      setCodeInput(updated.code ?? "");
+      toast.show("Trial code updated");
+    } catch (err: any) {
+      toast.show(err.message ?? "Failed to update trial code", "error");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm p-5 mb-6">
+      <div className="flex items-center gap-2 mb-2">
+        <Ticket size={16} className="text-brand" />
+        <h2 className="text-sm font-semibold text-brand-dark">Shared trial code</h2>
+      </div>
+      <p className="text-xs text-slate-500 mb-4">
+        One code, shared across every user, redeemable from the app's Profile screen for a one-day PRO trial —
+        each account can redeem it exactly once, ever. Doesn't apply to an account that already has active PRO.
+        Changing the code here takes effect immediately, no deploy or env-var edit needed.
+      </p>
+      {loading ? (
+        <div className="text-xs text-slate-400">Loading…</div>
+      ) : (
+        <div className="flex flex-wrap items-center gap-3">
+          <input
+            value={codeInput}
+            onChange={(e) => setCodeInput(e.target.value)}
+            placeholder="e.g. RRADAR-TRIAL"
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm font-mono"
+          />
+          <button
+            type="button"
+            disabled={saving || !codeInput.trim()}
+            onClick={() => save({ code: codeInput.trim() })}
+            className="rounded-md bg-brand text-white text-sm font-medium px-3 py-2 hover:bg-brand-dark disabled:opacity-50"
+          >
+            Save code
+          </button>
+          <label className="flex items-center gap-2 text-sm text-slate-600 ml-2">
+            <input
+              type="checkbox"
+              checked={state.active}
+              disabled={saving}
+              onChange={(e) => save({ active: e.target.checked })}
+            />
+            Active (users can redeem it)
+          </label>
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface ProPurchase {
   id: string;
@@ -74,6 +159,8 @@ export default function ProVouchers() {
         (test devices, support cases) — no Cashfree call involved, redeemed through the exact same in-app flow
         real buyers use (PRO screen → "Bought PRO on the website?").
       </p>
+
+      <TrialCodeCard />
 
       <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm p-5 mb-4 grid grid-cols-3 gap-3">
         <input

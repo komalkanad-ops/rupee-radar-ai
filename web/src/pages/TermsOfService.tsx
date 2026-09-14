@@ -57,6 +57,7 @@ const sections: Section[] = [
     heading: "Rewards, coins, and vouchers",
     body: [
       "Coins earned through challenges, referrals, or feedback submissions have no cash value and can only be redeemed for vouchers within the app, subject to availability. We reserve the right to adjust the coin economy (earning rates, available vouchers) at any time, and to withhold or reverse coins earned through fraud, abuse, or violation of these Terms.",
+      "From time to time we may offer a single, shared promotional code redeemable once per account for a short (currently one day) trial of PRO. It has no cash value, can't be combined with other offers, doesn't apply if you already have active PRO access, and may be changed, paused, or withdrawn at any time without notice.",
     ],
   },
   {
