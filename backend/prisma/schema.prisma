@@ -410,6 +410,34 @@ model ProEntitlement {
   status            String    @default("inactive")
 }
 
+// A website-purchased Cashfree order for a PRO voucher (weekly/monthly/yearly), independent of
+// Play Billing/ProEntitlement above. No FK to User — the buyer usually isn't signed into the app
+// at checkout time; identity is just whatever email/phone they typed. `phone` is required (Cashfree
+// mandates a customer_phone on every order); `email` is optional. `voucherCode` is generated only
+// once Cashfree confirms the order PAID, then redeemed exactly once inside the app by matching
+// either email OR phone against what's on this row (see proPurchaseRouter.ts).
+model ProPurchase {
+  id               String    @id @default(cuid())
+  orderId          String    @unique
+  cfOrderId        String?
+  plan             String
+  amountInr        Int
+  email            String?
+  phone            String
+  status           String    @default("CREATED")
+  voucherCode      String?   @unique
+  voucherRedeemed  Boolean   @default(false)
+  redeemedByUserId String?
+  redeemedAt       DateTime?
+  proExpiryAt      DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([email])
+  @@index([phone])
+  @@index([status])
+}
+
 // Tracks the AI chat assistant's free-tier lifetime message cap (3 messages, ever — not per day
 // or per session) — a real AI call costs real mesh-api tokens, so free users get a small taste
 // rather than unlimited access. Counted for PRO users too (useful for usage analytics later) but

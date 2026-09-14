@@ -8,6 +8,7 @@ const navLinks = [
   { to: "/statement-analyzer", label: "Statement Analyzer" },
   { to: "/emi-calculator", label: "EMI Calculator" },
   { to: "/why-rupee-radar-ai", label: "Why Rupee Radar AI" },
+  { to: "/pricing", label: "PRO" },
   { to: "/download", label: "Download" },
 ];
 

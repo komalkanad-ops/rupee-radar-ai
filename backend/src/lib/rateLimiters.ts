@@ -56,3 +56,30 @@ export const authLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Too many requests — please wait a few minutes and try again" },
 });
+
+// POST /pro-purchase/orders is public and unauthenticated (the buyer isn't signed in yet) — every
+// call also creates a real order against the Cashfree account, so it's a free-order-creation
+// endpoint for anyone who finds it. generalLimiter (300/15min) already covers this route as a
+// floor; this is a tighter, dedicated ceiling on top of it, generous enough for a real checkout
+// retrying a failed order a few times but not for scripted spam.
+export const proPurchaseOrderLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many purchase attempts — please wait a few minutes and try again" },
+});
+
+// GET /pro-purchase/orders/:orderId is the success page's status poll — every ~2.5s for up to
+// ~100s per checkout (root-caused: a single shared 30/15min budget with the order-creation
+// endpoint above let one slow real checkout's poll loop alone exhaust the window, 429ing a buyer
+// out of retrieving a voucher they'd already paid for). Read-only, keyed by an unguessable orderId
+// (same trust model as a Razorpay order id round-tripped to a client) — a much higher, separate
+// ceiling is safe.
+export const proPurchaseStatusLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 600,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many status checks — please wait a moment and try again" },
+});

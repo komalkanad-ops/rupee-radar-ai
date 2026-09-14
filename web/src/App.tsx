@@ -16,6 +16,8 @@ import Support from "./pages/Support";
 import DeleteAccount from "./pages/DeleteAccount";
 import Download from "./pages/Download";
 import ChangelogPage from "./pages/ChangelogPage";
+import Pricing from "./pages/Pricing";
+import ProSuccess from "./pages/ProSuccess";
 
 function PageviewTracker() {
   const location = useLocation();
@@ -45,6 +47,8 @@ export default function App() {
           <Route path="/download" element={<Download />} />
           <Route path="/delete-account" element={<DeleteAccount />} />
           <Route path="/changelog" element={<ChangelogPage />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/pro/success" element={<ProSuccess />} />
         </Route>
       </Routes>
     </>
