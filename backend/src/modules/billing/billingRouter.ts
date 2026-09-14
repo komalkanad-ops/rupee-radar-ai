@@ -189,11 +189,6 @@ billingRouter.post("/redeem-trial-code", trialCodeLimiter, requireUser, async (r
     return res.status(403).json({ error: "Invalid code" });
   }
 
-  const existing = await prisma.proEntitlement.findUnique({ where: { userId } });
-  if (existing?.status === "active" && existing.expiryAt && existing.expiryAt.getTime() > Date.now()) {
-    return res.status(409).json({ error: "You already have PRO — the trial code is for new PRO access only." });
-  }
-
   const entitlement = await prisma.$transaction(async (tx) => {
     const claimed = await tx.user.updateMany({
       where: { id: userId, trialCodeRedeemedAt: null },
@@ -202,6 +197,16 @@ billingRouter.post("/redeem-trial-code", trialCodeLimiter, requireUser, async (r
     if (claimed.count === 0) {
       throw Object.assign(new Error("ALREADY_REDEEMED"), { code: "ALREADY_REDEEMED" });
     }
+    // Re-checked INSIDE the same transaction as the claim above — an earlier version read this
+    // before the transaction, which let a real purchase (POST /pro-purchase/redeem or
+    // /billing/verify) land in the gap between that read and this route's write, and this route's
+    // flat upsert would then have overwritten a real subscription down to a 1-day expiry. Throwing
+    // here rolls back the trialCodeRedeemedAt claim above too, so a blocked user doesn't burn their
+    // one-time trial on a no-op.
+    const existing = await tx.proEntitlement.findUnique({ where: { userId } });
+    if (existing?.status === "active" && existing.expiryAt && existing.expiryAt.getTime() > Date.now()) {
+      throw Object.assign(new Error("ALREADY_PRO"), { code: "ALREADY_PRO" });
+    }
     const expiryAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
     return tx.proEntitlement.upsert({
       where: { userId },
@@ -209,12 +214,15 @@ billingRouter.post("/redeem-trial-code", trialCodeLimiter, requireUser, async (r
       update: { productId: "trial_code", expiryAt, verifiedAt: new Date(), status: "active" },
     });
   }).catch((err) => {
-    if (err?.code === "ALREADY_REDEEMED") return null;
+    if (err?.code === "ALREADY_REDEEMED" || err?.code === "ALREADY_PRO") return err.code as string;
     throw err;
   });
 
-  if (!entitlement) {
+  if (entitlement === "ALREADY_REDEEMED") {
     return res.status(409).json({ error: "This account has already used a trial code." });
+  }
+  if (entitlement === "ALREADY_PRO") {
+    return res.status(409).json({ error: "You already have PRO — the trial code is for new PRO access only." });
   }
   res.json(entitlement);
 });
