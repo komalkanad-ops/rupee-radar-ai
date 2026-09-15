@@ -874,6 +874,10 @@ model CityIncomeBracketBenchmark {
 
 // One row per successfully completed referral — @unique on referredUserId means a user can only
 // ever be credited as "referred" once, blocking double-dipping via the same or different codes.
+// Deleted on either side's account deletion (see authRouter.ts's DELETE /auth/me transaction) — the
+// coins/PRO days already granted from it are NOT clawed back, this is just the display record. The
+// actual anti-abuse device lock lives in ReferralDeviceClaim below, which deliberately does NOT get
+// deleted with the account.
 model ReferralConversion {
   id             String   @id @default(cuid())
   referrerUserId String
@@ -881,7 +885,29 @@ model ReferralConversion {
   referredUserId String   @unique
   referred       User     @relation("Referred", fields: [referredUserId], references: [id])
   coinsAwarded   Int
+  // Days of PRO credited to the referrer for this conversion (0 for older rows predating this).
+  proDaysAwarded Int      @default(0)
   completedAt    DateTime @default(now())
+}
+
+// Enforces "one physical device can complete at most one referral, ever" — independent of which
+// account (or how many successive accounts) that device was ever attached to. Deliberately has NO
+// foreign key to User: ReferralConversion above cascades away on account deletion, but this lock
+// must survive it, or the loop (sign in with a real Google/phone account -> redeem a code -> delete
+// the account -> sign back in with the SAME account -> redeem again) would let one real identity
+// farm unlimited PRO time and coins off a single device. referrerUserId/referredUserId are plain
+// strings kept for admin fraud-investigation only, not referential integrity — a dangling value
+// after either account is later deleted is expected and fine.
+model ReferralDeviceClaim {
+  id               String    @id @default(cuid())
+  deviceIdentifier String    @unique
+  referrerUserId   String
+  referredUserId   String
+  // Bumped every time a DIFFERENT account tries to redeem a referral from this already-claimed
+  // device — the "flag if the same device is reused" signal for admin review.
+  rejectedAttempts Int       @default(0)
+  lastRejectedAt   DateTime?
+  createdAt        DateTime  @default(now())
 }
 
 enum CoinLedgerReason {

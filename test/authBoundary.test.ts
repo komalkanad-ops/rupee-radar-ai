@@ -164,6 +164,8 @@ const ADMIN_ROUTES: Route[] = [
   // pro-purchase (comp voucher grants)
   { method: "get", path: "/pro-purchase/admin/purchases" },
   { method: "post", path: "/pro-purchase/admin/grant" },
+  // referrals (flagged-device fraud review)
+  { method: "get", path: "/referrals/admin/flagged" },
 ];
 
 describe("T7 — admin routes reject unauthenticated + non-admin (user) tokens", () => {
@@ -241,6 +243,7 @@ describe("T7 snapshot guard — every admin-gated route in the source is covered
     analyticsRouter: "/analytics",
     monitoringRouter: "/admin/monitoring",
     proPurchaseRouter: "/pro-purchase",
+    referralsRouter: "/referrals",
   };
 
   function norm(p: string): string {

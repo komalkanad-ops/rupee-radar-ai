@@ -1,5 +1,6 @@
 import request from "supertest";
 import { app } from "../src/app.js";
+import { prisma } from "../src/lib/prisma.js";
 
 let counter = 0;
 
@@ -14,4 +15,17 @@ export async function createAnonymousUser(): Promise<{ userId: string; token: st
     throw new Error(`Failed to create test user: ${res.status} ${JSON.stringify(res.body)}`);
   }
   return { userId: res.body.userId, token: res.body.token };
+}
+
+/** Creates a session then patches it in the DB to look like a real, non-anonymous signup (a unique
+ * email + authProvider "google") — there's no test-only OTP/Google flow to drive end-to-end, and
+ * routes that gate on "not anonymous" (e.g. POST /referrals/redeem) only ever look at those two
+ * columns, so patching them directly exercises the real gate without faking a whole auth provider. */
+export async function createRealUser(): Promise<{ userId: string; token: string }> {
+  const anon = await createAnonymousUser();
+  await prisma.user.update({
+    where: { id: anon.userId },
+    data: { authProvider: "google", email: `test-${anon.userId}@example.com` },
+  });
+  return anon;
 }
