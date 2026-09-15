@@ -500,6 +500,14 @@ authRouter.delete("/me", requireUser, async (req: UserRequest, res) => {
     prisma.coinLedgerEntry.deleteMany({ where: { userId } }),
     prisma.voucherRedemption.deleteMany({ where: { userId } }),
     // A ReferralConversion can have this user on either side.
+    //
+    // Deliberately NOT here, and must never be added: ReferralDeviceClaim (rewards/referralsRouter.ts).
+    // Its whole purpose is to survive this exact transaction — it's the anti-abuse lock stopping
+    // "redeem a referral -> delete this account -> sign back in with the same real identity ->
+    // redeem again" from being a free unlimited-PRO loop. It has no FK to User specifically so it
+    // CAN'T be added by following the "add every new userId-owning model here" convention this file
+    // otherwise follows — adding it would silently re-open that loop with no test failure to catch
+    // it (see the regression test in rewards.test.ts that exercises this exact sequence).
     prisma.referralConversion.deleteMany({ where: { OR: [{ referrerUserId: userId }, { referredUserId: userId }] } }),
     prisma.bankLink.deleteMany({ where: { userId } }),
     prisma.creditScoreSnapshot.deleteMany({ where: { userId } }),

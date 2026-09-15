@@ -94,3 +94,15 @@ export const trialCodeLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Too many attempts — please wait a few minutes and try again" },
 });
+
+// POST /referrals/redeem grants real coins + PRO days per successful call — same brute-force
+// concern as trialCodeLimiter above (guessing another user's referral code), own tight budget.
+// GET /referrals/me stays under generalLimiter (read-only, cheap, fires on every Settings ->
+// Referrals open).
+export const referralRedeemLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many attempts — please wait a few minutes and try again" },
+});

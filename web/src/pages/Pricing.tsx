@@ -236,6 +236,33 @@ export default function Pricing() {
         )}
       </div>
 
+      {/* Referral pitch — a free path to PRO, not a replacement for the paid plans above. Framed
+          conditionally ("keep referring, keep PRO") per the actual mechanic (24h stacks per unique
+          referral, capped by how many real friends you can bring in), never as a one-time "refer
+          once, PRO forever" claim — see the referral terms in Terms of Service for the exact rules
+          this is describing. */}
+      <div className="max-w-2xl mx-auto rounded-2xl border border-brand/40 bg-brand/5 p-6 mb-16 text-center">
+        <span className="inline-block text-xs font-bold uppercase tracking-wider text-brand bg-brand/10 border border-brand/30 rounded-full px-3 py-1 mb-3">
+          Or get PRO for free
+        </span>
+        <h2 className="text-xl font-bold text-app-text mb-2">Refer friends, never pay for PRO</h2>
+        <p className="text-sm text-app-muted max-w-lg mx-auto">
+          Every app user gets their own referral code (Rewards → Invite friends). When a friend
+          signs up with it, you earn <strong className="text-app-text">500 coins and 1 day of PRO</strong> —
+          and they get 100 coins too. Keep referring new friends and your PRO access keeps
+          extending, 24 hours at a time — refer enough people over time and PRO effectively never
+          runs out, for free.
+        </p>
+        <p className="text-xs text-app-muted/70 mt-3">
+          Only counts once per real (signed-in) device and per new signup, capped at 30 credited
+          referrals per referrer per day as an anti-abuse safeguard — see our{" "}
+          <Link to="/terms" className="underline hover:text-app-muted">
+            Terms of Service
+          </Link>{" "}
+          for the full referral rules.
+        </p>
+      </div>
+
       {/* Feature comparison */}
       <h2 className="text-2xl font-bold text-center mb-2">What you get with PRO</h2>
       <p className="text-app-muted text-center mb-8">Everything in Free, plus:</p>

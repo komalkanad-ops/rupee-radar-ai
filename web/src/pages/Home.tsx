@@ -160,7 +160,10 @@ export default function Home() {
             👑
           </div>
           <h2 className="text-2xl font-bold mb-1">Rupee Radar AI PRO</h2>
-          <p className="text-gold font-bold text-lg mb-4">From ₹199/week — ₹2,999/year</p>
+          <p className="text-gold font-bold text-lg mb-1">From ₹199/week — ₹2,999/year</p>
+          <p className="text-xs text-app-muted mb-4">
+            Or get it free — refer friends and never pay. <Link to="/pricing" className="underline hover:text-app-text">See how →</Link>
+          </p>
           <ul className="text-sm text-app-muted space-y-1.5 mb-6 max-w-sm mx-auto text-left">
             {proFeatures.map((f) => (
               <li key={f} className="flex gap-2">
