@@ -1,19 +1,72 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/analytics";
 
+const CONTROLS_HIDE_DELAY_MS = 2000;
+
+function formatTime(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
 /**
- * Autoplaying (muted, required by every browser for autoplay to actually run) hero demo video on
- * the home page. Custom control bar instead of the native <video controls> UI, since the ask was
- * specifically Pause / Stop / Exit (Stop resets to the start, unlike a plain pause) plus a sound
- * toggle — the video carries real dialogue, so autoplay-muted alone would make it pointless to
- * actually watch. Exit removes the whole section from the page for this visit (not just a pause) —
- * a real escape hatch for anyone who doesn't want an autoplaying video on the page at all.
+ * Autoplaying hero demo video on the home page, with a real overlay control layer (play/pause,
+ * seek bar, mute, exit) instead of a native <video controls> UI or a permanently-visible bar below
+ * the video — the overlay fades in on mouse movement / touch over the frame and auto-hides after
+ * CONTROLS_HIDE_DELAY_MS of inactivity, the standard video-player convention.
+ *
+ * Autoplay-with-sound is attempted first (the ask is "unmuted by default"), but every major browser
+ * silently refuses to actually start playback if autoplay would produce audio and the user hasn't
+ * already interacted with this site — there is no way to force real audible autoplay. `video.play()`
+ * is called imperatively (not via the `autoPlay` attribute) specifically so its returned promise can
+ * be caught: on rejection this falls back to muted autoplay so the video still visibly plays instead
+ * of not starting at all, and the mute button reflects reality so a visitor can turn sound on with
+ * one click.
  */
 export default function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [visible, setVisible] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [controlsVisible, setControlsVisible] = useState(true);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    const playAttempt = v.play();
+    if (playAttempt !== undefined) {
+      playAttempt.catch(() => {
+        // Unmuted autoplay was blocked (no prior interaction with this site) — fall back to muted
+        // so the video still plays rather than sitting frozen on the poster frame.
+        v.muted = true;
+        setIsMuted(true);
+        v.play().catch(() => setIsPlaying(false));
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    scheduleHide();
+    return () => {
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function scheduleHide() {
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    hideTimerRef.current = setTimeout(() => setControlsVisible(false), CONTROLS_HIDE_DELAY_MS);
+  }
+
+  function handleActivity() {
+    setControlsVisible(true);
+    scheduleHide();
+  }
 
   if (!visible) return null;
 
@@ -34,6 +87,7 @@ export default function HeroVideo() {
     if (!v) return;
     v.pause();
     v.currentTime = 0;
+    setCurrentTime(0);
     setIsPlaying(false);
     trackEvent("hero_video_stop", {});
   }
@@ -45,6 +99,14 @@ export default function HeroVideo() {
     setIsMuted(v.muted);
   }
 
+  function seek(e: React.ChangeEvent<HTMLInputElement>) {
+    const v = videoRef.current;
+    if (!v) return;
+    const t = Number(e.target.value);
+    v.currentTime = t;
+    setCurrentTime(t);
+  }
+
   function exit() {
     videoRef.current?.pause();
     setVisible(false);
@@ -53,46 +115,76 @@ export default function HeroVideo() {
 
   return (
     <section className="max-w-4xl mx-auto px-6 pb-4">
-      <div className="relative glass-card overflow-hidden rounded-2xl">
-        <button
-          onClick={exit}
-          aria-label="Close video"
-          className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition"
-        >
-          ✕
-        </button>
+      <div
+        className="relative glass-card overflow-hidden rounded-2xl group"
+        onMouseMove={handleActivity}
+        onTouchStart={handleActivity}
+      >
         <video
           ref={videoRef}
           className="w-full aspect-video bg-black"
           src="/videos/rupee-radar-hero.mp4"
           poster="/videos/rupee-radar-hero-poster.jpg"
-          autoPlay
-          muted
           playsInline
           preload="metadata"
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
           onEnded={() => setIsPlaying(false)}
+          onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+          onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
         />
-        <div className="flex items-center justify-center gap-3 py-3 bg-app-surface/80 border-t border-app-border">
-          <button
-            onClick={togglePlay}
-            className="px-4 py-1.5 rounded-full text-sm font-medium bg-brand text-black hover:bg-brand-dark transition"
-          >
-            {isPlaying ? "Pause" : "Play"}
-          </button>
-          <button
-            onClick={stop}
-            className="px-4 py-1.5 rounded-full text-sm font-medium border border-app-border text-app-text hover:border-app-text/40 transition"
-          >
-            Stop
-          </button>
-          <button
-            onClick={toggleMute}
-            className="px-4 py-1.5 rounded-full text-sm font-medium border border-app-border text-app-text hover:border-app-text/40 transition"
-          >
-            {isMuted ? "Unmute" : "Mute"}
-          </button>
+
+        {/* Overlay control layer — fades in on hover/touch, auto-hides after CONTROLS_HIDE_DELAY_MS. */}
+        <div
+          className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent pt-10 pb-3 px-4 transition-opacity duration-300 ${
+            controlsVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+        >
+          <input
+            type="range"
+            min={0}
+            max={duration || 0}
+            step={0.1}
+            value={currentTime}
+            onChange={seek}
+            aria-label="Seek"
+            className="w-full h-1.5 mb-3 accent-brand cursor-pointer"
+          />
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={togglePlay}
+                aria-label={isPlaying ? "Pause" : "Play"}
+                className="w-9 h-9 rounded-full bg-brand text-black flex items-center justify-center hover:bg-brand-dark transition"
+              >
+                {isPlaying ? "❚❚" : "▶"}
+              </button>
+              <button
+                onClick={stop}
+                aria-label="Stop"
+                className="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition"
+              >
+                ■
+              </button>
+              <button
+                onClick={toggleMute}
+                aria-label={isMuted ? "Unmute" : "Mute"}
+                className="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition"
+              >
+                {isMuted ? "🔇" : "🔊"}
+              </button>
+              <span className="text-xs text-white/80 tabular-nums">
+                {formatTime(currentTime)} / {formatTime(duration)}
+              </span>
+            </div>
+            <button
+              onClick={exit}
+              aria-label="Close video"
+              className="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition"
+            >
+              ✕
+            </button>
+          </div>
         </div>
       </div>
     </section>
