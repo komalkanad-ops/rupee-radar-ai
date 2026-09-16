@@ -5,6 +5,7 @@ import { Gauge } from "../components/charts/Gauge";
 import WhyRupeeRadarAI from "../components/WhyRupeeRadarAI";
 import FeatureTeasers from "../components/FeatureTeasers";
 import AppShowcase from "../components/AppShowcase";
+import HeroVideo from "../components/HeroVideo";
 import Reveal from "../components/Reveal";
 
 const organizationJsonLd = {
@@ -90,6 +91,8 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      <HeroVideo />
 
       <AppShowcase />
 
