@@ -23,7 +23,6 @@ const problems: ProblemCard[] = [
     solution:
       "Money Leaks scans your spending for forgotten subscriptions, sneaky bank fees, duplicate charges, and creeping category spend — then adds up exactly how much you could get back.",
     feature: "Money Leaks",
-    pro: true,
     example:
       "A real account found ₹3,965/month recoverable: an unused Netflix Premium (₹599), an unused gym membership (₹2,499), a credit-card annual fee (₹900), and a duplicate ₹1,700 Amazon charge.",
   },

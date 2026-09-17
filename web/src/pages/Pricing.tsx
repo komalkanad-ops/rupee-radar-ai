@@ -26,12 +26,13 @@ const PLANS: Plan[] = [
   { key: "YEARLY", label: "Yearly", priceInr: 2999, actualInr: 199 * 52, per: "/ year", badge: "Best value" },
 ];
 
-// The 16 PRO-only screens as of 2026-09-14 (grepped from every ProLockedCard(title=...) call in
+// The PRO-only screens as of 2026-09-17 (grepped from every ProLockedCard(title=...) call in
 // the Android app), grouped for readability. Keep this in sync when a new PRO screen ships.
+// Money Leaks moved to FREE_FEATURES below on 2026-09-17 — only its AI-written narrative summary
+// stays PRO now, the leak data itself (subscriptions/fees/duplicates/category creep) is free.
 const PRO_FEATURES: { title: string; blurb: string }[] = [
   { title: "Fix Your Finance", blurb: "One action plan pulling every insight together" },
   { title: "Financial Review", blurb: "Monthly/quarterly/yearly grade with an AI-written summary" },
-  { title: "Money Leaks", blurb: "Finds forgotten subscriptions, fee creep, and duplicate charges" },
   { title: "Safety Net", blurb: "Emergency-fund months + debt-to-income vs healthy benchmarks" },
   { title: "Debt Freedom", blurb: "Snowball vs avalanche payoff planner, with a debt-free date" },
   { title: "Net Worth Projection", blurb: "Where your net worth is heading, 1/3/5/10 years out" },
@@ -55,6 +56,7 @@ const FREE_FEATURES = [
   "Loan & EMI tracker",
   "Recurring bills & reminders",
   "Basic spending insights",
+  "Money Leaks — forgotten subscriptions, fee creep & duplicate charges",
 ];
 
 type Step = "form" | "paying";
@@ -145,8 +147,8 @@ export default function Pricing() {
         </span>
         <h1 className="text-3xl md:text-4xl font-bold mb-3">Get the full picture of your money</h1>
         <p className="text-app-muted max-w-xl mx-auto">
-          Free tracks your spend. PRO tells you what to do about it — money leaks, a debt-free
-          date, where your net worth is heading, and more.
+          Free tracks your spend and finds money leaks. PRO tells you what to do about it — a
+          debt-free date, where your net worth is heading, and more.
         </p>
       </div>
 

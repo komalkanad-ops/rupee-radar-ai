@@ -21,7 +21,7 @@ const features = [
   { title: "SMS expense manager", desc: "Auto-tracks spends from bank SMS — search, filter by category, and a smart nudge to categorize anything auto-parsing couldn't handle. Correct a merchant once and it learns that category for good." },
   { title: "Credit card optimizer", desc: "See exactly which card earns the most, wherever you shop — with utilization alerts before any card gets maxed out." },
   { title: "Budgets & Goals", desc: "Set a monthly limit per category and watch the bar fill. Save towards a house, a car, an emergency fund — and get told exactly how much per month keeps you on track." },
-  { title: "Financial Review & Money Leaks", desc: "A month / quarter / year report card with an A–F grade and a plain-English summary, plus an audit of forgotten subscriptions, bank fees and duplicate charges (PRO)." },
+  { title: "Financial Review (PRO) & Money Leaks", desc: "A month / quarter / year report card with an A–F grade and a plain-English summary (PRO), plus a free audit of forgotten subscriptions, bank fees and duplicate charges." },
   { title: "Subscriptions, EMIs & SIPs", desc: "One place for every recurring payment you're committed to — auto-detected from your SMS." },
   { title: "Net worth, projection & job-loss runway", desc: "Your true net worth today, where it's headed in 1/3/5/10 years, and how long your savings would last if income stopped (PRO)." },
 ];
@@ -29,7 +29,7 @@ const features = [
 const proFeatures = [
   "Unlimited AI finance chat",
   "Financial Review — monthly/quarterly/yearly report card with an AI narrative",
-  "Safety Net, Money Leaks & Spending Habits deep-dives",
+  "Safety Net & Spending Habits deep-dives, plus a written Money Leaks summary",
   "Debt Freedom payoff planner + Net Worth projection",
   "Job-loss runway, Cash Flow Calendar, Tax-Saving Nudges & Family Vault",
   "Smarter SMS parsing for tricky bank formats",
