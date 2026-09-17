@@ -324,9 +324,10 @@ insightsRouter.get("/safety-net", requireUser, requirePro, async (req: UserReque
   });
 });
 
-// GET /insights/leaks — PRO. "Where you're bleeding money": subscriptions, fees, category creep,
+// GET /insights/leaks — free (unlocked 2026-09-17 as a free-tier hook; the /leaks/narrative AI
+// summary below stays PRO). "Where you're bleeding money": subscriptions, fees, category creep,
 // duplicate charges, impulse patterns. Returns a per-type breakdown and a headline recoverable total.
-insightsRouter.get("/leaks", requireUser, requirePro, async (req: UserRequest, res) => {
+insightsRouter.get("/leaks", requireUser, async (req: UserRequest, res) => {
   const userId = req.userId!;
   const now = new Date();
   const start90 = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 2, 1)); // 3 whole months
