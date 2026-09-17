@@ -19,7 +19,7 @@ smsRouter.post("/parse", requireUser, async (req: UserRequest, res) => {
 
   const ruleResult = bankSender ? tryParseWithRules(bankSender, rawSms) : null;
   if (ruleResult) {
-    const category = categoryForTxnType(ruleResult.txnType, ruleResult.channel, ruleResult.merchant, categorizeMerchant);
+    const category = categoryForTxnType(ruleResult.txnType, ruleResult.channel, ruleResult.merchant, categorizeMerchant, ruleResult.refund);
     const balanceAfterTxn = extractAvailableBalance(rawSms);
     const paymentApp = extractPaymentApp(rawSms);
     return res.json({ ...ruleResult, category, balanceAfterTxn, paymentApp, parsedVia: "regex" });
@@ -91,6 +91,9 @@ smsRouter.post("/transactions", requireUser, async (req: UserRequest, res) => {
     paymentMethod: t.paymentMethod ?? null,
     balanceAfterTxn: t.balanceAfterTxn ?? null,
     paymentApp: t.paymentApp ?? null,
+    // Money direction. Only written when the client sends a valid value, so an older app build
+    // re-uploading an edit can't wipe a direction a newer build already stored.
+    ...(t.txnType === "debit" || t.txnType === "credit" ? { txnType: t.txnType as string } : {}),
     parsedVia: t.parsedVia ?? "regex",
     txnDate: new Date(t.txnDate),
   }));

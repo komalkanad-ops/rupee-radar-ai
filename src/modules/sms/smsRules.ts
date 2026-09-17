@@ -18,6 +18,9 @@ export interface SmsRule {
   merchantGroup?: number;
   merchantFallback?: string;
   txnType: "debit" | "credit";
+  // A credit that is money coming back (a failed/reversed UPI debit), not new income — tagged
+  // "transfer" by categoryForTxnType so it doesn't inflate income.
+  refund?: boolean;
   // Inferred from which pattern matched (card-swipe language, UPI-handle "Sent/Received", generic
   // A/C debit/credit, or a prepaid wallet) — not derivable from merchant text alone.
   channel: PaymentChannel;
@@ -63,12 +66,18 @@ export const smsRules: SmsRule[] = [
   // "Sent/Received Rs...to/from <UPI handle or payee>" — Kotak's UPI P2P/P2M notification format.
   { bankCode: "KOTAKB", bankName: "Kotak Bank", name: "sent", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "upi",
     pattern: /Sent\s+Rs\.?\s?([\d,]+\.?\d*)\s+from\s+Kotak Bank A\/?[Cc]\s+\S+\s+to\s+(.+?)\s+on\s+[\d-]+\./i },
+  // Must precede "received": same opening, but this one names the payer's UPI handle.
+  { bankCode: "KOTAKB", bankName: "Kotak Bank", name: "received-upi-from", txnType: "credit", amountGroup: 1, merchantGroup: 2, channel: "upi",
+    pattern: /Received\s+Rs\.?\s*([\d,]+\.?\d*)\s+in your Kotak Bank A\/?C\s+\S+\s+from\s+(\S+?)\s+on\s+[\d-]+/i },
   { bankCode: "KOTAKB", bankName: "Kotak Bank", name: "received", txnType: "credit", amountGroup: 1, merchantFallback: "Kotak Bank transfer", channel: "upi",
     pattern: /Received\s+Rs\.?\s*([\d,]+\.?\d*)\s+(?:on\s+[\d-]+\s+)?in your Kotak Bank A\/?C/i },
   { bankCode: "KOTAKB", bankName: "Kotak Bank", name: "nach-pg-debit", txnType: "debit", amountGroup: 1, merchantGroup: 2, merchantFallback: "Kotak Bank auto-debit", channel: "bank_transfer",
     pattern: /(?:INR|Rs\.?)\s?([\d,]+\.?\d*)\s+(?:is\s+)?debited (?:to|from) your Account.*?(?:towards\s+(.+?)\s+)?Kotak Bank/i },
   { bankCode: "KOTAKB", bankName: "Kotak Bank", name: "pg-debit-alt", txnType: "debit", amountGroup: 1, merchantFallback: "Kotak Bank payment", channel: "bank_transfer",
     pattern: /Rs\.?([\d,]+\.?\d*)\s+debited from A\/C\s+\S+\s+via Kotak Bank PG/i },
+  // Must precede "reversal-credit", which would otherwise count a reversed UPI debit as income.
+  { bankCode: "KOTAKB", bankName: "Kotak Bank", name: "upi-reversal", txnType: "credit", refund: true, amountGroup: 1, merchantFallback: "UPI reversal", channel: "upi",
+    pattern: /Rs\.?\s?([\d,]+\.?\d*)\s+is credited to Kotak Bank a\/c.*?as a reversal of debit transaction/i },
   { bankCode: "KOTAKB", bankName: "Kotak Bank", name: "reversal-credit", txnType: "credit", amountGroup: 1, merchantFallback: "Kotak Bank credit", channel: "bank_transfer",
     pattern: /Rs\.?\s?([\d,]+\.?\d*)\s+is credited to (?:your\s+)?Kotak Bank a\/c/i },
   { bankCode: "KOTAKB", bankName: "Kotak Bank", name: "rtgs-neft-credit", txnType: "credit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
@@ -138,9 +147,32 @@ export const smsRules: SmsRule[] = [
   { bankCode: "AMEXIN", bankName: "American Express", name: "payment-received", txnType: "credit", amountGroup: 1, merchantFallback: "Amex payment", channel: "card",
     pattern: /a payment of INR\s?([\d,.]+)\s+was received on your Amex Card/i },
 
+  // ── Kotak 811 (KOTAKD sender — a different bank code, so KOTAKB rules never see these) ──
+  { bankCode: "KOTAKD", bankName: "Kotak Bank", name: "upi-sent", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "upi",
+    pattern: /Sent\s+Rs\.?\s?([\d,]+\.?\d*)\s+from\s+\S+\s+to\s+(.+?)\s+on\s+\d{1,2}[\/-](?:\d{1,2}|[A-Za-z]{3})[\/-]\d{2,4}\.\s*UPI ref/i },
+  { bankCode: "KOTAKD", bankName: "Kotak Bank", name: "upi-received", txnType: "credit", amountGroup: 1, merchantGroup: 2, channel: "upi",
+    pattern: /Received\s+Rs\.?\s?([\d,]+\.?\d*)\s+from\s+(.+?)\s+in your Kotak\S*\s+a\/c/i },
+
   // ── SBI ────────────────────────────────────────────────────────────────────────
   { bankCode: "CBSSBI", bankName: "State Bank of India", name: "debited-transferred", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
     pattern: /A\/C\s+\S+\s+Debited INR\s?([\d,.]+)\s+on\s+[\d/]+\s+-Transferred to\s+(.+?)\.\s+Avl Balance/i },
+  { bankCode: "CBSSBI", bankName: "State Bank of India", name: "debit-by-transfer", txnType: "debit", amountGroup: 1, merchantFallback: "SBI transfer", channel: "bank_transfer",
+    pattern: /has a debit by transfer of Rs\.?\s?([\d,]+\.?\d*)\s+on/i },
+  { bankCode: "SBIUPI", bankName: "State Bank of India", name: "upi-debit", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "upi",
+    pattern: /A\/C\s+\S+\s+debited by\s+([\d,]+\.?\d*)\s+on date\s+\S+\s+trf to\s+(.+?)\s+(?:Refno\s+)?\d{6,}/i },
+  { bankCode: "SBIUPI", bankName: "State Bank of India", name: "upi-credit", txnType: "credit", amountGroup: 1, merchantGroup: 2, channel: "upi",
+    pattern: /A\/c\s*\S+?credited by Rs\.?\s?([\d,]+\.?\d*)\s+on\s+\S+\s+transfer from\s+(.+?)\s+Ref No/i },
+  { bankCode: "SBIUPI", bankName: "State Bank of India", name: "upi-reversal", txnType: "credit", refund: true, amountGroup: 1, merchantFallback: "UPI reversal", channel: "upi",
+    pattern: /credited with Rs\.?\s?([\d,]+\.?\d*)\s+on\s+\S+\s+against reversal/i },
+  { bankCode: "SBIINB", bankName: "State Bank of India", name: "imps-credit", txnType: "credit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    pattern: /a\/c no\.\s+\S+\s+is credited by Rs\.?\s?([\d,]+\.?\d*)\s+on\s+[\d-]+\s+by a\/c linked to mobile\s+\S+?-\s*(.+?)\s*\((?:IMPS|UPI)/i },
+  { bankCode: "SBIPSG", bankName: "State Bank of India", name: "imps-credit", txnType: "credit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    pattern: /a\/c no\.\s+\S+\s+is credited by Rs\.?\s?([\d,]+\.?\d*)\s+on\s+[\d-]+\s+by a\/c linked to mobile\s+\S+?-\s*(.+?)\s*\((?:IMPS|UPI)/i },
+  { bankCode: "SBICRD", bankName: "SBI Card", name: "bbps-payment", txnType: "credit", amountGroup: 1, merchantFallback: "Credit card payment", channel: "card",
+    pattern: /received payment of Rs\.?\s?([\d,]+\.?\d*)\s+via\s+\S+\s+&\s+the same has been credited to your SBI Credit Card/i },
+  // Same SBI Card message delivered over RCS (sender "SIP:SBI_CARDS_AND_PAYMENT_SERVICES_...").
+  { bankCode: "SBI_CARDS", bankName: "SBI Card", name: "bbps-payment-rcs", txnType: "credit", amountGroup: 1, merchantFallback: "Credit card payment", channel: "card",
+    pattern: /received payment of Rs\.?\s?([\d,]+\.?\d*)\s+via\s+\S+\s+&\s+the same has been credited to your SBI Credit Card/i },
 
   // ── Pluxee (meal card) ─────────────────────────────────────────────────────────
   { bankCode: "PLUXEE", bankName: "Pluxee", name: "spent", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "wallet",
@@ -158,7 +190,7 @@ export function tryParseWithRules(bankSender: string, rawSms: string) {
     const amount = parseFloat(match[rule.amountGroup].replace(/,/g, ""));
     if (Number.isNaN(amount)) continue;
     const merchant = rule.merchantGroup ? match[rule.merchantGroup]?.trim() : rule.merchantFallback ?? null;
-    return { amount, merchant: merchant ?? null, txnType: rule.txnType, channel: rule.channel };
+    return { amount, merchant: merchant ?? null, txnType: rule.txnType, channel: rule.channel, refund: rule.refund === true };
   }
   return null;
 }
@@ -229,9 +261,10 @@ export function categoryForTxnType(
   channel: PaymentChannel,
   merchant: string | null,
   categorizeMerchant: (merchant: string | null) => string | null,
+  refund = false,
 ): string | null {
   if (txnType === "credit") {
-    return channel === "card" ? "transfer" : "income";
+    return channel === "card" || refund ? "transfer" : "income";
   }
   return categorizeMerchant(merchant);
 }
