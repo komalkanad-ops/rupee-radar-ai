@@ -502,6 +502,10 @@ model SmsTransaction {
   // null when the channel isn't UPI, the SMS doesn't include a VPA, or the handle isn't recognized.
   // The UI falls back to showing the reliable `paymentMethod` channel label in that case.
   paymentApp      String?
+  // "debit" | "credit" — money out vs in, from the SMS rule that matched (or the user's Sent/
+  // Received choice on a manual entry). Null for rows synced before this field existed; the raw SMS
+  // isn't stored, so those can't be backfilled server-side.
+  txnType         String?
 
   @@unique([userId, rawSmsHash])
   @@index([userId, txnDate])
