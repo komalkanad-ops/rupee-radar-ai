@@ -22,12 +22,16 @@ describe("Safety Net + Money Leaks (/insights)", () => {
     await prisma.user.deleteMany({ where: { id: { in: uids } } });
   });
 
-  it("both endpoints are PRO-gated", async () => {
+  it("safety-net is PRO-gated; leaks (2026-09-17) is free for a signed-in non-PRO user", async () => {
     const user = await createAnonymousUser();
     uids.push(user.userId);
     const h = { Authorization: `Bearer ${user.token}` };
     expect((await request(app).get("/insights/safety-net").set(h)).status).toBe(403);
-    expect((await request(app).get("/insights/leaks").set(h)).status).toBe(403);
+    const leaks = await request(app).get("/insights/leaks").set(h);
+    expect(leaks.status).toBe(200);
+    expect(leaks.body.hasData).toBe(false);
+    // The narrative summary stays PRO-gated even though the underlying leak data is free.
+    expect((await request(app).post("/insights/leaks/narrative").set(h).send({})).status).toBe(403);
   });
 
   it("safety-net computes savings rate, emergency-fund months and DTI", async () => {

@@ -311,7 +311,6 @@ describe("T8 — PRO routes reject a non-PRO user", () => {
     { method: "get", path: "/insights/review" },
     { method: "post", path: "/insights/review/narrative" },
     { method: "get", path: "/insights/safety-net" },
-    { method: "get", path: "/insights/leaks" },
     { method: "post", path: "/insights/leaks/narrative" },
     { method: "post", path: "/insights/narrative" },
     { method: "get", path: "/cashflow/calendar" },
