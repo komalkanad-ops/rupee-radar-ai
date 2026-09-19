@@ -2,11 +2,54 @@ import * as Sentry from "@sentry/node";
 import { Router } from "express";
 import { prisma } from "../../lib/prisma.js";
 import { requireUser, type UserRequest } from "../auth/authMiddleware.js";
+import { CLASSIFIABLE_CATEGORIES } from "../categorization/merchantCategorizer.js";
 import { callMesh, type MeshMessage } from "../llm/meshClient.js";
 
 export const chatRouter = Router();
 
 const NON_SPEND_CATEGORIES = new Set(["income", "transfer", "savings"]);
+// Categories a top-spend-category entry is allowed to claim, beyond the AI-classifiable set — kept
+// separate from NON_SPEND_CATEGORIES/CLASSIFIABLE_CATEGORIES so this list only has to mean "valid
+// label for a client-supplied spend line," nothing more.
+const VALID_LOCAL_CONTEXT_CATEGORIES = new Set([...CLASSIFIABLE_CATEGORIES, "uncategorized"]);
+
+/** Android's `ChatContextComputer.compute()` output, as received over the wire. Validated before
+ * use — see [validateLocalContext] — since this is user-influenced input (crafted SMS could shape
+ * category/amount values) landing right next to the system prompt. */
+interface LocalChatContext {
+  thisMonthSpend: number;
+  thisMonthIncome: number;
+  topCategories: { category: string; amount: number }[];
+}
+
+// No real monthly spend/income figure approaches this — a ceiling closes off a crafted/buggy
+// payload inflating the rendered context (and so LLM token cost) with a near-Number.MAX_VALUE
+// amount, which `Number.isFinite` alone doesn't catch.
+const MAX_PLAUSIBLE_AMOUNT = 1_000_000_000;
+
+function isFiniteNonNegative(n: unknown): n is number {
+  return typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= MAX_PLAUSIBLE_AMOUNT;
+}
+
+/** Rejects the whole payload (falls back to the server-side query) rather than trying to salvage a
+ * partially-valid one — a malformed/adversarial client shouldn't get partial credit, and this
+ * context is cheap to recompute server-side anyway. */
+function validateLocalContext(input: unknown): LocalChatContext | null {
+  if (!input || typeof input !== "object") return null;
+  const { thisMonthSpend, thisMonthIncome, topCategories } = input as Record<string, unknown>;
+  if (!isFiniteNonNegative(thisMonthSpend) || !isFiniteNonNegative(thisMonthIncome)) return null;
+  if (!Array.isArray(topCategories) || topCategories.length > 8) return null;
+
+  const cleaned: { category: string; amount: number }[] = [];
+  for (const entry of topCategories) {
+    if (!entry || typeof entry !== "object") return null;
+    const { category, amount } = entry as Record<string, unknown>;
+    if (typeof category !== "string" || !VALID_LOCAL_CONTEXT_CATEGORIES.has(category)) return null;
+    if (!isFiniteNonNegative(amount)) return null;
+    cleaned.push({ category, amount });
+  }
+  return { thisMonthSpend, thisMonthIncome, topCategories: cleaned };
+}
 
 // Free tier: a cheap, fast model with a hard output-token ceiling and a lifetime message cap —
 // the point of all three limits together is to keep an unpaid user's AI cost near-zero, not just
@@ -51,13 +94,20 @@ function inr(n: number): string {
  * Loan "outstanding balance" is deliberately NOT computed here — no backend equivalent of
  * Android's LoanCalculator exists (see Loan model's own doc comment), so only raw stored facts
  * are given; the system prompt tells the assistant to be upfront about that limit if asked. */
-async function buildFinanceContext(userId: string): Promise<string> {
+/** @param localContext Pre-validated (see [validateLocalContext]) client-computed spend/income
+ * summary. When present, it replaces the `smsTransaction` query below for this section only — the
+ * fix for the anonymous-userId sync gap, see ChatContextComputer.kt's doc comment on the Android
+ * side. Every other section here (net worth, loans, lending, recurring, savings, cards) is written
+ * under the live session already, so it's unaffected by that gap and stays server-queried. */
+async function buildFinanceContext(userId: string, localContext: LocalChatContext | null): Promise<string> {
   const monthStart = new Date();
   monthStart.setDate(1);
   monthStart.setHours(0, 0, 0, 0);
 
   const [thisMonthTxns, latestNetWorth, loans, lending, recurring, savingsInstruments, cards] = await Promise.all([
-    prisma.smsTransaction.findMany({ where: { userId, txnDate: { gte: monthStart } }, select: { amount: true, category: true } }),
+    localContext
+      ? Promise.resolve([])
+      : prisma.smsTransaction.findMany({ where: { userId, txnDate: { gte: monthStart } }, select: { amount: true, category: true } }),
     prisma.netWorthSnapshot.findFirst({ where: { userId }, orderBy: { month: "desc" } }),
     prisma.loan.findMany({ where: { userId, active: true, foreclosedAt: null } }),
     prisma.lentMoney.findMany({ where: { userId, active: true, status: "OUTSTANDING" } }),
@@ -69,23 +119,34 @@ async function buildFinanceContext(userId: string): Promise<string> {
     prisma.userCreditCard.findMany({ where: { userId, status: "ACTIVE" }, include: { card: true } }),
   ]);
 
-  const spendByCategory = new Map<string, number>();
-  let thisMonthIncome = 0;
-  for (const t of thisMonthTxns) {
-    if (t.category === "income") {
-      thisMonthIncome += t.amount;
-      continue;
+  let thisMonthIncome: number;
+  let thisMonthSpend: number;
+  let topCategories: string;
+  if (localContext) {
+    thisMonthIncome = localContext.thisMonthIncome;
+    thisMonthSpend = localContext.thisMonthSpend;
+    topCategories = localContext.topCategories
+      .map(({ category, amount }) => `${category}: ${inr(amount)}`)
+      .join(", ");
+  } else {
+    const spendByCategory = new Map<string, number>();
+    thisMonthIncome = 0;
+    for (const t of thisMonthTxns) {
+      if (t.category === "income") {
+        thisMonthIncome += t.amount;
+        continue;
+      }
+      if (t.category && NON_SPEND_CATEGORIES.has(t.category)) continue;
+      const key = t.category ?? "uncategorized";
+      spendByCategory.set(key, (spendByCategory.get(key) ?? 0) + t.amount);
     }
-    if (t.category && NON_SPEND_CATEGORIES.has(t.category)) continue;
-    const key = t.category ?? "uncategorized";
-    spendByCategory.set(key, (spendByCategory.get(key) ?? 0) + t.amount);
+    topCategories = [...spendByCategory.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([category, spent]) => `${category}: ${inr(spent)}`)
+      .join(", ");
+    thisMonthSpend = [...spendByCategory.values()].reduce((sum, v) => sum + v, 0);
   }
-  const topCategories = [...spendByCategory.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 8)
-    .map(([category, spent]) => `${category}: ${inr(spent)}`)
-    .join(", ");
-  const thisMonthSpend = [...spendByCategory.values()].reduce((sum, v) => sum + v, 0);
 
   const loanLines = loans.length
     ? loans
@@ -168,10 +229,11 @@ const SYSTEM_PROMPT =
 
 chatRouter.post("/", requireUser, async (req: UserRequest, res) => {
   const userId = req.userId!;
-  const { message, history } = req.body ?? {};
+  const { message, history, localContext: rawLocalContext } = req.body ?? {};
   if (typeof message !== "string" || !message.trim()) {
     return res.status(400).json({ error: "message is required" });
   }
+  const localContext = validateLocalContext(rawLocalContext);
 
   const isPro = await isProUser(userId);
   const usage = await prisma.chatUsage.upsert({ where: { userId }, update: {}, create: { userId } });
@@ -189,7 +251,7 @@ chatRouter.post("/", requireUser, async (req: UserRequest, res) => {
         .slice(-10)
     : [];
 
-  const context = await buildFinanceContext(userId);
+  const context = await buildFinanceContext(userId, localContext);
   const lengthInstruction = isPro ? "" : ` Keep your ENTIRE reply under ${FREE_REPLY_CHAR_LIMIT} characters total — be extremely brief, one short sentence.`;
 
   try {
