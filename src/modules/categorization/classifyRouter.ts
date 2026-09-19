@@ -168,6 +168,10 @@ classifyRouter.post("/quick-capture", requireUser, async (req: UserRequest, res)
   }
 
   const captures: any[] = [];
+  // Distinct from "genuinely nothing to capture" (a well-formed `{"captures": []}` reply) so the
+  // client can tell a real parse failure apart from a no-op success and show a retry affordance
+  // instead of silently rendering nothing — both cases produce an empty `captures` array otherwise.
+  let parseFailed = false;
   try {
     const jsonText = raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
     const parsed = JSON.parse(jsonText);
@@ -192,8 +196,9 @@ classifyRouter.post("/quick-capture", requireUser, async (req: UserRequest, res)
       }
     }
   } catch (err) {
+    parseFailed = true;
     Sentry.captureException(err, { tags: { route: "POST /categorization/quick-capture" } });
   }
 
-  res.json({ captures });
+  res.json({ captures, parseFailed });
 });
