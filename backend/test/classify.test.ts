@@ -223,7 +223,7 @@ describe("Quick Capture AI dictation (/categorization/quick-capture)", () => {
     expect(recurringCount).toBe(0);
   });
 
-  it("a malformed model response is a no-op, not a 500", async () => {
+  it("a malformed model response is a no-op, not a 500, and is flagged distinctly from a real zero-capture reply", async () => {
     (callMesh as any).mockResolvedValueOnce("sorry, I can't do that");
     const user = await createAnonymousUser();
     createdUserIds.push(user.userId);
@@ -236,6 +236,23 @@ describe("Quick Capture AI dictation (/categorization/quick-capture)", () => {
 
     expect(res.status).toBe(200);
     expect(res.body.captures).toEqual([]);
+    expect(res.body.parseFailed).toBe(true);
+  });
+
+  it("a well-formed reply with nothing to capture is not flagged as a parse failure", async () => {
+    (callMesh as any).mockResolvedValueOnce(JSON.stringify({ captures: [] }));
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    await grantPro(user.token);
+
+    const res = await request(app)
+      .post("/categorization/quick-capture")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({ text: "just saying hi" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.captures).toEqual([]);
+    expect(res.body.parseFailed).toBe(false);
   });
 
   it("returns a retryable 429 when the mesh provider is rate-limited", async () => {

@@ -163,4 +163,46 @@ describe("AI chat assistant (/chat)", () => {
     expect(userTurns).toHaveLength(10);
     expect(sentMessages.some((m: any) => m.content === "should be dropped")).toBe(false);
   });
+
+  it("prefers a valid client-supplied localContext over the (empty) server-side transaction query", async () => {
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    // No smsTransaction rows for this user — simulates the anonymous-userId sync gap: Room has the
+    // data, the server-side row doesn't. Without localContext this would say "no spend recorded".
+
+    const res = await request(app)
+      .post("/chat")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({
+        message: "What have I spent on dining this month?",
+        localContext: { thisMonthSpend: 4200, thisMonthIncome: 0, topCategories: [{ category: "dining", amount: 4200 }] },
+      });
+
+    expect(res.status).toBe(200);
+    const systemMessage = (callMesh as any).mock.calls[(callMesh as any).mock.calls.length - 1][0].find((m: any) => m.role === "system");
+    expect(systemMessage.content).toContain("dining: ₹4,200");
+    expect(systemMessage.content).not.toContain("No spend recorded yet this month");
+  });
+
+  it("falls back to the server-side query when localContext is malformed", async () => {
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    await prisma.smsTransaction.create({
+      data: { userId: user.userId, rawSmsHash: `chat-fallback-${Date.now()}`, amount: 900, merchant: "BigBasket", category: "groceries", txnDate: new Date() },
+    });
+
+    const res = await request(app)
+      .post("/chat")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({
+        message: "What have I spent this month?",
+        // Not a real category — should be rejected wholesale, not partially trusted.
+        localContext: { thisMonthSpend: 4200, thisMonthIncome: 0, topCategories: [{ category: "made-up-category", amount: 4200 }] },
+      });
+
+    expect(res.status).toBe(200);
+    const systemMessage = (callMesh as any).mock.calls[(callMesh as any).mock.calls.length - 1][0].find((m: any) => m.role === "system");
+    expect(systemMessage.content).toContain("groceries: ₹900");
+    expect(systemMessage.content).not.toContain("₹4,200");
+  });
 });
