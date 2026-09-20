@@ -215,6 +215,37 @@ export default function Download() {
         )}
       </div>
 
+      {/* Google Play beta invite */}
+      <div className="rounded-2xl border border-app-border bg-app-surface p-6 mb-10">
+        <h2 className="font-semibold text-app-text mb-2">Rupee Radar AI is now in beta testing on Google Play</h2>
+        <p className="text-sm text-app-muted mb-3">
+          We're testing the Play Store version with a small group before it opens up to everyone.
+          Want to help test it? Email{" "}
+          <a
+            href="mailto:support@rupeeradarai.com?subject=Google%20Play%20beta%20testing%20request"
+            className="text-brand hover:underline"
+          >
+            support@rupeeradarai.com
+          </a>{" "}
+          with the Google account email you'd like added, then use the link below to join — it
+          opens an invite page, and once you accept, takes you straight to the Play Store to
+          install.
+        </p>
+        <a
+          href="https://play.google.com/apps/internaltest/4701129163907111016"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackEvent("play_beta_invite_click", { source: "download_page" })}
+          className="inline-block rounded-xl border border-brand text-brand font-semibold px-5 py-3 hover:bg-brand hover:text-black transition-colors"
+        >
+          Join the Google Play beta
+        </a>
+        <p className="text-xs text-app-muted mt-3">
+          Rupee Radar AI will be available to everyone on the Play Store soon — this page will
+          link straight to it the moment that happens.
+        </p>
+      </div>
+
       {/* Previous versions — the last few builds, served straight from the site */}
       {previousVersions.length > 0 && (
         <div id="previous-versions" className="rounded-2xl border border-app-border bg-app-surface p-6 mb-10">
@@ -308,10 +339,10 @@ export default function Download() {
           </li>
         </ol>
         <p className="text-xs text-app-muted">
-          We're in the process of registering Rupee Radar AI with Google's app-verification
-          program, which should reduce this warning for everyone over time — it's not something a
-          single app update can fix instantly. If you'd rather wait, the app will also be
-          available directly on the Play Store; we'll update this page the moment that happens.
+          Rupee Radar AI is now in beta testing on Google Play (see above), which should reduce
+          this warning for everyone over time as more installs happen through Play — it's not
+          something a single app update can fix instantly. If you'd rather wait for the full Play
+          Store release, we'll update this page the moment it's open to everyone.
         </p>
       </div>
 
