@@ -50,6 +50,15 @@ describe("App Version catalog (/app-version)", () => {
     expect(res.body.latestBeta.versionCode).toBe(12); // the higher of the two beta rows, not the first inserted
   });
 
+  it("GET /latest includes a non-persisted apkUrl built from versionName, matching publish-apk.sh's naming", async () => {
+    const platform = `android-apkurl-${Date.now()}`;
+    const row = await prisma.appVersion.create({ data: { platform, versionName: "1.3.7", versionCode: 30, channel: "STABLE" } });
+    createdIds.push(row.id);
+
+    const res = await request(app).get(`/app-version/latest?platform=${platform}`);
+    expect(res.body.latestStable.apkUrl).toBe("https://rupeeradarai.com/rupee-radar-ai-1.3.7.apk");
+  });
+
   it("GET /latest surfaces the highest minSupportedVersionCode across both channels", async () => {
     const platform = `android-force-${Date.now()}`;
     const rows = await Promise.all([
