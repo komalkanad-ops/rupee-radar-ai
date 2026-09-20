@@ -115,6 +115,9 @@ const ADMIN_ROUTES: Route[] = [
   // bug reports
   { method: "get", path: "/bug-reports" },
   { method: "patch", path: "/bug-reports/x/status" },
+  // beta tester requests
+  { method: "get", path: "/beta-tester-requests" },
+  { method: "delete", path: "/beta-tester-requests/x" },
   // login bypass
   { method: "get", path: "/admin/login-bypass" },
   { method: "post", path: "/admin/login-bypass" },
@@ -232,6 +235,7 @@ describe("T7 snapshot guard — every admin-gated route in the source is covered
     rewardsRouter: "/rewards",
     feedbackRouter: "/feedback",
     bugReportRouter: "/bug-reports",
+    betaTesterRouter: "/beta-tester-requests",
     loginBypassRouter: "/admin/login-bypass",
     appVersionRouter: "/app-version",
     featureFlagsRouter: "/feature-flags",
