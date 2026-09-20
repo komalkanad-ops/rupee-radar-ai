@@ -780,6 +780,18 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "A screen's guide now closes when you navigate away, and shows instantly if you've turned animations off." },
     ],
   },
+  {
+    version: "1.1.1",
+    releaseDate: "2026-09-20",
+    platforms: ["android"],
+    summary: "The AI Assistant now sees your real spending data, and Quick Capture tells you when it can't understand you.",
+    highlights: [
+      { type: "FIX", platform: "android", text: "AI Assistant now answers using your real spending data, even if your SMS was synced before you signed in." },
+      { type: "FIX", platform: "android", text: "Quick Capture now shows a clear message and a Try Again button when it can't understand what you typed." },
+      { type: "FIX", platform: "android", text: "Hindi is now labeled Beta, since translation coverage is still growing across the app." },
+      { type: "FEATURE", platform: "android", text: "Settings can now download and install app updates directly, for installs outside Google Play." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
