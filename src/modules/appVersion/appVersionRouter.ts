@@ -21,7 +21,13 @@ appVersionRouter.get("/latest", async (req, res) => {
     latestStable?.minSupportedVersionCode ?? 0,
   ) || null;
 
-  res.json({ latestBeta, latestStable, minSupportedVersionCode });
+  // Non-persisted — built from versionName per scripts/publish-apk.sh's own naming convention
+  // (web/public/rupee-radar-ai-<versionName>.apk, served at the domain root). Lets the client
+  // download-and-install an update in-app instead of only linking to the /download page.
+  const withApkUrl = <T extends { versionName: string } | null>(v: T) =>
+    v ? { ...v, apkUrl: `https://rupeeradarai.com/rupee-radar-ai-${v.versionName}.apk` } : v;
+
+  res.json({ latestBeta: withApkUrl(latestBeta), latestStable: withApkUrl(latestStable), minSupportedVersionCode });
 });
 
 // GET /app-version — admin console's release list.
