@@ -16,6 +16,7 @@ import RedemptionQueue from "./pages/RedemptionQueue";
 import Feedback from "./pages/Feedback";
 import UserDiagnostics from "./pages/UserDiagnostics";
 import BugReports from "./pages/BugReports";
+import BetaTesterRequests from "./pages/BetaTesterRequests";
 import AppVersions from "./pages/AppVersions";
 import Corrections from "./pages/Corrections";
 import Users from "./pages/Users";
@@ -64,6 +65,7 @@ export default function App() {
         <Route path="/redemptions" element={<RedemptionQueue />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/bug-reports" element={<BugReports />} />
+        <Route path="/beta-tester-requests" element={<BetaTesterRequests />} />
         <Route path="/user-diagnostics/:userId" element={<UserDiagnostics />} />
         <Route path="/login-bypass" element={<LoginBypass />} />
         <Route path="/app-versions" element={<AppVersions />} />

@@ -1153,6 +1153,18 @@ enum AppVersionChannel {
 // access (no such integration exists in this project — see CLAUDE.md's standing Play Console
 // blocker). `platform` is deliberately a free string, not an enum, so iOS/web-app entries could be
 // added later without a schema change.
+// Website /download page's "join the Google Play beta" form — public, anonymous (no login concept
+// on the website), so deliberately no FK to User, same reasoning as ReferralDeviceClaim. The Play
+// Console Internal Testing link only grants access to emails the owner has explicitly added there;
+// this table is just the admin console's queue of "someone asked to be added."
+model BetaTesterRequest {
+  id        String   @id @default(cuid())
+  email     String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
 model AppVersion {
   id                      String            @id @default(cuid())
   platform                String            @default("android")
