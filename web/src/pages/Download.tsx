@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { api } from "../lib/api";
+import { FormEvent, useEffect, useState } from "react";
+import { api, apiPost } from "../lib/api";
 import { trackEvent } from "../lib/analytics";
 import { useSeo } from "../lib/useSeo";
 
@@ -136,6 +136,27 @@ export default function Download() {
   const [apkSize, setApkSize] = useState<string | null>(null);
   const [manifest, setManifest] = useState<string[] | null>(null);
 
+  const [betaEmail, setBetaEmail] = useState("");
+  const [betaLoading, setBetaLoading] = useState(false);
+  const [betaError, setBetaError] = useState<string | null>(null);
+  const [betaSubmitted, setBetaSubmitted] = useState(false);
+
+  async function submitBetaRequest(e: FormEvent) {
+    e.preventDefault();
+    if (!betaEmail.trim() || betaLoading) return;
+    setBetaLoading(true);
+    setBetaError(null);
+    try {
+      await apiPost("/beta-tester-requests", { email: betaEmail.trim() });
+      setBetaSubmitted(true);
+      trackEvent("play_beta_request_submit", { source: "download_page" });
+    } catch {
+      setBetaError("Couldn't submit that — check the email and try again.");
+    } finally {
+      setBetaLoading(false);
+    }
+  }
+
   useEffect(() => {
     api<LatestVersion>("/app-version/latest?platform=android")
       .then(setVersion)
@@ -218,25 +239,44 @@ export default function Download() {
       {/* Google Play beta invite */}
       <div className="rounded-2xl border border-app-border bg-app-surface p-6 mb-10">
         <h2 className="font-semibold text-app-text mb-2">Rupee Radar AI is now in beta testing on Google Play</h2>
-        <p className="text-sm text-app-muted mb-3">
+        <p className="text-sm text-app-muted mb-4">
           We're testing the Play Store version with a small group before it opens up to everyone.
-          Want to help test it? Email{" "}
-          <a
-            href="mailto:support@rupeeradarai.com?subject=Google%20Play%20beta%20testing%20request"
-            className="text-brand hover:underline"
-          >
-            support@rupeeradarai.com
-          </a>{" "}
-          with the Google account email you'd like added, then use the link below to join — it
-          opens an invite page, and once you accept, takes you straight to the Play Store to
-          install.
+          Want to help test it? Submit your Google account email below — once we've added it in
+          Play Console, use the "Join the Google Play beta" link to accept the invite and install
+          from the Play Store.
         </p>
+
+        {betaSubmitted ? (
+          <p className="text-sm text-app-text bg-app-bg border border-app-border rounded-lg px-4 py-3 mb-4">
+            Thanks — we'll add that email to the tester list soon.
+          </p>
+        ) : (
+          <form onSubmit={submitBetaRequest} className="flex flex-col sm:flex-row gap-3 mb-2">
+            <input
+              type="email"
+              required
+              value={betaEmail}
+              onChange={(e) => setBetaEmail(e.target.value)}
+              placeholder="you@gmail.com"
+              className="flex-1 rounded-lg border border-app-border bg-app-bg text-app-text px-3 py-2.5"
+            />
+            <button
+              type="submit"
+              disabled={betaLoading}
+              className="rounded-lg bg-brand text-black font-semibold px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-60"
+            >
+              {betaLoading ? "Submitting…" : "Request access"}
+            </button>
+          </form>
+        )}
+        {betaError && <p className="text-sm text-danger mb-3">{betaError}</p>}
+
         <a
           href="https://play.google.com/apps/internaltest/4701129163907111016"
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackEvent("play_beta_invite_click", { source: "download_page" })}
-          className="inline-block rounded-xl border border-brand text-brand font-semibold px-5 py-3 hover:bg-brand hover:text-black transition-colors"
+          className="inline-block rounded-xl border border-brand text-brand font-semibold px-5 py-3 mt-2 hover:bg-brand hover:text-black transition-colors"
         >
           Join the Google Play beta
         </a>
