@@ -6,7 +6,7 @@ const ORIGINAL_ENV = { ...process.env };
 describe("Hostinger mail webhook (/webhooks/hostinger-mail)", () => {
   beforeEach(() => {
     vi.resetModules();
-    process.env.HOSTINGER_MAIL_WEBHOOK_SECRETS = "secret-admin,secret-support";
+    process.env.HOSTINGER_MAIL_WEBHOOK_SECRETS = "admin@rupeeradarai.com:secret-admin,support@rupeeradarai.com:secret-support";
     process.env.SLACK_BOT_TOKEN = "xoxb-test-token";
     process.env.SLACK_MAIL_ALERT_CHANNEL_ID = "C0TESTCHANNEL";
   });
@@ -42,7 +42,6 @@ describe("Hostinger mail webhook (/webhooks/hostinger-mail)", () => {
       .set("Authorization", "Bearer secret-support")
       .send({
         event: "message.received",
-        mailbox: "support@rupeeradarai.com",
         data: { message: { subject: "Hello", from: { address: "someone@example.com" } } },
       });
 
