@@ -4,10 +4,20 @@ import { Router } from "express";
 export const mailWebhookRouter = Router();
 
 // One secret per mailbox webhook — Hostinger generates a fresh, distinct secret per webhook
-// (mail_createWebhookV1), there's no way to set a shared one ourselves. Comma-separated so both
-// admin@ and support@'s webhooks can point at this same route.
-const VALID_SECRETS = new Set(
-  (process.env.HOSTINGER_MAIL_WEBHOOK_SECRETS ?? "").split(",").map((s) => s.trim()).filter(Boolean),
+// (mail_createWebhookV1), there's no way to set a shared one ourselves. `mailbox:secret` pairs,
+// comma-separated, so both admin@ and support@'s webhooks can point at this same route. The
+// mailbox is looked up from *which secret* authenticated the request, not from the payload body —
+// confirmed via a real test delivery that Hostinger's `message.received` payload doesn't identify
+// the mailbox itself (no `mailbox`/`account` field), only `subject`/`from` under `data.message`.
+const SECRET_TO_MAILBOX = new Map(
+  (process.env.HOSTINGER_MAIL_WEBHOOK_SECRETS ?? "")
+    .split(",")
+    .map((pair) => pair.trim())
+    .filter(Boolean)
+    .map((pair) => {
+      const [mailbox, secret] = pair.split(":");
+      return [secret, mailbox] as const;
+    }),
 );
 // chat.postMessage, not an Incoming Webhook — a bot token doesn't expire (unlike the rotating user
 // OAuth token used for the interactive Slack MCP connection elsewhere), which matters here since
@@ -21,14 +31,14 @@ function extractBearerToken(header: string | undefined): string | null {
   return match ? match[1] : null;
 }
 
-/** Best-effort field extraction — Hostinger's OpenAPI spec (github.com/hostinger/mail-api)
- * documents the webhook *management* API in full but not the shape of what's actually POSTed on
- * `message.received`. Every field here is optional and falls back to something generic rather than
- * throwing, so an unexpected shape still produces a (less detailed) Slack post instead of a 500 —
- * tighten this once a real delivery has been observed (see [formatSlackMessage]'s raw-payload log). */
-function formatSlackMessage(body: any): string {
+/** Best-effort field extraction for subject/from — Hostinger's OpenAPI spec
+ * (github.com/hostinger/mail-api) documents the webhook *management* API in full but not the exact
+ * shape of what's actually POSTed on `message.received`. Confirmed via a real test delivery:
+ * `data.message.subject` and `data.message.from.address` are populated; every field here still
+ * falls back to something generic rather than throwing, in case a real delivery's shape differs
+ * from the test payload's. */
+function formatSlackMessage(mailbox: string, body: any): string {
   const event = body?.event ?? body?.type ?? "message.received";
-  const mailbox = body?.mailbox ?? body?.account ?? body?.data?.mailbox ?? "a mailbox";
   const message = body?.data?.message ?? body?.message ?? body?.data ?? {};
   const subject = message?.subject ?? "(no subject)";
   const from = message?.from?.address ?? message?.from?.name ?? message?.from ?? "unknown sender";
@@ -42,7 +52,8 @@ function formatSlackMessage(body: any): string {
 // per-webhook secret it sends as a bearer token instead.
 mailWebhookRouter.post("/", async (req, res) => {
   const token = extractBearerToken(req.headers.authorization);
-  if (!token || !VALID_SECRETS.has(token)) {
+  const mailbox = token ? SECRET_TO_MAILBOX.get(token) : undefined;
+  if (!mailbox) {
     return res.status(401).json({ error: "invalid webhook secret" });
   }
 
@@ -57,7 +68,7 @@ mailWebhookRouter.post("/", async (req, res) => {
     return;
   }
   try {
-    const text = formatSlackMessage(req.body);
+    const text = formatSlackMessage(mailbox, req.body);
     const slackRes = await fetch("https://slack.com/api/chat.postMessage", {
       method: "POST",
       headers: {
