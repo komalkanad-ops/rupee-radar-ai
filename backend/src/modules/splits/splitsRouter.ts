@@ -17,6 +17,12 @@ const MAX_AMOUNT = 1e9;
 // Shares are entered/rounded per person, so they rarely add up to the paise; a rupee of slack.
 const SHARE_SUM_TOLERANCE = 1.0;
 const ID_PATTERN = /^[A-Za-z0-9_-]{1,40}$/;
+// Counts every row including soft-deleted ones (those are never purged), so delete-and-recreate
+// can't grow the table without bound. Far above any real household's usage.
+const MAX_SPLITS_PER_USER = 1000;
+// MySQL DATETIME only holds years 1000-9999 and an out-of-range date otherwise surfaces as a 500.
+const MIN_EXPENSE_DATE = new Date("2000-01-01T00:00:00.000Z");
+const MAX_FUTURE_YEARS = 2;
 
 interface Participant {
   name: string;
@@ -48,12 +54,23 @@ function parseStoredParticipants(json: string): Participant[] {
   }
 }
 
+// A name made only of zero-width / control / space characters passes trim() yet renders blank.
+function hasVisibleText(s: string): boolean {
+  return s.replace(/[\p{Cc}\p{Cf}\p{Zs}]/gu, "").length > 0;
+}
+
 function parseDate(v: unknown): Date | null {
   // A Date is legitimate here: PUT merges the stored row (whose expenseDate is a Date) under the
-  // request before validating the whole thing.
-  if (!(v instanceof Date) && typeof v !== "string" && typeof v !== "number") return null;
-  const d = new Date(v);
-  return Number.isNaN(d.getTime()) ? null : d;
+  // request before validating the whole thing. Strings must look ISO-ish — `new Date("1")` is a
+  // valid date (year 2000) and bare numbers are epoch millis, neither of which a client means.
+  let d: Date;
+  if (v instanceof Date) d = v;
+  else if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v)) d = new Date(v);
+  else return null;
+  if (Number.isNaN(d.getTime())) return null;
+  const latest = new Date();
+  latest.setFullYear(latest.getFullYear() + MAX_FUTURE_YEARS);
+  return d >= MIN_EXPENSE_DATE && d <= latest ? d : null;
 }
 
 // Validates a COMPLETE set of fields — for PUT the caller merges the stored row under the request
@@ -61,7 +78,7 @@ function parseDate(v: unknown): Date | null {
 // against the whole.
 function validate(input: Record<string, unknown>): Validated {
   const title = typeof input.title === "string" ? input.title.trim() : "";
-  if (!title || title.length > MAX_TITLE) return { ok: false, error: `title is required (max ${MAX_TITLE} characters)` };
+  if (!title || !hasVisibleText(title) || title.length > MAX_TITLE) return { ok: false, error: `title is required (max ${MAX_TITLE} characters)` };
 
   const totalAmount = input.totalAmount;
   if (!isFiniteNumber(totalAmount) || totalAmount <= 0 || totalAmount > MAX_AMOUNT) {
@@ -77,7 +94,7 @@ function validate(input: Record<string, unknown>): Validated {
   }
 
   const expenseDate = parseDate(input.expenseDate);
-  if (!expenseDate) return { ok: false, error: "expenseDate must be a valid date" };
+  if (!expenseDate) return { ok: false, error: "expenseDate must be a valid date (2000 up to two years from now)" };
 
   const rawParticipants = input.participants;
   if (!Array.isArray(rawParticipants) || rawParticipants.length < MIN_PARTICIPANTS || rawParticipants.length > MAX_PARTICIPANTS) {
@@ -91,7 +108,7 @@ function validate(input: Record<string, unknown>): Validated {
     if (typeof p !== "object" || p === null) return { ok: false, error: "each participant must be an object" };
     const { name: rawName, share, settled } = p as Record<string, unknown>;
     const name = typeof rawName === "string" ? rawName.trim() : "";
-    if (!name || name.length > MAX_NAME) return { ok: false, error: `each participant needs a name (max ${MAX_NAME} characters)` };
+    if (!name || !hasVisibleText(name) || name.length > MAX_NAME) return { ok: false, error: `each participant needs a name (max ${MAX_NAME} characters)` };
     if (!isFiniteNumber(share) || share < 0 || share > MAX_AMOUNT) {
       return { ok: false, error: `each participant's share must be a number between 0 and ${MAX_AMOUNT}` };
     }
@@ -139,6 +156,7 @@ splitsRouter.get("/", requireUser, async (req: UserRequest, res) => {
   const rows = await prisma.splitExpense.findMany({
     where: { userId: req.userId, active: true },
     orderBy: { expenseDate: "desc" },
+    take: MAX_SPLITS_PER_USER,
   });
   res.json(rows.map(serialize));
 });
@@ -158,8 +176,19 @@ splitsRouter.post("/", requireUser, async (req: UserRequest, res) => {
   if (!result.ok) return res.status(400).json({ error: result.error });
   const v = result.value;
 
-  if (id && (await prisma.splitExpense.findUnique({ where: { id }, select: { id: true } }))) {
-    return res.status(409).json({ error: "That id is already in use" });
+  if (id) {
+    const existing = await prisma.splitExpense.findUnique({ where: { id } });
+    if (existing) {
+      // The same user retrying a create whose response was lost (edge 502/503/504, or the app's
+      // retry interceptor) must get their row back, not a 409 the client would read as failure.
+      // Returned unchanged: a retry never overwrites, and a soft-deleted row is not resurrected.
+      if (existing.userId === req.userId) return res.status(200).json(serialize(existing));
+      return res.status(409).json({ error: "That id is already in use" });
+    }
+  }
+
+  if ((await prisma.splitExpense.count({ where: { userId: req.userId! } })) >= MAX_SPLITS_PER_USER) {
+    return res.status(409).json({ error: `You've reached the limit of ${MAX_SPLITS_PER_USER} split expenses` });
   }
 
   const row = await prisma.splitExpense.create({
