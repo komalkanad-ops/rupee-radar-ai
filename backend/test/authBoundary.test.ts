@@ -370,6 +370,8 @@ describe("T8 — PRO routes reject a non-PRO user", () => {
 
 // =================================================================================================
 // T9 — mass-assignment sweep: extra { userId, active, id } in the body must not take effect
+// (asserted for userId and active only — several routers, incl. splits, deliberately honour a
+// client-generated id so the app's local id matches the server's; see sanitizeBody.ts)
 // =================================================================================================
 describe("T9 — create/update ignore client-supplied userId / active / id", () => {
   const userIds: string[] = [];
@@ -387,6 +389,7 @@ describe("T9 — create/update ignore client-supplied userId / active / id", () 
       "investment",
       "goal",
       "wishlistItem",
+      "splitExpense",
       "parkingTicket",
       "productRecord",
       "todoItem",
@@ -413,6 +416,7 @@ describe("T9 — create/update ignore client-supplied userId / active / id", () 
     },
     { name: "savings", path: "/savings", whitelisted: true, body: { type: "OTHER", name: "T9" } },
     { name: "wishlist", path: "/wishlist", whitelisted: true, body: { name: "T9", targetAmount: 1000 } },
+    { name: "splits", path: "/splits", whitelisted: true, body: { title: "T9", totalAmount: 100, paidBy: "Me", expenseDate: "2026-01-01T00:00:00.000Z", participants: [{ name: "Me", share: 50, settled: true }, { name: "Ravi", share: 50, settled: false }] } },
     { name: "parking", path: "/parking", whitelisted: true, body: { kind: "PARKING", location: "T9", amount: 50, issuedDate: "2026-01-01T00:00:00.000Z" } },
     { name: "products", path: "/products", whitelisted: true, body: { name: "T9", purchaseDate: "2026-01-01T00:00:00.000Z" } },
     { name: "todo", path: "/todo", whitelisted: true, body: { title: "T9" } },
@@ -476,6 +480,7 @@ describe("T10 — :id mutation routes reject a token for a different user", () =
       "investment",
       "goal",
       "wishlistItem",
+      "splitExpense",
       "parkingTicket",
       "productRecord",
       "todoItem",
@@ -499,6 +504,7 @@ describe("T10 — :id mutation routes reject a token for a different user", () =
     { name: "investments", path: "/investments", model: "investment", create: { kind: "STOCKS", label: "own", investedInr: 100 }, update: { kind: "STOCKS", label: "hacked", investedInr: 100 } },
     { name: "goals", path: "/goals", model: "goal", create: { name: "own", targetAmountInr: 100, targetDate: "2030-01-01T00:00:00.000Z" }, update: { name: "hacked", targetAmountInr: 100, targetDate: "2030-01-01T00:00:00.000Z" } },
     { name: "wishlist", path: "/wishlist", model: "wishlistItem", create: { name: "own", targetAmount: 100 }, update: { name: "hacked", targetAmount: 100 } },
+    { name: "splits", path: "/splits", model: "splitExpense", create: { title: "own", totalAmount: 100, paidBy: "Me", expenseDate: "2026-01-01T00:00:00.000Z", participants: [{ name: "Me", share: 50, settled: true }, { name: "Ravi", share: 50, settled: false }] }, update: { title: "hacked", totalAmount: 100, paidBy: "Me", expenseDate: "2026-01-01T00:00:00.000Z", participants: [{ name: "Me", share: 50, settled: true }, { name: "Ravi", share: 50, settled: false }] } },
     { name: "parking", path: "/parking", model: "parkingTicket", create: { kind: "PARKING", location: "own", amount: 10, issuedDate: "2026-01-01T00:00:00.000Z" }, update: { kind: "PARKING", location: "hacked", amount: 10, issuedDate: "2026-01-01T00:00:00.000Z" }, statusPath: "/status" },
     { name: "products", path: "/products", model: "productRecord", create: { name: "own", purchaseDate: "2026-01-01T00:00:00.000Z" }, update: { name: "hacked", purchaseDate: "2026-01-01T00:00:00.000Z" } },
     { name: "todo", path: "/todo", model: "todoItem", create: { title: "own" }, update: { title: "hacked" }, statusPath: "/status" },

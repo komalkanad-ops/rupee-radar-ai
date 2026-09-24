@@ -205,6 +205,7 @@ model User {
   parkingTickets       ParkingTicket[]
   productRecords       ProductRecord[]
   wishlistItems        WishlistItem[]
+  splitExpenses        SplitExpense[]
   feedback             Feedback[]
   savingsInstruments   SavingsInstrument[]
   chatUsage            ChatUsage?
@@ -642,6 +643,26 @@ model WishlistItem {
   notes        String?  @db.Text
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
+
+  @@index([userId])
+}
+
+// A bill split between the user and people who are NOT app users — participants are plain names,
+// never linked accounts, so no contacts permission and no cross-user data. `participantsJson` is a
+// JSON array of {name, share, settled}; the router validates the shape and exposes it as a parsed
+// `participants` array. `paidBy` always equals one participant's name.
+model SplitExpense {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  title            String
+  totalAmount      Float
+  paidBy           String
+  expenseDate      DateTime
+  note             String?  @db.Text
+  participantsJson String   @db.Text
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
 
   @@index([userId])
 }
