@@ -1,7 +1,7 @@
 import { useSeo } from "../lib/useSeo";
 
 const SUPPORT_EMAIL = "support@rupeeradarai.com";
-const LAST_UPDATED = "14 September 2026";
+const LAST_UPDATED = "25 September 2026";
 
 interface Section {
   heading: string;
@@ -46,6 +46,12 @@ const sections: Section[] = [
     heading: "Contacts (Lending Tracker)",
     body: [
       "If you use the Lending Tracker to record money you've lent to someone, you can optionally pick a contact from your device to attach their name and phone number to that record. We only access the single contact you explicitly pick — we never request broad access to your contacts list, and no contacts permission is requested by the app. The name and phone number you attach are stored against that lending record so you can keep track of who owes you money; they're only used for display within the app and any reminder notifications you set.",
+    ],
+  },
+  {
+    heading: "People you split expenses with (Splits)",
+    body: [
+      "If you use Splits to share an expense with friends, the names you type for the other people, the amount each of them owes, who paid, and any note you add are stored against your account so the list is available on a new phone and after a reinstall. We don't ask for access to your contacts for this, we never contact those people or invite them to the app, and they don't get an account. This information is only shown to you inside the app and is deleted when you delete your account.",
     ],
   },
   {
