@@ -370,6 +370,8 @@ describe("T8 — PRO routes reject a non-PRO user", () => {
 
 // =================================================================================================
 // T9 — mass-assignment sweep: extra { userId, active, id } in the body must not take effect
+// (asserted for userId and active only — several routers, incl. splits, deliberately honour a
+// client-generated id so the app's local id matches the server's; see sanitizeBody.ts)
 // =================================================================================================
 describe("T9 — create/update ignore client-supplied userId / active / id", () => {
   const userIds: string[] = [];

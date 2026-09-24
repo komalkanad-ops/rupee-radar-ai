@@ -91,15 +91,62 @@ describe("Splits (/splits)", () => {
       expect(res.body.participants.map((p: any) => p.name)).toEqual(["Me", "Ravi"]);
     });
 
-    it("accepts a client-supplied id and rejects reuse of it with 409", async () => {
+    it("accepts a client-supplied id, and a retry by the same user returns the row instead of failing", async () => {
       const user = await newUser();
       const id = `split_${Date.now()}`;
       const first = await post(user.token, validBody({ id }));
       expect(first.status).toBe(201);
       expect(first.body.id).toBe(id);
 
+      // A lost response + client retry must not look like a failure to the app.
+      const again = await post(user.token, validBody({ id, title: "Different title on retry" }));
+      expect(again.status).toBe(200);
+      expect(again.body.id).toBe(id);
+      expect(again.body.title).toBe("Goa trip dinner"); // a retry never overwrites
+      expect(await prisma.splitExpense.count({ where: { userId: user.userId } })).toBe(1);
+    });
+
+    it("accepts a date-only expenseDate (yyyy-MM-dd), which is what the Android app sends", async () => {
+      const user = await newUser();
+      const res = await post(user.token, validBody({ expenseDate: "2026-09-20" }));
+      expect(res.status).toBe(201);
+      expect(new Date(res.body.expenseDate).toISOString().slice(0, 10)).toBe("2026-09-20");
+    });
+
+    it("a retry after the user deleted the row does not resurrect it", async () => {
+      const user = await newUser();
+      const id = `split_del_${Date.now()}`;
+      await post(user.token, validBody({ id }));
+      await request(app).delete(`/splits/${id}`).set("Authorization", `Bearer ${user.token}`);
+
       const again = await post(user.token, validBody({ id }));
-      expect(again.status).toBe(409);
+      expect(again.status).toBe(200);
+      expect(again.body.active).toBe(false);
+      const list = await request(app).get("/splits").set("Authorization", `Bearer ${user.token}`);
+      expect(list.body).toHaveLength(0);
+    });
+
+    it("refuses new splits once a user hits the per-user cap, counting soft-deleted rows too", async () => {
+      const user = await newUser();
+      const now = new Date();
+      await prisma.splitExpense.createMany({
+        data: Array.from({ length: 1000 }, (_, i) => ({
+          userId: user.userId,
+          title: `bulk ${i}`,
+          totalAmount: 10,
+          paidBy: "Me",
+          expenseDate: now,
+          participantsJson: JSON.stringify([{ name: "Me", share: 5, settled: true }, { name: "Ravi", share: 5, settled: false }]),
+          active: i % 2 === 0, // half are soft-deleted; they must still count
+        })),
+      });
+      const res = await post(user.token, validBody());
+      expect(res.status).toBe(409);
+      expect(res.body.error).toMatch(/limit/i);
+      // ...but an idempotent retry of an existing id still works at the cap.
+      const existing = await prisma.splitExpense.findFirst({ where: { userId: user.userId } });
+      const retry = await post(user.token, validBody({ id: existing!.id }));
+      expect(retry.status).toBe(200);
     });
 
     it("does not let another user claim an existing id", async () => {
@@ -267,6 +314,13 @@ describe("Splits (/splits)", () => {
       ["missing expenseDate", { expenseDate: undefined }],
       ["invalid expenseDate", { expenseDate: "not-a-date" }],
       ["boolean expenseDate", { expenseDate: true }],
+      ["numeric expenseDate (epoch millis)", { expenseDate: 1758400000000 }],
+      ["ambiguous short-string expenseDate", { expenseDate: "1" }],
+      ["expenseDate before 2000", { expenseDate: "1999-12-31T00:00:00.000Z" }],
+      ["expenseDate in year 0001", { expenseDate: "0001-01-01" }],
+      ["expenseDate absurdly far in the future", { expenseDate: "9999-12-31T00:00:00.000Z" }],
+      ["title of only zero-width characters", { title: "\u200b\u200b" }],
+      ["participant name of only zero-width characters", { participants: [p("Me", 50, true), p("\u200b", 50)] }],
       ["missing participants", { participants: undefined }],
       ["participants not an array", { participants: "Me,Ravi" }],
       ["only one participant", { totalAmount: 100, participants: [p("Me", 100, true)] }],
