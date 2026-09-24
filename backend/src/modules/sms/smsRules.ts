@@ -181,16 +181,96 @@ export const smsRules: SmsRule[] = [
     pattern: /Pluxee Card.*?credited with (?:Rs\.?|INR\s?)([\d,.]+)\s+(?:towards|on)/i },
 ];
 
+// ── Bank-agnostic fallback ─────────────────────────────────────────────────────────────────────
+// The table above is keyed on bank code, and the `senderUpper.includes(r.bankCode)` filter means a
+// sender whose code isn't listed gets ZERO rules tried — however standard its wording is. Someone
+// banking with Yes/PNB/Canara/Federal/Fi/Slice therefore had every historical transaction silently
+// dropped by the regex-only inbox backfill (the LLM fallback is real-time only, so it can't rescue
+// history). These structural patterns run only after every bank-specific rule missed.
+//
+// Deliberately conservative: a false positive invents a transaction the user has to hunt down and
+// delete, which is worse than missing one. Hence the guards below, and merchant capture that never
+// crosses a sentence boundary.
+//
+// KEEP IN SYNC with genericRules in android/.../data/sms/SmsRules.kt.
+export const genericSmsRules: SmsRule[] = [
+  // Debits — payee-capturing variants first, bare amount as the fallback.
+  { bankCode: "", bankName: "Generic", name: "generic-debited-to", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    pattern: /(?:Rs|INR)\.?\s?([\d,]+\.?\d*)\s+(?:has been |have been |is |was )?debited[^.]{0,60}?\b(?:towards|to|for)\s+([^.,;]{2,40}?)(?:\s+on\s|[.,;]|$)/i },
+  { bankCode: "", bankName: "Generic", name: "generic-debited", txnType: "debit", amountGroup: 1, merchantFallback: "Bank debit", channel: "bank_transfer",
+    pattern: /(?:Rs|INR)\.?\s?([\d,]+\.?\d*)\s+(?:has been |have been |is |was )?debited/i },
+  { bankCode: "", bankName: "Generic", name: "generic-debited-by", txnType: "debit", amountGroup: 1, merchantFallback: "Bank debit", channel: "bank_transfer",
+    pattern: /debited\s+(?:by|with|for)\s+(?:Rs|INR)\.?\s?([\d,]+\.?\d*)/i },
+  { bankCode: "", bankName: "Generic", name: "generic-spent-at", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "card",
+    pattern: /(?:Rs|INR)\.?\s?([\d,]+\.?\d*)\s+(?:has been |have been |is |was )?spent[^.]{0,60}?\bat\s+([^.,;]{2,40}?)(?:\s+on\s|[.,;]|$)/i },
+  { bankCode: "", bankName: "Generic", name: "generic-spent", txnType: "debit", amountGroup: 1, merchantFallback: "Card spend", channel: "card",
+    pattern: /(?:spent\s+(?:Rs|INR)\.?\s?([\d,]+\.?\d*)|(?:Rs|INR)\.?\s?([\d,]+\.?\d*)\s+spent)/i },
+  { bankCode: "", bankName: "Generic", name: "generic-sent-to", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "upi",
+    pattern: /Sent\s+(?:Rs|INR)\.?\s?([\d,]+\.?\d*)[^.]{0,60}?\bto\s+([^.,;]{2,40}?)(?:\s+on\s|[.,;]|$)/i },
+  { bankCode: "", bankName: "Generic", name: "generic-withdrawn", txnType: "debit", amountGroup: 1, merchantFallback: "Cash withdrawal", channel: "card",
+    pattern: /(?:Rs|INR)\.?\s?([\d,]+\.?\d*)\s+(?:has been |is |was )?withdrawn/i },
+
+  // Credits — a card-channel credit is a bill payment/refund clearing, not new income, so these
+  // stay on bank_transfer/upi and let categoryForTxnType decide (see its doc comment).
+  { bankCode: "", bankName: "Generic", name: "generic-credited-from", txnType: "credit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    pattern: /(?:Rs|INR)\.?\s?([\d,]+\.?\d*)\s+(?:has been |have been |is |was )?credited[^.]{0,60}?\b(?:from|by)\s+([^.,;]{2,40}?)(?:\s+on\s|[.,;]|$)/i },
+  { bankCode: "", bankName: "Generic", name: "generic-credited", txnType: "credit", amountGroup: 1, merchantFallback: "Bank credit", channel: "bank_transfer",
+    pattern: /(?:Rs|INR)\.?\s?([\d,]+\.?\d*)\s+(?:has been |have been |is |was )?credited/i },
+  { bankCode: "", bankName: "Generic", name: "generic-credited-by", txnType: "credit", amountGroup: 1, merchantFallback: "Bank credit", channel: "bank_transfer",
+    pattern: /credited\s+(?:by|with)\s+(?:Rs|INR)\.?\s?([\d,]+\.?\d*)/i },
+  { bankCode: "", bankName: "Generic", name: "generic-received", txnType: "credit", amountGroup: 1, merchantFallback: "Money received", channel: "upi",
+    pattern: /Received\s+(?:Rs|INR)\.?\s?([\d,]+\.?\d*)/i },
+];
+
+// Phrases that mean "this is not a completed transaction", checked before the generic rules run.
+// Every one of these otherwise matches a generic pattern and books money that never moved: an OTP
+// quotes the amount it is authorising, an EMI reminder is future-tense, and a declined payment
+// reads exactly like a successful one apart from the verb.
+const NON_TRANSACTION_MARKERS = [
+  "otp", "one time password", "one-time password", "do not share", "never share",
+  "will be debited", "will be deducted", "will be credited", "due on", "is due", "due date",
+  "scheduled", "declined", "failed", "unsuccessful", "not processed", "request for",
+  "cashback of", "you can get", "apply now", "offer", "win ", "click", "eligible for",
+];
+
+function looksLikeCompletedTransaction(rawSms: string): boolean {
+  const lower = rawSms.toLowerCase();
+  return !NON_TRANSACTION_MARKERS.some((m) => lower.includes(m));
+}
+
+// A DLT bank header ("JM-HDFCBK-S", "AD-YESBNK") always carries letters. A plain 10-digit mobile
+// number is a person, and "I spent 500 on dinner" from a friend must never become a transaction —
+// the same "business senders only" line Walnut/axio draws.
+function isLikelyBusinessSender(bankSender: string): boolean {
+  const trimmed = bankSender.trim();
+  return trimmed.length > 0 && !/^\+?\d{10,13}$/.test(trimmed);
+}
+
+function applyRule(rule: SmsRule, rawSms: string) {
+  const match = rawSms.match(rule.pattern);
+  if (!match) return null;
+  // An alternation rule captures its amount in whichever branch fired, so take the first non-empty
+  // group rather than assuming amountGroup is the populated one.
+  const amountText = match[rule.amountGroup] || match.slice(1).find((g) => g && /^\d/.test(g));
+  if (!amountText) return null;
+  const amount = parseFloat(amountText.replace(/,/g, ""));
+  if (Number.isNaN(amount)) return null;
+  const merchant = (rule.merchantGroup ? match[rule.merchantGroup]?.trim() : null) || rule.merchantFallback || null;
+  return { amount, merchant: merchant ?? null, txnType: rule.txnType, channel: rule.channel, refund: rule.refund === true };
+}
+
 export function tryParseWithRules(bankSender: string, rawSms: string) {
   const senderUpper = bankSender.toUpperCase();
   const candidates = smsRules.filter((r) => senderUpper.includes(r.bankCode));
   for (const rule of candidates) {
-    const match = rawSms.match(rule.pattern);
-    if (!match) continue;
-    const amount = parseFloat(match[rule.amountGroup].replace(/,/g, ""));
-    if (Number.isNaN(amount)) continue;
-    const merchant = rule.merchantGroup ? match[rule.merchantGroup]?.trim() : rule.merchantFallback ?? null;
-    return { amount, merchant: merchant ?? null, txnType: rule.txnType, channel: rule.channel, refund: rule.refund === true };
+    const parsed = applyRule(rule, rawSms);
+    if (parsed) return parsed;
+  }
+
+  if (!isLikelyBusinessSender(bankSender) || !looksLikeCompletedTransaction(rawSms)) return null;
+  for (const rule of genericSmsRules) {
+    const parsed = applyRule(rule, rawSms);
+    if (parsed) return parsed;
   }
   return null;
 }

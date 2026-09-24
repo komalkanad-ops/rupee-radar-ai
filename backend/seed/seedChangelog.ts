@@ -792,6 +792,19 @@ const entries: Entry[] = [
       { type: "FEATURE", platform: "android", text: "Settings can now download and install app updates directly, for installs outside Google Play." },
     ],
   },
+  {
+    version: "1.1.2",
+    releaseDate: "2026-09-24",
+    platforms: ["android"],
+    summary: "Fixes for spending that wasn't being picked up from your SMS, plus smoother phone sign-in.",
+    highlights: [
+      { type: "FIX", platform: "android", text: "Transaction SMS from more banks are now recognised, so your spending totals are more complete." },
+      { type: "FIX", platform: "android", text: "Transactions are now filed under the date the SMS arrived, so a late-night payment no longer lands in the wrong month." },
+      { type: "FIX", platform: "android", text: "Phone sign-in now verifies automatically once you've entered all 6 digits, and the keyboard's Enter key submits the code." },
+      { type: "FIX", platform: "android", text: "AI Assistant now shows bold text properly instead of stray asterisks." },
+      { type: "FIX", platform: "android", text: "If your email is already linked to another account, sign-up now says so clearly instead of showing a bare error code." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
