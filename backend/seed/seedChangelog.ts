@@ -805,6 +805,16 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "If your email is already linked to another account, sign-up now says so clearly instead of showing a bare error code." },
     ],
   },
+  {
+    version: "1.1.3",
+    releaseDate: "2026-09-25",
+    platforms: ["android"],
+    summary: "Introducing Splits — share a bill with friends and keep track of who still owes what.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "New: Splits. Record a bill you shared with friends, split it equally or by custom amounts, and tick people off as they pay you back. It only keeps track of amounts — it doesn't move money or message anyone." },
+      { type: "IMPROVEMENT", platform: "android", text: "The salary day on your Profile is now a slider instead of a text box, so it can't be entered out of range." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
