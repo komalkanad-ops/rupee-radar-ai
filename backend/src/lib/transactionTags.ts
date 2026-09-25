@@ -4,7 +4,18 @@
 export const MAX_TAGS = 5;
 export const MAX_TAG_LENGTH = 24; // code points, not UTF-16 units — an emoji counts as one
 
-const INVISIBLE = /[\p{Cc}\p{Cf}]/gu; // control + format (zero-width, bidi overrides)
+// Bounds the work a hostile payload can force. The 2 MB body limit already caps the total, but there is
+// no reason to walk 700k junk elements, or clean a multi-MB string in full, to keep 5 tags of 24
+// characters. Only the first elements / characters are ever looked at.
+const MAX_ELEMENTS_EXAMINED = 50;
+const MAX_CHARS_EXAMINED = 256;
+
+// Control characters plus the invisibles that have no legitimate use in a label: zero-width space,
+// bidi marks / embeddings / overrides / isolates, word joiner and the invisible math operators, BOM.
+// Deliberately NOT the whole Unicode "format" class: ZWJ (U+200D) and ZWNJ (U+200C) are load-bearing
+// in emoji sequences (family, skin tone) and in Hindi / Persian / other Indic shaping, and the tag
+// characters (U+E0020-E007F) carry flag sequences — stripping them silently mangles real text.
+const INVISIBLE = /[\p{Cc}\u200B\u200E\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF]/gu;
 
 // Returns undefined when the client didn't send a usable `tags` value at all, meaning "leave whatever
 // is stored alone" — that's what keeps an older app build, which doesn't know about tags, from
@@ -15,9 +26,14 @@ export function normalizeTags(input: unknown): string[] | undefined {
 
   const seen = new Set<string>();
   const out: string[] = [];
-  for (const raw of input) {
+  for (const raw of input.slice(0, MAX_ELEMENTS_EXAMINED)) {
     if (typeof raw !== "string") continue;
-    const cleaned = Array.from(raw.replace(INVISIBLE, "").replace(/\s+/g, " ").trim())
+    // Whitespace is collapsed BEFORE controls are removed: \t and \n are control characters, so the
+    // other order turned "road\ntrip" into "roadtrip" instead of "road trip". Collapsed again after,
+    // because removing an invisible between two spaces leaves a double space.
+    const cleaned = Array.from(
+      raw.slice(0, MAX_CHARS_EXAMINED).replace(/\s+/g, " ").replace(INVISIBLE, "").replace(/\s+/g, " ").trim(),
+    )
       .slice(0, MAX_TAG_LENGTH)
       .join("")
       .trim();
