@@ -824,6 +824,17 @@ const entries: Entry[] = [
       { type: "FEATURE", platform: "android", text: "New: Tags. Add up to five of your own tags to any transaction (trip, work, reimbursable), see them on the list, search for them, and filter your expenses by tag. Tags are included when you export to CSV." },
     ],
   },
+  {
+    version: "1.1.6",
+    releaseDate: "2026-09-25",
+    platforms: ["android"],
+    summary: "A cleaner, more compact transactions list.",
+    highlights: [
+      { type: "IMPROVEMENT", platform: "android", text: "Expenses: each day is now one tidy list with a day header that stays in view as you scroll, instead of a separate box for every transaction. Money you received shows in green with a +, and each row shows its category and time." },
+      { type: "IMPROVEMENT", platform: "android", text: "Expenses: swipe a transaction to the left to open it for editing." },
+      { type: "IMPROVEMENT", platform: "android", text: "Home: Recent transactions is now a swipeable card stack, so it takes far less space on the screen." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
