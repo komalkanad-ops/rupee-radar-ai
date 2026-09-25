@@ -835,6 +835,16 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "Home: Recent transactions is now a swipeable card stack, so it takes far less space on the screen." },
     ],
   },
+  {
+    version: "1.1.7",
+    releaseDate: "2026-09-25",
+    platforms: ["android"],
+    summary: "Clearer Google sign-in messages and tighter privacy in crash reports.",
+    highlights: [
+      { type: "IMPROVEMENT", platform: "android", text: "Sign-in: if your phone has no Google account to sign in with, the app now tells you what to do (add an account, or sign in with your phone number) instead of showing a technical message. Closing the Google account sheet no longer shows an error." },
+      { type: "IMPROVEMENT", platform: "android", text: "Privacy: crash and performance reports now redact amounts, phone numbers, emails and card numbers in more places before anything leaves your phone." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
