@@ -507,6 +507,10 @@ model SmsTransaction {
   // Received choice on a manual entry). Null for rows synced before this field existed; the raw SMS
   // isn't stored, so those can't be backfilled server-side.
   txnType         String?
+  // User-chosen labels, stored as a JSON array of strings (e.g. ["trip","reimbursable"]). Null means
+  // "never tagged" and is also what an older app build leaves untouched on re-upload — see
+  // normalizeTags in src/lib/transactionTags.ts for the limits applied on write.
+  tagsJson        String?  @db.Text
 
   @@unique([userId, rawSmsHash])
   @@index([userId, txnDate])
