@@ -20,6 +20,43 @@ describe("normalizeTags", () => {
     expect(normalizeTags(["tr​ip", "a\u0000b", "x‮y"])).toEqual(["trip", "ab", "xy"]);
   });
 
+  it("turns newlines and tabs into a space instead of gluing the words together", () => {
+    expect(normalizeTags(["road\ntrip", "a\tb", "x\r\ny"])).toEqual(["road trip", "a b", "x y"]);
+  });
+
+  it("keeps ZWJ inside emoji sequences intact (a family is still one glyph, not three emoji)", () => {
+    const family = "\u{1F468}\u200D\u{1F469}\u200D\u{1F467}";
+    expect(normalizeTags([family])).toEqual([family]);
+  });
+
+  it("keeps ZWNJ, which Persian and Indic text needs for correct shaping", () => {
+    const persian = "\u0645\u06CC\u200C\u062E\u0648\u0627\u0647\u0645";
+    expect(normalizeTags([persian])).toEqual([persian]);
+    const devanagari = "\u0915\u094D\u200D\u0937"; // conjunct written with a joiner
+    expect(normalizeTags([devanagari])).toEqual([devanagari]);
+  });
+
+  it("strips BOM, zero-width space, word joiner and bidi marks/isolates", () => {
+    expect(normalizeTags(["\uFEFFtrip", "a\u200Bb", "c\u2060d", "\u2066x\u2069", "\u200Ey\u200F"])).toEqual(["trip", "ab", "cd", "x", "y"]);
+  });
+
+  it("collapses the double space left behind when an invisible sat between two spaces", () => {
+    expect(normalizeTags(["a \u200B b"])).toEqual(["a b"]);
+  });
+
+  it("only examines the first 50 elements, so a junk-padded array can't force unbounded work", () => {
+    const padded = [...Array.from({ length: 60 }, () => ""), "late"];
+    expect(normalizeTags(padded)).toEqual([]);
+    expect(normalizeTags([...Array.from({ length: 10 }, () => ""), "early"])).toEqual(["early"]);
+  });
+
+  it("cuts a huge string before cleaning it and still returns a bounded tag", () => {
+    const start = Date.now();
+    const [tag] = normalizeTags(["a ".repeat(1_000_000)])!;
+    expect(Array.from(tag).length).toBeLessThanOrEqual(MAX_TAG_LENGTH);
+    expect(Date.now() - start).toBeLessThan(200);
+  });
+
   it("drops tags that are only invisible characters or whitespace", () => {
     expect(normalizeTags(["​​", "   ", "\t\n", "ok"])).toEqual(["ok"]);
   });
