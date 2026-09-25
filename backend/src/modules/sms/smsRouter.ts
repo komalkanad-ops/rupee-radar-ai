@@ -5,6 +5,7 @@ import { tryParseWithRules, categoryForTxnType, extractAvailableBalance, extract
 import { parseSmsWithLlm } from "../llm/meshClient.js";
 import { categorizeMerchant } from "../categorization/merchantCategorizer.js";
 import { requireAdmin, requireUser, type UserRequest } from "../auth/authMiddleware.js";
+import { normalizeTags, parseStoredTags } from "../../lib/transactionTags.js";
 
 export const smsRouter = Router();
 
@@ -81,22 +82,28 @@ smsRouter.post("/transactions", requireUser, async (req: UserRequest, res) => {
   }
   const userId = req.userId!;
 
-  const rows = transactions.map((t: any) => ({
-    userId,
-    rawSmsHash: t.rawSmsHash || createHash("sha256").update(t.rawSms ?? "").digest("hex"),
-    bankSender: t.bankSender ?? null,
-    amount: t.amount,
-    merchant: t.merchant ?? null,
-    category: t.category ?? categorizeMerchant(t.merchant),
-    paymentMethod: t.paymentMethod ?? null,
-    balanceAfterTxn: t.balanceAfterTxn ?? null,
-    paymentApp: t.paymentApp ?? null,
-    // Money direction. Only written when the client sends a valid value, so an older app build
-    // re-uploading an edit can't wipe a direction a newer build already stored.
-    ...(t.txnType === "debit" || t.txnType === "credit" ? { txnType: t.txnType as string } : {}),
-    parsedVia: t.parsedVia ?? "regex",
-    txnDate: new Date(t.txnDate),
-  }));
+  const rows = transactions.map((t: any) => {
+    // undefined = the client sent no usable `tags`, so the stored value is left alone (an older app
+    // build re-uploading an edit must not wipe them); an array, even [], is the full new set.
+    const tags = normalizeTags(t.tags);
+    return {
+      userId,
+      rawSmsHash: t.rawSmsHash || createHash("sha256").update(t.rawSms ?? "").digest("hex"),
+      bankSender: t.bankSender ?? null,
+      amount: t.amount,
+      merchant: t.merchant ?? null,
+      category: t.category ?? categorizeMerchant(t.merchant),
+      paymentMethod: t.paymentMethod ?? null,
+      balanceAfterTxn: t.balanceAfterTxn ?? null,
+      paymentApp: t.paymentApp ?? null,
+      // Money direction. Only written when the client sends a valid value, so an older app build
+      // re-uploading an edit can't wipe a direction a newer build already stored.
+      ...(t.txnType === "debit" || t.txnType === "credit" ? { txnType: t.txnType as string } : {}),
+      ...(tags !== undefined ? { tagsJson: JSON.stringify(tags) } : {}),
+      parsedVia: t.parsedVia ?? "regex",
+      txnDate: new Date(t.txnDate),
+    };
+  });
 
   await prisma.$transaction(
     rows.map((data) =>
@@ -182,7 +189,8 @@ smsRouter.get("/transactions", requireUser, async (req: UserRequest, res) => {
     take: limit,
     skip: offset,
   });
-  res.json(transactions);
+  // `tagsJson` is returned as stored; `tags` is the same data parsed defensively for clients.
+  res.json(transactions.map((t) => ({ ...t, tags: parseStoredTags(t.tagsJson) })));
 });
 
 // GET /sms/balances — the most recently known "Available Balance" per bank, from whichever
