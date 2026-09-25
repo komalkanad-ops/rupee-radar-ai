@@ -815,6 +815,15 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "The salary day on your Profile is now a slider instead of a text box, so it can't be entered out of range." },
     ],
   },
+  {
+    version: "1.1.5",
+    releaseDate: "2026-09-25",
+    platforms: ["android"],
+    summary: "Tag your transactions so you can organise and find them.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "New: Tags. Add up to five of your own tags to any transaction (trip, work, reimbursable), see them on the list, search for them, and filter your expenses by tag. Tags are included when you export to CSV." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
