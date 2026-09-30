@@ -854,6 +854,17 @@ const entries: Entry[] = [
       { type: "FEATURE", platform: "android", text: "Import SMS from CSV: export your messages with a third-party SMS backup app, then in Expenses tap the menu and choose Import SMS from CSV. Transactions are read on your phone, added to your expenses and categorised. Messages you already have are not added twice." },
     ],
   },
+  {
+    version: "1.1.9",
+    releaseDate: "2026-09-30",
+    platforms: ["android"],
+    summary: "See who you pay by brand, and get a monthly spending review.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "Vendors: see everything you pay, grouped by brand — so a company name on a statement and the app you know it by count as one. Search, filter by time range and how often you pay, and move all of a vendor's payments to the right category in one step, including future ones." },
+      { type: "FEATURE", platform: "android", text: "Spending Review: a month-by-month view of your spending with the change from last month and a split into essentials, discretionary and unclassified. PRO adds estimates of spending you could trim, with the assumption shown behind each number." },
+      { type: "IMPROVEMENT", platform: "android", text: "Smarter categories: more company and parent-company names are now recognised, so more payments land in the right category automatically. Tolls and fuel stay separate categories." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
