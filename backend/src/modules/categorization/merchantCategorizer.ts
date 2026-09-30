@@ -90,12 +90,12 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "expressway", "e-way toll", "yamuna expressway", "mumbai pune expressway", "ideal toll",
       "mep infra", "peripheral expressway",
       // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
-      "parkplus", "park plus", "sai expressway",
+      "parkplus", "park plus", "sai expressway", "toll",
   ],
   },
   {
     category: "fuel",
-    keywords: ["hpcl", "bpcl", "iocl", "indian oil", "hp petrol", "bharat petroleum", "shell", "petrol", "diesel", "fuel station", "petrol pump", "reliance petroleum", "nayara energy", "hindustan petroleum", "reliance bp", "nayara"],
+    keywords: ["hpcl", "bpcl", "iocl", "indian oil", "hp petrol", "bharat petroleum", "shell", "petrol", "diesel", "fuel station", "petrol pump", "reliance petroleum", "nayara energy", "hindustan petroleum", "reliance bp", "nayara", "fuel services"],
   },
   {
     category: "shopping",
