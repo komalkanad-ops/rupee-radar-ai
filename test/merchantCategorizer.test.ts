@@ -16,6 +16,10 @@ describe("merchantCategorizer learned aliases", () => {
     ["MSEDC ELECTRICITY BILL", "utilities"],
     ["INTERGLOBE AVIATION", "travel"],
     ["API HOLDINGS LIMITED", "medical"],
+    ["TOLL", "tolls"],
+    ["UDAY FUEL SERVICES", "fuel"],
+    ["NHAI TOLL PLAZA", "tolls"],
+    ["INDIAN OIL PETROL PUMP", "fuel"],
   ])("%s -> %s", (merchant, category) => {
     expect(categorizeMerchant(merchant)).toBe(category);
   });
