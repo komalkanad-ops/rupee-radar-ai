@@ -845,6 +845,15 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "Privacy: crash and performance reports now redact amounts, phone numbers, emails and card numbers in more places before anything leaves your phone." },
     ],
   },
+  {
+    version: "1.1.8",
+    releaseDate: "2026-09-30",
+    platforms: ["android"],
+    summary: "Import your SMS from a CSV file.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "Import SMS from CSV: export your messages with a third-party SMS backup app, then in Expenses tap the menu and choose Import SMS from CSV. Transactions are read on your phone, added to your expenses and categorised. Messages you already have are not added twice." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
