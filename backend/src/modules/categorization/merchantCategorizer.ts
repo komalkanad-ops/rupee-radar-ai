@@ -9,7 +9,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "bigbasket", "big basket", "blinkit", "zepto", "swiggy instamart", "dmart", "d mart", "more supermarket",
       "reliance fresh", "reliance smart", "spencers", "nature's basket", "star bazaar", "grofers",
       "jiomart", "vishal mega mart", "big bazaar",
-    ],
+      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "instamart", "innovative retail", "supermarket grocery", "blink commerce", "kiranakart", "avenue supermarts", "reliance retail", "jio mart", "vishal mega", "more retail",
+  ],
   },
   {
     category: "medical",
@@ -30,7 +32,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "wockhardt hospital", "care hospital", "rainbow hospital", "motherhood hospital", "surya hospital",
       "dr lal", "dr. lal", "lal pathlab", "srl diagnostic", "thyrocare", "metropolis healthcare",
       "redcliffe", "agilus diagnostic", "vijaya diagnostic", "healthians",
-    ],
+      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "api holdings", "dadha pharma", "qikwell",
+  ],
   },
   {
     category: "fitness",
@@ -56,14 +60,18 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "theobroma", "keventers", "baskin robbins", "naturals ice cream", "wendys", "wendy's", "taco bell",
       "smoke house", "farzi cafe", "punjab grill", "mainland china", "absolute barbecue", "copper chimney",
       "social offline", "the beer cafe",
-    ],
+      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "jubilant food", "jubilant foodworks", "bundl tech", "eternal limited", "hardcastle", "westlife", "devyani", "sapphire foods", "restaurant brands asia", "tata starbucks", "rebel foods", "sunshine teahouse", "third wave", "cafe coffee", "barista", "culinary brands",
+  ],
   },
   {
     category: "transport",
     keywords: [
       "uber", "ola", "rapido", "irctc", "metro", "namma metro", "delhi metro", "meru cab", "blu smart",
       "namma yatri", "quick ride", "quickride", "yulu", "bounce", "chalo", "abhibus", "shuttl",
-    ],
+      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "uber india", "ani technologies", "ola cabs", "roppen",
+  ],
   },
   {
     category: "travel",
@@ -71,7 +79,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "makemytrip", "goibibo", "yatra", "cleartrip", "indigo", "spicejet", "vistara", "air india",
       "oyo", "airbnb", "booking.com", "agoda", "redbus", "irctc air", "akasa air", "easemytrip",
       "treebo", "fabhotels", "lemon tree", "ginger hotel",
-    ],
+      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "indian railway catering", "ibibo", "le travenues", "ixigo", "interglobe", "akasa", "oravel", "ritz carlton", "marriott", "taj hotel",
+  ],
   },
   {
     category: "tolls",
@@ -79,11 +89,13 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "fastag", "netc", "nhai", "toll plaza", "paytm fastag", "national highway", "toll payment",
       "expressway", "e-way toll", "yamuna expressway", "mumbai pune expressway", "ideal toll",
       "mep infra", "peripheral expressway",
-    ],
+      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "parkplus", "park plus", "sai expressway", "toll",
+  ],
   },
   {
     category: "fuel",
-    keywords: ["hpcl", "bpcl", "iocl", "indian oil", "hp petrol", "bharat petroleum", "shell", "petrol", "diesel", "fuel station", "petrol pump", "reliance petroleum", "nayara energy"],
+    keywords: ["hpcl", "bpcl", "iocl", "indian oil", "hp petrol", "bharat petroleum", "shell", "petrol", "diesel", "fuel station", "petrol pump", "reliance petroleum", "nayara energy", "hindustan petroleum", "reliance bp", "nayara", "fuel services"],
   },
   {
     category: "shopping",
@@ -97,7 +109,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "kalyan jewellers", "malabar gold", "caratlane", "bluestone", "lenskart", "vijay sales",
       "sangeetha mobiles", "poorvika", "boat lifestyle", "pepperfry", "urban ladder", "wakefit",
       "the sleep company", "nilkamal", "home centre", "chumbak",
-    ],
+      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "amazon seller", "amazon retail", "amazon pay in e", "amazon.in", "fsn e-commerce", "tata digital", "tata neu", "trent limited", "aditya birla fashion", "lifestyle intern", "life style intern", "shein", "zudio", "hopscotch", "reliance brands", "babyhug", "mothercare", "gyftr", "qwikcilver", "smartbuy", "gift card", "pine labs", "apple store",
+  ],
   },
   {
     category: "entertainment",
@@ -106,7 +120,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "pvr", "inox", "cinepolis", "youtube premium", "jiocinema", "gaana", "wynk",
       "timezone", "smaaash", "wonderla", "snow world", "fun city", "kidzania", "paytm movies",
       "ticketnew", "essel world", "apple music", "audible",
-    ],
+      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "novi digital", "sony pictures", "bigtree", "google play", "apple.com", "apple services", "itunes", "icloud", "youtube", "microsoft", "adobe", "openai", "anthropic", "chatgpt", "vidiq", "eversub", "github", "hostinger", "godaddy", "namecheap", "linkedin", "canva", "dropbox", "figma", "vercel",
+  ],
   },
   {
     category: "utilities",
@@ -115,15 +131,17 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "indane", "hp gas", "broadband", "wifi bill", "dth", "tata sky", "d2h",
       "tata power", "adani electricity", "bescom", "mseb", "torrent power", "cesc", "bses",
       "act fibernet", "hathway", "excitel", "spectra", "railwire", "you broadband",
-    ],
+      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "msedc", "mahadiscom", "mahavitaran", "adani electric", "bharti airtel", "reliance jio", "tata play",
+  ],
   },
   {
     category: "rent",
-    keywords: ["rent payment", "housing rent", "nobroker", "rentpay", "magicbricks rent"],
+    keywords: ["rent payment", "housing rent", "nobroker", "rentpay", "magicbricks rent", "magicbricks"],
   },
   {
     category: "insurance",
-    keywords: ["lic", "hdfc life", "icici prudential", "policybazaar", "star health", "insurance premium", "bajaj allianz"],
+    keywords: ["lic", "hdfc life", "icici prudential", "policybazaar", "star health", "insurance premium", "bajaj allianz", "icici lombard", "hdfc ergo"],
   },
   {
     category: "education",
@@ -131,7 +149,7 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
   },
   {
     category: "emi",
-    keywords: ["emi", "loan installment", "loan emi", "bajaj finserv", "home credit", "nach"],
+    keywords: ["emi", "loan installment", "loan emi", "bajaj finserv", "home credit", "nach", "bajaj fin", "newtap", "kissht", "pyu custcap"],
   },
 ];
 
