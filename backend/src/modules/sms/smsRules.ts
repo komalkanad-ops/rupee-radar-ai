@@ -38,6 +38,13 @@ export const smsRules: SmsRule[] = [
     pattern: /Paid\s+Rs\.?\s?([\d,]+\.?\d*)\s+For:\s+(.+?)\s+From HDFC Bank A\/c/i },
   { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "credit-alert", txnType: "credit", amountGroup: 1, merchantFallback: "HDFC Bank credit", channel: "bank_transfer",
     pattern: /Credit Alert!\s+Rs\.?([\d,]+\.?\d*)\s+credited to HDFC Bank A\/c/i },
+  // "Update! INR X deposited in HDFC Bank A/c XX1234 on 30-JUL-26 for NEFT Cr-<IFSC>-Salary Acme Pvt Ltd-NAME-REF.Avl bal"
+  // — HDFC's NEFT/RTGS/IMPS credit wording (salary included). Says "deposited", never "credited", so nothing matched it.
+  // Merchant = the remitter text after the IFSC. Mirrors SmsRules.kt.
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "neft-deposit", txnType: "credit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    pattern: /INR\s?([\d,]+\.?\d*)\s+deposited in HDFC Bank A\/c\s+\S+\s+on\s+[\w-]+\s+for\s+(?:NEFT|RTGS|IMPS)\s*Cr-[A-Z0-9]+-([^-]{2,60}?)(?=-)/i },
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "deposit", txnType: "credit", amountGroup: 1, merchantFallback: "HDFC Bank deposit", channel: "bank_transfer",
+    pattern: /INR\s?([\d,]+\.?\d*)\s+deposited in HDFC Bank A\/c/i },
   { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "card-payment-credited", txnType: "credit", amountGroup: 1, merchantFallback: "Credit card payment", channel: "card",
     pattern: /Payment of Rs\.?\s?([\d,]+\.?\d*)\s+was credited to your card ending/i },
   { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "bill-paid-smartpay", txnType: "debit", amountGroup: 2, merchantGroup: 1, channel: "card",

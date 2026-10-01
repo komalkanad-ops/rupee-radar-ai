@@ -865,6 +865,19 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "Smarter categories: more company and parent-company names are now recognised, so more payments land in the right category automatically. Tolls and fuel stay separate categories." },
     ],
   },
+  {
+    version: "1.1.10",
+    releaseDate: "2026-10-01",
+    platforms: ["android"],
+    summary: "See where your salary really went, label who you pay, and compare your spending with published Indian data.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "Money Flow: a typical month of salary, variable pay (bonus, RSU, ESPP) and spending, with transfers between your own accounts and loans received taken out. One-off purchases are spread over a year (or over the EMI tenure, if you converted one), each pay cycle gets a breakdown, and you can see whether spending is growing faster than income. Every automatic match can be undone." },
+      { type: "FEATURE", platform: "android", text: "Who are these?: your biggest payments and incoming amounts the app can't explain, ranked by amount. Label each once — rent, family, your own account, a loan, salary — and its past payments follow." },
+      { type: "IMPROVEMENT", platform: "android", text: "Peer Comparison is now India Benchmark: your spending per person compared with the government's 2023-24 household consumption survey, plus published figures on EMIs and saving, with the source on every number. The old comparison used modelled placeholder figures, not real data." },
+      { type: "FIX", platform: "android", text: "HDFC Bank NEFT/RTGS credits worded \"deposited in HDFC Bank A/c\", including salary, are now recognised. To pick up past ones, re-sync your SMS in Expenses." },
+      { type: "FIX", platform: "android", text: "Payments to people named Ravi, Kavi and similar are no longer filed as a Vodafone Vi bill." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
