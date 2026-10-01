@@ -127,7 +127,7 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
   {
     category: "utilities",
     keywords: [
-      "jio", "airtel", "vodafone", "vi ", "bsnl", "electricity board", "discom", "water board", "gas agency",
+      "jio", "airtel", "vodafone", "vi prepaid", "vi postpaid", "vi recharge", "vi app", "vi bill", "bsnl", "electricity board", "discom", "water board", "gas agency",
       "indane", "hp gas", "broadband", "wifi bill", "dth", "tata sky", "d2h",
       "tata power", "adani electricity", "bescom", "mseb", "torrent power", "cesc", "bses",
       "act fibernet", "hathway", "excitel", "spectra", "railwire", "you broadband",

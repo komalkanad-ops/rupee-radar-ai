@@ -24,3 +24,12 @@ describe("merchantCategorizer learned aliases", () => {
     expect(categorizeMerchant(merchant)).toBe(category);
   });
 });
+
+// Mirror of the Android MerchantCategorizerTest case: the old bare "vi " keyword matched inside "Ravi Kumar".
+describe("merchantCategorizer Vodafone Vi keyword", () => {
+  it("does not file a person named Ravi as a Vi utility bill", () => {
+    expect(categorizeMerchant("RAVI KUMAR")).toBeNull();
+    expect(categorizeMerchant("Kavi Shah")).toBeNull();
+    expect(categorizeMerchant("Vi Prepaid Recharge")).toBe("utilities");
+  });
+});
