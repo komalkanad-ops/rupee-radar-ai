@@ -1,7 +1,7 @@
 import { useSeo } from "../lib/useSeo";
 
 const SUPPORT_EMAIL = "support@rupeeradarai.com";
-const LAST_UPDATED = "25 September 2026";
+const LAST_UPDATED = "1 October 2026";
 
 interface Section {
   heading: string;
@@ -33,7 +33,7 @@ const sections: Section[] = [
   {
     heading: "Optional profile details",
     body: [
-      "From Profile you can optionally tell us your city, income bracket, gender, and a broad age group (a 10-year bucket like \"25-34\" — never your date of birth). These are entirely optional, editable and deletable at any time, and are used only to power features like peer spending comparisons and persona-aware guidance within the app. We never share these details with any third party, and they're erased immediately when you delete your account.",
+      "From Profile you can optionally tell us your city, income bracket, gender, and a broad age group (a 10-year bucket like \"25-34\" — never your date of birth). These are entirely optional, editable and deletable at any time, and are used only to personalise features within the app, such as persona-aware guidance. We never share these details with any third party, and they're erased immediately when you delete your account.",
     ],
   },
   {
