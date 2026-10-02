@@ -891,6 +891,16 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "An EMI you hadn't marked paid stopped showing as overdue at the start of each month. It now stays overdue until you mark it paid." },
     ],
   },
+  {
+    version: "1.2.1",
+    releaseDate: "2026-10-02",
+    platforms: ["android"],
+    summary: "Bills & Subscriptions: detected payments now move into your list.",
+    highlights: [
+      { type: "FIX", platform: "android", text: "Bills & Subscriptions: when you add a detected payment it now leaves the \"Detected\" list and appears under Active, with a confirmation. A re-scan no longer brings back payments you already track." },
+      { type: "IMPROVEMENT", platform: "android", text: "Recognised subscription and bill brands found in your SMS are now added to Active automatically. EMIs, card bills and unrecognised payees still wait for you to confirm, and anything you removed stays removed." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
