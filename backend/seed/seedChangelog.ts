@@ -878,6 +878,19 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "Payments to people named Ravi, Kavi and similar are no longer filed as a Vodafone Vi bill." },
     ],
   },
+  {
+    version: "1.2.0",
+    releaseDate: "2026-10-01",
+    platforms: ["android"],
+    summary: "Easier to find your way around: a setup checklist, feature search, and clearer screens.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "Set up Rupee Radar: a short checklist on the Dashboard that walks you through the first steps and ticks itself off as you go. You can hide it." },
+      { type: "FEATURE", platform: "android", text: "Find a feature: search every service from the Dashboard, even with everyday words like \"fastag\" or \"emi\", or pick what you want to do under \"I want to…\" in All Services." },
+      { type: "FEATURE", platform: "android", text: "Weekly summary (optional): a once-a-week notification of what you spent. Off by default — turn it on in Settings. Amounts are hidden on the lock screen." },
+      { type: "IMPROVEMENT", platform: "android", text: "Empty screens now tell you what to do next and take you there, and tap the ⓘ next to terms like Essentials or Fixed to see what they mean." },
+      { type: "FIX", platform: "android", text: "An EMI you hadn't marked paid stopped showing as overdue at the start of each month. It now stays overdue until you mark it paid." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
