@@ -97,21 +97,23 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
     category: "fuel",
     keywords: ["hpcl", "bpcl", "iocl", "indian oil", "hp petrol", "bharat petroleum", "shell", "petrol", "diesel", "fuel station", "petrol pump", "reliance petroleum", "nayara energy", "hindustan petroleum", "reliance bp", "nayara", "fuel services"],
   },
+    {
+    category: "electronics",
+    keywords: ["croma", "reliance digital", "vijay sales", "sangeetha mobiles", "poorvika", "apple store", "samsung", "boat lifestyle", "oneplus", "imagine store", "unicorn store", "jbl", "bose"],
+  },
   {
+    category: "home",
+    keywords: ["ikea", "pepperfry", "urban ladder", "wakefit", "the sleep company", "nilkamal", "home centre", "chumbak", "godrej interio", "hometown", "durian", "@home"],
+  },
+{
     category: "shopping",
     keywords: [
-      "amazon", "flipkart", "myntra", "ajio", "meesho", "nykaa", "tata cliq", "snapdeal", "croma",
-      "reliance digital", "decathlon", "ikea", "lifestyle store", "shoppers stop", "pantaloons",
-      "jewellers", "jewellery", "firstcry", "hamleys", "libas", "samsung",
-      // Fashion / lifestyle / electronics / furniture chains that read as "Other" without them.
+      "amazon", "flipkart", "myntra", "ajio", "meesho", "nykaa", "tata cliq", "snapdeal", "decathlon", "lifestyle store", "shoppers stop", "pantaloons",
+      "jewellers", "jewellery", "firstcry", "hamleys", "libas", // Fashion / lifestyle / electronics / furniture chains that read as "Other" without them.
       "westside", "max fashion", "reliance trends", "fabindia", "biba", "global desi", "zara",
       "h&m", "uniqlo", "marks & spencer", "adidas", "nike", "puma", "reebok", "titan", "tanishq",
-      "kalyan jewellers", "malabar gold", "caratlane", "bluestone", "lenskart", "vijay sales",
-      "sangeetha mobiles", "poorvika", "boat lifestyle", "pepperfry", "urban ladder", "wakefit",
-      "the sleep company", "nilkamal", "home centre", "chumbak",
-      // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
-      "amazon seller", "amazon retail", "amazon pay in e", "amazon.in", "fsn e-commerce", "tata digital", "tata neu", "trent limited", "aditya birla fashion", "lifestyle intern", "life style intern", "shein", "zudio", "hopscotch", "reliance brands", "babyhug", "mothercare", "gyftr", "qwikcilver", "smartbuy", "gift card", "pine labs", "apple store",
-  ],
+      "kalyan jewellers", "malabar gold", "caratlane", "bluestone", "lenskart", // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
+      "amazon seller", "amazon retail", "amazon pay in e", "amazon.in", "fsn e-commerce", "tata digital", "tata neu", "trent limited", "aditya birla fashion", "lifestyle intern", "life style intern", "shein", "zudio", "hopscotch", "reliance brands", "babyhug", "mothercare", "gyftr", "qwikcilver", "smartbuy", "gift card", "pine labs", ],
   },
   {
     category: "entertainment",
@@ -168,4 +170,5 @@ export function categorizeMerchant(merchant: string | null | undefined): string 
 export const CLASSIFIABLE_CATEGORIES = [
   "groceries", "medical", "fitness", "dining", "transport", "travel", "tolls", "fuel",
   "shopping", "entertainment", "utilities", "rent", "insurance", "education", "emi",
+  "electronics", "home",
 ];

@@ -901,6 +901,20 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "Recognised subscription and bill brands found in your SMS are now added to Active automatically. EMIs, card bills and unrecognised payees still wait for you to confirm, and anything you removed stays removed." },
     ],
   },
+  {
+    version: "1.2.2",
+    releaseDate: "2026-10-02",
+    platforms: ["android"],
+    summary: "Fixes for subscriptions, phone sign-in, categories and more.",
+    highlights: [
+      { type: "FIX", platform: "android", text: "Bills & Subscriptions: automatic adding is now limited to well-known subscription and bill brands (streaming, mobile, electricity, gas). Everyday shops and food apps are no longer added as subscriptions." },
+      { type: "IMPROVEMENT", platform: "android", text: "Bills & Subscriptions: tap any payment to edit its name, amount or frequency." },
+      { type: "FEATURE", platform: "android", text: "New categories: Electronics and Home (appliances, furniture). Pick them when categorising a transaction; well-known electronics and furniture stores are filed there automatically." },
+      { type: "FIX", platform: "android", text: "Phone sign-in: when your phone reads the verification SMS automatically, it now signs you in instead of ignoring the code." },
+      { type: "FIX", platform: "android", text: "Dashboard: the last items can now scroll clear of the floating bolt button." },
+      { type: "IMPROVEMENT", platform: "android", text: "Hindi: more of Settings is now translated. Most other screens are still English." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
