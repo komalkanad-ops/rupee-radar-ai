@@ -33,3 +33,14 @@ describe("merchantCategorizer Vodafone Vi keyword", () => {
     expect(categorizeMerchant("Vi Prepaid Recharge")).toBe("utilities");
   });
 });
+
+// Mirror of the Android MerchantCategorizerTest case: electronics and home are their own categories.
+describe("merchantCategorizer electronics and home", () => {
+  it("files appliance/electronics and furniture retailers separately from shopping", () => {
+    expect(categorizeMerchant("Croma Retail")).toBe("electronics");
+    expect(categorizeMerchant("Vijay Sales")).toBe("electronics");
+    expect(categorizeMerchant("IKEA India")).toBe("home");
+    expect(categorizeMerchant("Pepperfry")).toBe("home");
+    expect(categorizeMerchant("Amazon")).toBe("shopping");
+  });
+});

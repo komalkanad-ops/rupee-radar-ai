@@ -233,7 +233,7 @@ function trimByDayOfMonth(txns: Txn[]): Txn[] {
 // Left out on purpose (kept eligible): entertainment (real streaming subscriptions live here),
 // utilities/rent/insurance/education/emi (inherently recurring by nature), and null/uncategorized
 // (an unrecognized merchant could still be a real subscription not yet in the taxonomy).
-const NON_RECURRING_CATEGORIES = new Set(["groceries", "medical", "dining", "transport", "travel", "fuel", "shopping"]);
+const NON_RECURRING_CATEGORIES = new Set(["groceries", "medical", "dining", "transport", "travel", "fuel", "shopping", "electronics", "home"]);
 
 // "entertainment" is a mixed bag in merchantCategorizer.ts's taxonomy — real streaming
 // subscriptions (Netflix, Spotify, …) sit alongside one-off ticket/event purchases (movie
