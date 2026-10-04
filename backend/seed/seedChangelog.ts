@@ -915,6 +915,15 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "Hindi: more of Settings is now translated. Most other screens are still English." },
     ],
   },
+  {
+    version: "1.2.3",
+    releaseDate: "2026-10-04",
+    platforms: ["android"],
+    summary: "A new Pipeline view for your expenses.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "Expenses: switch from List to Pipeline to see each month as a pipe. Income flows in, and every payment is a leak. Bigger payments make bigger leaks, and the water level shows what is left of that month's income." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
