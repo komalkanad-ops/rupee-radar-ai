@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { prisma } from "../../lib/prisma.js";
 import { requireUser, type UserRequest } from "../auth/authMiddleware.js";
+import { normalizePrepayments } from "./loanPrepayments.js";
 
 export const loanRouter = Router();
 
@@ -16,12 +17,17 @@ loanRouter.get("/", requireUser, async (req: UserRequest, res) => {
 });
 
 loanRouter.post("/", requireUser, async (req: UserRequest, res) => {
-  const { id, type, bankName, accountRef, principal, roiAnnualPct, startDate, tenureMonths, emiAmount, notes } =
+  const { id, type, bankName, accountRef, principal, roiAnnualPct, startDate, tenureMonths, emiAmount, notes, prepayments } =
     req.body ?? {};
   if (!type || !bankName || !principal || roiAnnualPct == null || !startDate || !tenureMonths || !emiAmount) {
     return res
       .status(400)
       .json({ error: "type, bankName, principal, roiAnnualPct, startDate, tenureMonths, emiAmount are required" });
+  }
+  let cleanPrepayments: ReturnType<typeof normalizePrepayments> | undefined;
+  if (prepayments !== undefined) {
+    cleanPrepayments = normalizePrepayments(prepayments);
+    if (!cleanPrepayments.ok) return res.status(400).json({ error: cleanPrepayments.error });
   }
   const loan = await prisma.loan.create({
     data: {
@@ -39,6 +45,7 @@ loanRouter.post("/", requireUser, async (req: UserRequest, res) => {
       tenureMonths,
       emiAmount,
       notes: notes || null,
+      ...(cleanPrepayments?.ok ? { prepayments: cleanPrepayments.value } : {}),
     },
   });
   res.status(201).json(loan);
@@ -54,10 +61,19 @@ loanRouter.put("/:id", requireUser, async (req: UserRequest, res) => {
   const owned = await loadOwnedLoan(req.params.id, req.userId!);
   if (!owned) return res.status(404).json({ error: "Not found" });
 
-  const { userId: _ignored, id: _ignoredId, createdAt: _ignoredCreated, updatedAt: _ignoredUpdated, ...rest } =
-    req.body ?? {};
-  const data: Record<string, unknown> = { ...rest };
+  // Explicit allowlist: the body used to be spread straight into the update, so any column
+  // (active, foreclosedAt, ...) was writable here and an unknown key made Prisma throw a 500.
+  // active / lastPaymentConfirmedAt / foreclosedAt have their own routes.
+  const body = (req.body ?? {}) as Record<string, unknown>;
+  const editable = ["type", "bankName", "accountRef", "principal", "roiAnnualPct", "startDate", "tenureMonths", "emiAmount", "notes"] as const;
+  const data: Record<string, unknown> = {};
+  for (const key of editable) if (body[key] !== undefined) data[key] = body[key];
   if (data.startDate) data.startDate = new Date(data.startDate as string);
+  if (body.prepayments !== undefined) {
+    const clean = normalizePrepayments(body.prepayments);
+    if (!clean.ok) return res.status(400).json({ error: clean.error });
+    data.prepayments = clean.value;
+  }
 
   const loan = await prisma.loan.update({ where: { id: req.params.id }, data });
   res.json(loan);
