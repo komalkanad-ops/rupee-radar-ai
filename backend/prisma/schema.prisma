@@ -1080,6 +1080,10 @@ model Loan {
   // deleted/hidden. A foreclosed loan stays active: true and still shows in the loan list, just
   // in a "closed" state rather than "ongoing."
   foreclosedAt           DateTime?
+  // Part-payments the user recorded: [{ date: "yyyy-mm-dd", amount, note? }], validated and
+  // normalised by modules/loans/loanPrepayments.ts. Each keeps the EMI and shortens the tenure —
+  // the maths lives in the app (LoanCalculator.kt); the server only stores the list.
+  prepayments            Json?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
