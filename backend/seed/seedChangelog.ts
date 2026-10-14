@@ -924,6 +924,26 @@ const entries: Entry[] = [
       { type: "FEATURE", platform: "android", text: "Expenses: switch from List to Pipeline to see each month as a pipe. Income flows in, and every payment is a leak. Bigger payments make bigger leaks, and the water level shows what is left of that month's income." },
     ],
   },
+  {
+    version: "1.2.4",
+    releaseDate: "2026-10-15",
+    platforms: ["android"],
+    summary: "EMI calculator, part-payments, imports from other apps, Money Tools, and fixes.",
+    highlights: [
+      { type: "FIX", platform: "android", text: "Money Leaks no longer closes the app when you open it." },
+      { type: "FEATURE", platform: "android", text: "EMI Calculator: fill in any three of loan amount, interest rate, tenure and EMI to get the fourth. Add part-payments (extra every month, once a year, or one-off amounts) and see how much sooner the loan ends and the interest you save." },
+      { type: "FEATURE", platform: "android", text: "Loans: record a part-payment you made. The loan's outstanding amount, time left and closing date update to match." },
+      { type: "FEATURE", platform: "android", text: "Expenses: import a CSV from another expense app (expenses, loans or recurring payments). You see a preview and can fix the columns before anything is saved." },
+      { type: "IMPROVEMENT", platform: "android", text: "Don't want to share SMS access? Expenses now shows other ways in, including importing your bank SMS from a file saved with SMS Exporter." },
+      { type: "FEATURE", platform: "android", text: "Money Tools: GST (with the CGST/SGST split), discounts, credit-card payoff, and FD, RD, simple and compound interest calculators." },
+      { type: "IMPROVEMENT", platform: "android", text: "Expenses: see what you spent today, this week, this month and this year at the top of the list. The + on the home screen now opens the add form directly." },
+      { type: "FIX", platform: "android", text: "Home: this month's spend now matches Spending Review. Money coming in and credit-card bill payments are no longer counted as spending." },
+      { type: "FIX", platform: "android", text: "Home: Recent transactions shows your latest five, even early in the month." },
+      { type: "FIX", platform: "android", text: "Transactions of ₹0 (such as meal-card wallet notices) are no longer shown." },
+      { type: "FIX", platform: "android", text: "Bills & Subscriptions: the same subscription detected under two names (for example 'Vidiq' and 'Vidiq Inc') now shows as one." },
+      { type: "IMPROVEMENT", platform: "android", text: "Loans now ask before removing a loan." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
