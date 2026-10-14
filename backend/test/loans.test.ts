@@ -139,4 +139,84 @@ describe("Loans (/loans)", () => {
     const list = await request(app).get("/loans").set("Authorization", `Bearer ${userA.token}`);
     expect(list.body.find((l: any) => l.id === id)).toBeTruthy();
   });
+
+  it("stores part-payments cleaned: bad rows dropped, sorted by date, notes trimmed", async () => {
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    const res = await request(app)
+      .post("/loans")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({
+        ...baseLoan,
+        prepayments: [
+          { date: "2025-06-10", amount: 200000, note: "  bonus  " },
+          { date: "2025-02-30", amount: 5000 }, // not a real date
+          { date: "2025-01-15", amount: -1 }, // non-positive
+          { date: "2024-12-01", amount: 50000.555 },
+          "junk",
+        ],
+      });
+    expect(res.status).toBe(201);
+    expect(res.body.prepayments).toEqual([
+      { date: "2024-12-01", amount: 50000.56 },
+      { date: "2025-06-10", amount: 200000, note: "bonus" },
+    ]);
+  });
+
+  it("rejects prepayments that aren't a list", async () => {
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    const res = await request(app)
+      .post("/loans")
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({ ...baseLoan, prepayments: { date: "2025-01-01", amount: 1 } });
+    expect(res.status).toBe(400);
+  });
+
+  it("PUT updates part-payments and ignores fields outside the allowlist", async () => {
+    const user = await createAnonymousUser();
+    createdUserIds.push(user.userId);
+    const created = await request(app).post("/loans").set("Authorization", `Bearer ${user.token}`).send(baseLoan);
+    const id = created.body.id;
+
+    const res = await request(app)
+      .put(`/loans/${id}`)
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({
+        ...baseLoan,
+        bankName: "HDFC Ltd",
+        prepayments: [{ date: "2025-03-01", amount: 100000 }],
+        // None of these may be written through PUT, and unknown keys must not 500.
+        active: false,
+        foreclosedAt: "2025-01-01T00:00:00.000Z",
+        userId: "someone-else",
+        notAColumn: 1,
+      });
+    expect(res.status).toBe(200);
+    expect(res.body.bankName).toBe("HDFC Ltd");
+    expect(res.body.prepayments).toEqual([{ date: "2025-03-01", amount: 100000 }]);
+    expect(res.body.active).toBe(true);
+    expect(res.body.foreclosedAt).toBeNull();
+    expect(res.body.userId).toBe(user.userId);
+
+    // An empty list clears them.
+    const cleared = await request(app)
+      .put(`/loans/${id}`)
+      .set("Authorization", `Bearer ${user.token}`)
+      .send({ prepayments: [] });
+    expect(cleared.status).toBe(200);
+    expect(cleared.body.prepayments).toEqual([]);
+  });
+
+  it("PUT can't touch another user's loan", async () => {
+    const owner = await createAnonymousUser();
+    const other = await createAnonymousUser();
+    createdUserIds.push(owner.userId, other.userId);
+    const created = await request(app).post("/loans").set("Authorization", `Bearer ${owner.token}`).send(baseLoan);
+    const res = await request(app)
+      .put(`/loans/${created.body.id}`)
+      .set("Authorization", `Bearer ${other.token}`)
+      .send({ prepayments: [{ date: "2025-03-01", amount: 1 }] });
+    expect(res.status).toBe(404);
+  });
 });
