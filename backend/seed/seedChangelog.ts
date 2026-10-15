@@ -973,6 +973,17 @@ const entries: Entry[] = [
       { type: "FEATURE", platform: "android", text: "Save payees and payers with a default category, and your own payment methods. Pick them when you add or edit a transaction." },
     ],
   },
+  {
+    version: "1.2.7",
+    releaseDate: "2026-10-15",
+    platforms: ["android"],
+    summary: "Fixes for editing transactions and for Reports.",
+    highlights: [
+      { type: "FIX", platform: "android", text: "Editing a transaction that had no category no longer files it under Groceries. It stays without a category unless you pick one." },
+      { type: "IMPROVEMENT", platform: "android", text: "Reports: the month-by-month chart shows amounts on the side, fits every month on screen, and can list the figures for each month." },
+      { type: "FIX", platform: "android", text: "Renaming one of your own categories now shows the new name straight away." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
