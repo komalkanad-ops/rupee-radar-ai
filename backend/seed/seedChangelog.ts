@@ -960,6 +960,19 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "Home: on small screens or with large text, the + button no longer slides off the edge." },
     ],
   },
+  {
+    version: "1.2.6",
+    releaseDate: "2026-10-15",
+    platforms: ["android", "backend"],
+    summary: "Reports, and your own categories, payees and payment methods.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "Reports: a month-by-month chart of what you spent and received, and any two months compared category by category." },
+      { type: "FEATURE", platform: "android", text: "Reports: pick any dates to see what you spent and received, by category, payee and payment method, and export those dates as a CSV." },
+      { type: "FEATURE", platform: "android", text: "Add your own expense categories. They appear in every category picker and in Budgets." },
+      { type: "FEATURE", platform: "android", text: "Add income categories (salary, freelance, rent) to label money you receive. It still counts as income." },
+      { type: "FEATURE", platform: "android", text: "Save payees and payers with a default category, and your own payment methods. Pick them when you add or edit a transaction." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
