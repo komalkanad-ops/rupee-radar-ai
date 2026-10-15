@@ -59,4 +59,20 @@ describe("tryParseWithRules — payment channel classification", () => {
     const r = tryParseWithRules("AD-CBSSBI-S", "A/C X1234 Debited INR 5000.00 on 01/01/26 -Transferred to JOHN DOE. Avl Balance INR 10000.00");
     expect(r?.channel).toBe("bank_transfer");
   });
+
+  // Mirrors the matching cases in android SmsRulesTest.kt.
+  it("reads IndusInd Credited-Ref as a credit and Debited-Ref as a debit", () => {
+    const credit = tryParseWithRules("AX-INDUSB", "IndusInd A/C  Credited; INR 101,111.30 Ref-Repayment credit [301029233468].Bal INR 102,208.21.Dispute-Call 18602677777-IndusInd Bank");
+    expect(credit?.txnType).toBe("credit");
+    expect(credit?.amount).toBe(101111.3);
+    const debit = tryParseWithRules("AX-INDUSB", "IndusInd A/C  Debited; INR 2,500.00 Ref-NEFT 301029233468.Bal INR 1,208.21");
+    expect(debit?.txnType).toBe("debit");
+  });
+
+  it("keeps the real merchant on an HDFC debit-card spend From the card", () => {
+    const r = tryParseWithRules("JM-HDFCBK-S", "Spent Rs.656 From HDFC Bank Card x9341 At WWWBIGBASKETCOM On 2026-08-14:21:44:26 Bal Rs.11052.08 Not You? Call 18002586161");
+    expect(r?.amount).toBe(656);
+    expect(r?.merchant).toBe("WWWBIGBASKETCOM");
+    expect(r?.channel).toBe("card");
+  });
 });
