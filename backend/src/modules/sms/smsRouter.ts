@@ -87,7 +87,8 @@ smsRouter.post("/transactions", requireUser, async (req: UserRequest, res) => {
     // undefined = the client sent no usable `tags`, so the stored value is left alone (an older app
     // build re-uploading an edit must not wipe them); an array, even [], is the full new set.
     const tags = normalizeTags(t.tags);
-    const subcategory = normalizeSubcategory(t.subcategory);
+    // An income label only belongs on an income row: a row recategorised away from income clears it.
+    const subcategory = t.category !== undefined && t.category !== "income" ? null : normalizeSubcategory(t.subcategory);
     return {
       userId,
       rawSmsHash: t.rawSmsHash || createHash("sha256").update(t.rawSms ?? "").digest("hex"),

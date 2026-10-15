@@ -656,10 +656,6 @@ model WishlistItem {
   @@index([userId])
 }
 
-// A bill split between the user and people who are NOT app users — participants are plain names,
-// never linked accounts, so no contacts permission and no cross-user data. `participantsJson` is a
-// JSON array of {name, share, settled}; the router validates the shape and exposes it as a parsed
-// `participants` array. `paidBy` always equals one participant's name.
 // The user's own lists, as in other expense apps: custom expense categories, income categories,
 // saved payees/payers and payment methods. `clientId` is the app's own stable id for the item (the
 // app creates it offline), unique per user — sync and delete go by it, never by the server `id`.
@@ -680,6 +676,10 @@ model CustomListItem {
   @@index([userId])
 }
 
+// A bill split between the user and people who are NOT app users — participants are plain names,
+// never linked accounts, so no contacts permission and no cross-user data. `participantsJson` is a
+// JSON array of {name, share, settled}; the router validates the shape and exposes it as a parsed
+// `participants` array. `paidBy` always equals one participant's name.
 model SplitExpense {
   id               String   @id @default(cuid())
   userId           String

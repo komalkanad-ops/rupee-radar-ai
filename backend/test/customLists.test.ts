@@ -100,6 +100,11 @@ describe("Custom lists (/custom-lists)", () => {
     expect((await put(u.token, "bad id!", { kind: "PAYEE", name: "x" })).status).toBe(400);
     expect((await put(u.token, "k1", { kind: "PAYEE", name: "Shop" })).status).toBe(201);
     expect((await put(u.token, "k1", { kind: "PAYER", name: "Shop" })).status).toBe(409);
+    // Same name in the same list, any case → 409; same name in another list is fine.
+    expect((await put(u.token, "k2", { kind: "PAYEE", name: "SHOP" })).status).toBe(409);
+    expect((await put(u.token, "k3", { kind: "PAYMENT_METHOD", name: "Shop" })).status).toBe(201);
+    // Renaming an item to its own name in a different case is not a clash.
+    expect((await put(u.token, "k1", { kind: "PAYEE", name: "shop" })).status).toBe(200);
   });
 
   it("one user can't see, change or delete another user's items, even with the same id", async () => {
@@ -131,6 +136,11 @@ describe("Custom lists (/custom-lists)", () => {
     expect(await read()).toBe("Freelance");
 
     expect((await send({ ...base, subcategory: null })).status).toBe(201);
+    expect(await read()).toBeNull();
+
+    // A row moved away from income loses its income label even if the client omits the field.
+    expect((await send({ ...base, subcategory: "Freelance" })).status).toBe(201);
+    expect((await send({ ...base, category: "transfer" })).status).toBe(201);
     expect(await read()).toBeNull();
   });
 });

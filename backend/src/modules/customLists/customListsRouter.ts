@@ -58,6 +58,12 @@ customListsRouter.put("/:clientId", requireUser, async (req: UserRequest, res) =
   }
 
   const userId = req.userId!;
+  // One name per list, ignoring case: a custom category's transaction key is its lower-cased name,
+  // so "Gifts" and "gifts" would share rows and removing one would strip the other. The column's
+  // utf8mb4_unicode_ci collation makes this equality case-insensitive.
+  const clash = await prisma.customListItem.findFirst({ where: { userId, kind, name, NOT: { clientId } } });
+  if (clash) return res.status(409).json({ error: `You already have "${clash.name}"` });
+
   const existing = await prisma.customListItem.findUnique({ where: { userId_clientId: { userId, clientId } } });
   if (existing) {
     // The kind of an item never changes — a category can't become a payee under the same id.
