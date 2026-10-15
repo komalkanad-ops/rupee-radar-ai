@@ -178,8 +178,8 @@ export function categorizeMerchant(merchant: string | null | undefined): string 
 }
 
 // These short keywords match only as a whole word: as plain substrings they filed "Licious"
-// under insurance, "Solanki" under transport and "Premium" under EMI. Other short keywords
-// ("kfc", "1mg", "jio") stay substrings — banks glue them to other text ("SFILKFC6438").
+// under insurance, "Kolar" under transport and "Premium" under EMI. Other short keywords
+// ("kfc", "1mg", "jio") stay substrings — banks glue them to other text ("SFILKFC1234").
 // Mirrors wholeWordKeywords in MerchantCategorizer.kt.
 const WHOLE_WORD_KEYWORDS = new Map<string, RegExp>(
   ["lic", "ola", "emi"].map((k) => [k, new RegExp(`(?<![a-z0-9])${k}(?![a-z0-9])`)]),
