@@ -1,11 +1,17 @@
 import * as Sentry from "@sentry/node";
 import { Router } from "express";
 import multer from "multer";
-import { extractTransactionsFromCsv, extractTransactionsFromText, detectIssuer, detectHiddenFees, StatementTransaction } from "./statementParser.js";
+import {
+  extractTransactionsFromCsv, extractTransactionsFromText, detectIssuer, detectHiddenFees, detectStatementKind, statementPeriod,
+  StatementTransaction,
+} from "./statementParser.js";
 import { categorizeMerchant } from "../categorization/merchantCategorizer.js";
 import { requireUser } from "../auth/authMiddleware.js";
+import { statementLimiter } from "../../lib/rateLimiters.js";
 
 export const statementRouter = Router();
+
+const MAX_ROWS = 2000;
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -16,13 +22,14 @@ const upload = multer({
 // PDFs). Stateless: nothing is written to disk or the database — the file is parsed in memory and
 // discarded once the response is sent, since statements are sensitive documents.
 //
+// The response also lists every parsed row (`transactions`, capped at MAX_ROWS) so the app can offer
+// to add the ones it doesn't already have from SMS. Still nothing is stored server-side.
+//
 // `requireUser` gates it: this buffers up to 15 MB in memory and hands it to a native PDF parser on
 // a host CLAUDE.md documents as memory-fragile (known-fragile item #2 — the reason pdf-parse is
-// lazily imported at all). Unauthenticated, that is a trivial restart-cycling DoS. The route has no
-// live caller today — both the app and website surfaces are "Coming Soon" pending the standalone
-// statement-analyzer app — so requiring auth costs nothing now and the standalone app can
-// authenticate like any other client.
-statementRouter.post("/analyze", requireUser, upload.single("file"), async (req, res) => {
+// lazily imported at all). Unauthenticated, that is a trivial restart-cycling DoS. The app's
+// Statement Analyzer (behind the `statement-analyzer` feature flag) is the caller.
+statementRouter.post("/analyze", requireUser, statementLimiter, upload.single("file"), async (req, res) => {
   const file = req.file;
   if (!file) return res.status(400).json({ error: "file is required (field name 'file')" });
 
@@ -59,8 +66,9 @@ statementRouter.post("/analyze", requireUser, upload.single("file"), async (req,
     return res.status(422).json({ error: "Could not read this file — is it a valid PDF/CSV statement?" });
   }
 
+  const kind = isPdf ? detectStatementKind(rawText) : null;
   const transactions: StatementTransaction[] = isPdf
-    ? extractTransactionsFromText(rawText)
+    ? extractTransactionsFromText(rawText, kind!)
     : extractTransactionsFromCsv(rawText);
 
   if (transactions.length === 0) {
@@ -108,8 +116,15 @@ statementRouter.post("/analyze", requireUser, upload.single("file"), async (req,
   // the line-item transaction table extractTransactionsFromText targets.
   const hiddenFees = isPdf ? detectHiddenFees(rawText) : [];
 
+  const period = isPdf ? statementPeriod(rawText) : null;
   res.json({
     detectedIssuer: detectIssuer(rawText),
+    statementKind: kind,
+    periodFrom: period?.from ?? null,
+    periodTo: period?.to ?? null,
+    transactions: categorized.slice(0, MAX_ROWS).map((t) => ({
+      date: t.date, description: t.description, amount: t.amount, type: t.type, category: t.type === "debit" ? t.category : null,
+    })),
     transactionCount: transactions.length,
     totalSpend,
     totalCredits,
