@@ -11,7 +11,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "jiomart", "vishal mega mart", "big bazaar",
       // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
       "instamart", "innovative retail", "supermarket grocery", "blink commerce", "kiranakart", "avenue supermarts", "reliance retail", "jio mart", "vishal mega", "more retail",
-  ],
+      // Session 77, from the owner's real export: truncated/joined bank spellings and national brands only.
+      "licious", "freshtohome", "country delight",
+    ],
   },
   {
     category: "medical",
@@ -34,7 +36,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "redcliffe", "agilus diagnostic", "vijaya diagnostic", "healthians",
       // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
       "api holdings", "dadha pharma", "qikwell",
-  ],
+      // Session 77, from the owner's real export: truncated/joined bank spellings and national brands only.
+      "loudnine", "hospita", "jupiter hosp", "dental",
+    ],
   },
   {
     category: "fitness",
@@ -71,7 +75,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "namma yatri", "quick ride", "quickride", "yulu", "bounce", "chalo", "abhibus", "shuttl",
       // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
       "uber india", "ani technologies", "ola cabs", "roppen",
-  ],
+      // Session 77, from the owner's real export: truncated/joined bank spellings and national brands only.
+      "olacabs", "tvs motor", "hero motocorp", "bajaj auto", "maruti suzuki", "tata motors", "hyundai",
+    ],
   },
   {
     category: "travel",
@@ -81,7 +87,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "treebo", "fabhotels", "lemon tree", "ginger hotel",
       // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
       "indian railway catering", "ibibo", "le travenues", "ixigo", "interglobe", "akasa", "oravel", "ritz carlton", "marriott", "taj hotel",
-  ],
+      // Session 77, from the owner's real export: truncated/joined bank spellings and national brands only.
+      "oyorooms", "radisson", "hyatt", "novotel", "holiday inn", "ibis hotel", "itc hotel",
+    ],
   },
   {
     category: "tolls",
@@ -99,11 +107,11 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
   },
     {
     category: "electronics",
-    keywords: ["croma", "reliance digital", "vijay sales", "sangeetha mobiles", "poorvika", "apple store", "samsung", "boat lifestyle", "oneplus", "imagine store", "unicorn store", "jbl", "bose"],
+    keywords: ["croma", "reliance digital", "vijay sales", "sangeetha mobiles", "poorvika", "apple store", "samsung", "boat lifestyle", "oneplus", "imagine store", "unicorn store", "jbl", "bose", "unicorn inf", "rel retail ltd digital", "mobile shop"],
   },
   {
     category: "home",
-    keywords: ["ikea", "pepperfry", "urban ladder", "wakefit", "the sleep company", "nilkamal", "home centre", "chumbak", "godrej interio", "hometown", "durian", "@home"],
+    keywords: ["ikea", "pepperfry", "urban ladder", "wakefit", "the sleep company", "nilkamal", "home centre", "chumbak", "godrej interio", "hometown", "durian", "@home", "wakef"],
   },
 {
     category: "shopping",
@@ -113,7 +121,10 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "westside", "max fashion", "reliance trends", "fabindia", "biba", "global desi", "zara",
       "h&m", "uniqlo", "marks & spencer", "adidas", "nike", "puma", "reebok", "titan", "tanishq",
       "kalyan jewellers", "malabar gold", "caratlane", "bluestone", "lenskart", // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
-      "amazon seller", "amazon retail", "amazon pay in e", "amazon.in", "fsn e-commerce", "tata digital", "tata neu", "trent limited", "aditya birla fashion", "lifestyle intern", "life style intern", "shein", "zudio", "hopscotch", "reliance brands", "babyhug", "mothercare", "gyftr", "qwikcilver", "smartbuy", "gift card", "pine labs", ],
+      "amazon seller", "amazon retail", "amazon pay in e", "amazon.in", "fsn e-commerce", "tata digital", "tata neu", "trent limited", "aditya birla fashion", "lifestyle intern", "life style intern", "shein", "zudio", "hopscotch", "reliance brands", "babyhug", "mothercare", "gyftr", "qwikcilver", "smartbuy", "gift card", "pine labs",
+      // Session 77, from the owner's real export: truncated/joined bank spellings and national brands only.
+      "jewell", "jewels", "saraf", "fossil", "garments", "voucher",
+    ],
   },
   {
     category: "entertainment",
@@ -135,7 +146,9 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
       "act fibernet", "hathway", "excitel", "spectra", "railwire", "you broadband",
       // Learned from real statement<->SMS pairs: parent/legal entity names -> brand category.
       "msedc", "mahadiscom", "mahavitaran", "adani electric", "bharti airtel", "reliance jio", "tata play",
-  ],
+      // Session 77, from the owner's real export: truncated/joined bank spellings and national brands only.
+      "myjio", "jiomobility",
+    ],
   },
   {
     category: "rent",
@@ -143,15 +156,15 @@ const TAXONOMY: { category: string; keywords: string[] }[] = [
   },
   {
     category: "insurance",
-    keywords: ["lic", "hdfc life", "icici prudential", "policybazaar", "star health", "insurance premium", "bajaj allianz", "icici lombard", "hdfc ergo"],
+    keywords: ["lic", "hdfc life", "icici prudential", "policybazaar", "star health", "insurance premium", "bajaj allianz", "icici lombard", "hdfc ergo", "licindia", "lic of india", "hdfcergo", "aditya birla health", "adityabirlahealth", "policyb", "niva bupa", "care health insurance", "tata aig", "health insurance", "acko", "go digit"],
   },
   {
     category: "education",
-    keywords: ["byju", "unacademy", "vedantu", "upgrad", "coursera", "udemy", "school fee", "tuition", "college fee"],
+    keywords: ["byju", "unacademy", "vedantu", "upgrad", "coursera", "udemy", "school fee", "tuition", "college fee", "school", "education"],
   },
   {
     category: "emi",
-    keywords: ["emi", "loan installment", "loan emi", "bajaj finserv", "home credit", "nach", "bajaj fin", "newtap", "kissht", "pyu custcap"],
+    keywords: ["emi", "loan installment", "loan emi", "bajaj finserv", "home credit", "nach", "bajaj fin", "newtap", "kissht", "pyu custcap", "custcap", "bajaj finance", "bajajfinance"],
   },
 ];
 
@@ -159,9 +172,22 @@ export function categorizeMerchant(merchant: string | null | undefined): string 
   if (!merchant) return null;
   const lower = merchant.toLowerCase();
   for (const { category, keywords } of TAXONOMY) {
-    if (keywords.some((k) => lower.includes(k))) return category;
+    if (keywords.some((k) => matchesKeyword(lower, k))) return category;
   }
   return null;
+}
+
+// These short keywords match only as a whole word: as plain substrings they filed "Licious"
+// under insurance, "Solanki" under transport and "Premium" under EMI. Other short keywords
+// ("kfc", "1mg", "jio") stay substrings — banks glue them to other text ("SFILKFC6438").
+// Mirrors wholeWordKeywords in MerchantCategorizer.kt.
+const WHOLE_WORD_KEYWORDS = new Map<string, RegExp>(
+  ["lic", "ola", "emi"].map((k) => [k, new RegExp(`(?<![a-z0-9])${k}(?![a-z0-9])`)]),
+);
+
+function matchesKeyword(lower: string, keyword: string): boolean {
+  const pattern = WHOLE_WORD_KEYWORDS.get(keyword);
+  return pattern ? pattern.test(lower) : lower.includes(keyword);
 }
 
 /** The fine categories the AI merchant-classification pass (POST /categorization/classify) is

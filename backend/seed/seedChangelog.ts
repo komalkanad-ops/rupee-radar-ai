@@ -944,6 +944,22 @@ const entries: Entry[] = [
       { type: "IMPROVEMENT", platform: "android", text: "Loans now ask before removing a loan." },
     ],
   },
+  {
+    version: "1.2.5",
+    releaseDate: "2026-10-15",
+    platforms: ["android"],
+    summary: "Better automatic categories, and loan and layout fixes.",
+    highlights: [
+      { type: "IMPROVEMENT", platform: "android", text: "More of your transactions get a category automatically, including hospital, jewellery, insurance and electronics spends that banks write in shortened form. Older transactions with no category are filled in too; categories you chose are never changed." },
+      { type: "FIX", platform: "android", text: "Licious is now filed under groceries, not insurance." },
+      { type: "FIX", platform: "android", text: "More credit-card bill payments (OneCard, Amex, SBI Card and others) are recognised and no longer counted as spending." },
+      { type: "FIX", platform: "android", text: "An IndusInd 'Credited' message is now counted as money in, not as spending." },
+      { type: "FIX", platform: "android", text: "HDFC debit-card spends now show the shop's name instead of 'Card spend'." },
+      { type: "FIX", platform: "android", text: "Loans: a loan added today no longer shows as overdue. The first EMI is due a month after the start date." },
+      { type: "IMPROVEMENT", platform: "android", text: "Bills & Subscriptions now asks before removing a payment." },
+      { type: "FIX", platform: "android", text: "Home: on small screens or with large text, the + button no longer slides off the edge." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
