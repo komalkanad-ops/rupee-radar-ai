@@ -106,3 +106,16 @@ export const referralRedeemLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Too many attempts — please wait a few minutes and try again" },
 });
+
+// POST /statements/analyze buffers up to 15 MB and runs a native PDF parser on a memory-fragile
+// host — a real user analyses a handful of statements at a time, so cap it well below the general
+// ceiling (a wrong password retry or two included). Mounted after requireUser and keyed on the user,
+// so other people on a shared IP can't use up someone's allowance.
+export const statementLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  keyGenerator: (req) => `user:${(req as { userId?: string }).userId ?? "anon"}`,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many statements in a short time — please wait a few minutes and try again" },
+});

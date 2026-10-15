@@ -984,6 +984,20 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "Renaming one of your own categories now shows the new name straight away." },
     ],
   },
+  {
+    version: "1.2.8",
+    releaseDate: "2026-10-15",
+    platforms: ["android"],
+    summary: "Statement Analyzer (beta), Mark paid on upcoming bills, and smaller fixes.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "Statement Analyzer (beta): pick a credit-card or bank statement (PDF or CSV) to see where the money went, and add the transactions your SMS missed to Expenses. The file isn't stored." },
+      { type: "IMPROVEMENT", platform: "android", text: "Upcoming Bills: \"Pay\" is now \"Mark paid\". It asks first, then moves the bill to its next due date. An EMI marked paid a few days early no longer shows as overdue on the day." },
+      { type: "IMPROVEMENT", platform: "android", text: "Home: tap the Income / Expenses / Savings card to open Expenses." },
+      { type: "FIX", platform: "android", text: "Fix Your Finance: \"Add to To-do\" now confirms and takes the card off the list, and the buttons fit without scrolling sideways." },
+      { type: "FIX", platform: "android", text: "Bills & Subscriptions and Lending: adding or removing now confirms, and buttons no longer hide off the edge of the screen." },
+      { type: "FIX", platform: "android", text: "Fixed Debt Freedom and loan suggestions failing on Android 13 and older." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
