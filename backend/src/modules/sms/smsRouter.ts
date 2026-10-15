@@ -4,6 +4,7 @@ import { prisma } from "../../lib/prisma.js";
 import { tryParseWithRules, categoryForTxnType, extractAvailableBalance, extractPaymentApp } from "./smsRules.js";
 import { parseSmsWithLlm } from "../llm/meshClient.js";
 import { categorizeMerchant } from "../categorization/merchantCategorizer.js";
+import { normalizeSubcategory } from "../customLists/customListRules.js";
 import { requireAdmin, requireUser, type UserRequest } from "../auth/authMiddleware.js";
 import { normalizeTags, parseStoredTags } from "../../lib/transactionTags.js";
 
@@ -86,6 +87,7 @@ smsRouter.post("/transactions", requireUser, async (req: UserRequest, res) => {
     // undefined = the client sent no usable `tags`, so the stored value is left alone (an older app
     // build re-uploading an edit must not wipe them); an array, even [], is the full new set.
     const tags = normalizeTags(t.tags);
+    const subcategory = normalizeSubcategory(t.subcategory);
     return {
       userId,
       rawSmsHash: t.rawSmsHash || createHash("sha256").update(t.rawSms ?? "").digest("hex"),
@@ -100,6 +102,7 @@ smsRouter.post("/transactions", requireUser, async (req: UserRequest, res) => {
       // re-uploading an edit can't wipe a direction a newer build already stored.
       ...(t.txnType === "debit" || t.txnType === "credit" ? { txnType: t.txnType as string } : {}),
       ...(tags !== undefined ? { tagsJson: JSON.stringify(tags) } : {}),
+      ...(subcategory !== undefined ? { subcategory } : {}),
       parsedVia: t.parsedVia ?? "regex",
       txnDate: new Date(t.txnDate),
     };
