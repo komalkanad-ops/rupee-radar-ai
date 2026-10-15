@@ -516,6 +516,7 @@ authRouter.delete("/me", requireUser, async (req: UserRequest, res) => {
     prisma.productRecord.deleteMany({ where: { userId } }),
     prisma.wishlistItem.deleteMany({ where: { userId } }),
     prisma.splitExpense.deleteMany({ where: { userId } }),
+    prisma.customListItem.deleteMany({ where: { userId } }),
     // SavingsContribution already cascades at the DB level from SavingsInstrument.
     prisma.savingsInstrument.deleteMany({ where: { userId } }),
     prisma.budget.deleteMany({ where: { userId } }),

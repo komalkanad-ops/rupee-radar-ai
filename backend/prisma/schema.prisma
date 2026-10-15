@@ -206,6 +206,7 @@ model User {
   productRecords       ProductRecord[]
   wishlistItems        WishlistItem[]
   splitExpenses        SplitExpense[]
+  customListItems      CustomListItem[]
   feedback             Feedback[]
   savingsInstruments   SavingsInstrument[]
   chatUsage            ChatUsage?
@@ -511,6 +512,10 @@ model SmsTransaction {
   // "never tagged" and is also what an older app build leaves untouched on re-upload — see
   // normalizeTags in src/lib/transactionTags.ts for the limits applied on write.
   tagsJson        String?  @db.Text
+  // The user's own income category ("Freelance", "Rent received") on a money-in row. `category`
+  // stays "income" so every income/spend rule keeps working; this only refines the label. Null =
+  // none. See normalizeSubcategory in src/modules/customLists/customListRules.ts.
+  subcategory     String?  @db.VarChar(40)
 
   @@unique([userId, rawSmsHash])
   @@index([userId, txnDate])
@@ -648,6 +653,26 @@ model WishlistItem {
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
 
+  @@index([userId])
+}
+
+// The user's own lists, as in other expense apps: custom expense categories, income categories,
+// saved payees/payers and payment methods. `clientId` is the app's own stable id for the item (the
+// app creates it offline), unique per user — sync and delete go by it, never by the server `id`.
+// `kind`/`name`/`defaultCategory` are validated by customListRules.ts (KEEP IN SYNC with the app's
+// CustomLists.kt).
+model CustomListItem {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  clientId        String   @db.VarChar(40)
+  kind            String   @db.VarChar(24)
+  name            String   @db.VarChar(40)
+  defaultCategory String?  @db.VarChar(40)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([userId, clientId])
   @@index([userId])
 }
 
