@@ -46,23 +46,23 @@ describe("merchantCategorizer electronics and home", () => {
 
   it("matches short keywords as whole words only", () => {
     expect(categorizeMerchant("Licious")).toBe("groceries");
-    expect(categorizeMerchant("Solanki Enterprise")).toBeNull();
+    expect(categorizeMerchant("Kolar Enterprise")).toBeNull();
     expect(categorizeMerchant("LIC Premium")).toBe("insurance");
     expect(categorizeMerchant("UPI-OLA")).toBe("transport");
     expect(categorizeMerchant("Loan EMI")).toBe("emi");
     // Other short keywords still match glued to bank text.
-    expect(categorizeMerchant("SFILKFC6438")).toBe("dining");
+    expect(categorizeMerchant("SFILKFC1234")).toBe("dining");
     expect(categorizeMerchant("1mgtechnologies@ptybl")).toBe("medical");
   });
 
   it("recognises truncated and joined bank spellings of known merchants", () => {
     expect(categorizeMerchant("_C LOUDNINE.")).toBe("medical");
-    expect(categorizeMerchant("_ASIAN EYE HOSPITA.")).toBe("medical");
-    expect(categorizeMerchant("_P N GADGIL JEWELL.")).toBe("shopping");
-    expect(categorizeMerchant("WWWWAKEF5037481")).toBe("home");
-    expect(categorizeMerchant("HDFCERGO4940931")).toBe("insurance");
+    expect(categorizeMerchant("_CITY EYE HOSPITA.")).toBe("medical");
+    expect(categorizeMerchant("_SAMPLE JEWELL.")).toBe("shopping");
+    expect(categorizeMerchant("WWWWAKEF1234567")).toBe("home");
+    expect(categorizeMerchant("HDFCERGO1234567")).toBe("insurance");
     expect(categorizeMerchant("ADITYABIRLAHEALTHINS")).toBe("insurance");
     expect(categorizeMerchant("REL RETAIL LTD DIGITAL")).toBe("electronics");
-    expect(categorizeMerchant("Bharat Maruti Katkar")).toBeNull();
+    expect(categorizeMerchant("Sample Maruti Person")).toBeNull();
   });
 });

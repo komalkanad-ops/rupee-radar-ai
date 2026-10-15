@@ -951,7 +951,7 @@ const entries: Entry[] = [
     summary: "Better automatic categories, and loan and layout fixes.",
     highlights: [
       { type: "IMPROVEMENT", platform: "android", text: "More of your transactions get a category automatically, including hospital, jewellery, insurance and electronics spends that banks write in shortened form. Older transactions with no category are filled in too; categories you chose are never changed." },
-      { type: "FIX", platform: "android", text: "Licious is now filed under groceries, not insurance." },
+      { type: "FIX", platform: "android", text: "New Licious transactions are filed under groceries, not insurance." },
       { type: "FIX", platform: "android", text: "More credit-card bill payments (OneCard, Amex, SBI Card and others) are recognised and no longer counted as spending." },
       { type: "FIX", platform: "android", text: "An IndusInd 'Credited' message is now counted as money in, not as spending." },
       { type: "FIX", platform: "android", text: "HDFC debit-card spends now show the shop's name instead of 'Card spend'." },
