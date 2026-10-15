@@ -29,7 +29,7 @@ export interface SmsRule {
 export const smsRules: SmsRule[] = [
   // ── HDFC Bank ──────────────────────────────────────────────────────────────────
   { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "spent-A", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "card",
-    pattern: /Spent\s+Rs\.?\s?([\d,]+\.?\d*)\s+On\s+HDFC Bank Card\s+\S+\s+At\s+(.+?)\s+On\s+\d{4}-\d{2}-\d{2}/i },
+    pattern: /Spent\s+Rs\.?\s?([\d,]+\.?\d*)\s+(?:On|From)\s+HDFC Bank Card\s+\S+\s+At\s+(.+?)\s+On\s+\d{4}-\d{2}-\d{2}/i },
   { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "spent-B", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "card",
     pattern: /Rs\.?\s?([\d,]+\.?\d*)\s+spent (?:on|From)\s+HDFC Bank Card\s+\S+\s+at\s+(.+?)\s+on\s+\d{4}-\d{2}-\d{2}/i },
   { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "upi-txn", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "upi",
@@ -95,8 +95,12 @@ export const smsRules: SmsRule[] = [
     pattern: /A\/C\s+\S+\s+credited by Rs\s?([\d,]+\.?\d*)\s+from\s+(.+?)\./i },
   { bankCode: "INDUSB", bankName: "IndusInd Bank", name: "debited-towards", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
     pattern: /A\/C\s+\S+\s+debited by Rs\s?([\d,]+\.?\d*)\s+towards\s+(.+?)\./i },
-  { bankCode: "INDUSB", bankName: "IndusInd Bank", name: "debited-credited-ref", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
-    pattern: /A\/C\s+(?:Debited|Credited);\s+INR\s?([\d,]+\.?\d*)\s+Ref-(.+?)\d/i },
+  // "Debited;" and "Credited;" share one layout — they were one rule tagged "debit", so a credit
+  // (e.g. "Ref-Repayment credit") was counted as spend.
+  { bankCode: "INDUSB", bankName: "IndusInd Bank", name: "debited-ref", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    pattern: /A\/C\s+Debited;\s+INR\s?([\d,]+\.?\d*)\s+Ref-(.+?)\d/i },
+  { bankCode: "INDUSB", bankName: "IndusInd Bank", name: "credited-ref", txnType: "credit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    pattern: /A\/C\s+Credited;\s+INR\s?([\d,]+\.?\d*)\s+Ref-(.+?)\d/i },
   { bankCode: "INDUSB", bankName: "IndusInd Bank", name: "purchase-debited", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
     pattern: /INR\s?([\d,]+\.?\d*)\s+has been debited from your IndusInd Bank.*?towards\s+(.+?)\s+purchase/i },
   { bankCode: "INDUSB", bankName: "IndusInd Bank", name: "generic-debited-towards", txnType: "debit", amountGroup: 1, merchantGroup: 2, merchantFallback: "IndusInd Bank debit", channel: "bank_transfer",
