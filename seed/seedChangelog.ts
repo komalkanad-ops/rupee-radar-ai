@@ -968,7 +968,7 @@ const entries: Entry[] = [
     highlights: [
       { type: "FEATURE", platform: "android", text: "Reports: a month-by-month chart of what you spent and received, and any two months compared category by category." },
       { type: "FEATURE", platform: "android", text: "Reports: pick any dates to see what you spent and received, by category, payee and payment method, and export those dates as a CSV." },
-      { type: "FEATURE", platform: "android", text: "Add your own expense categories. They appear in every category picker and in Budgets." },
+      { type: "FEATURE", platform: "android", text: "Add your own expense categories. They appear in every category picker." },
       { type: "FEATURE", platform: "android", text: "Add income categories (salary, freelance, rent) to label money you receive. It still counts as income." },
       { type: "FEATURE", platform: "android", text: "Save payees and payers with a default category, and your own payment methods. Pick them when you add or edit a transaction." },
     ],
