@@ -21,7 +21,7 @@ smsRouter.post("/parse", requireUser, async (req: UserRequest, res) => {
 
   const ruleResult = bankSender ? tryParseWithRules(bankSender, rawSms) : null;
   if (ruleResult) {
-    const category = categoryForTxnType(ruleResult.txnType, ruleResult.channel, ruleResult.merchant, categorizeMerchant, ruleResult.refund);
+    const category = categoryForTxnType(ruleResult.txnType, ruleResult.channel, ruleResult.merchant, categorizeMerchant, ruleResult.refund, ruleResult.category);
     const balanceAfterTxn = extractAvailableBalance(rawSms);
     const paymentApp = extractPaymentApp(rawSms);
     return res.json({ ...ruleResult, category, balanceAfterTxn, paymentApp, parsedVia: "regex" });
