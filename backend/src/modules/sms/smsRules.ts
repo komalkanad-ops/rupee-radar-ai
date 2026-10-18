@@ -24,6 +24,11 @@ export interface SmsRule {
   // Inferred from which pattern matched (card-swipe language, UPI-handle "Sent/Received", generic
   // A/C debit/credit, or a prepaid wallet) — not derivable from merchant text alone.
   channel: PaymentChannel;
+  // A category the rule itself knows (a FASTag toll, a transfer to an account number); wins over the
+  // merchant keyword lookup in categoryForTxnType.
+  category?: string;
+  // "%s" is replaced by the captured merchant group ("IMPS to A/c ••%s").
+  merchantTemplate?: string;
 }
 
 export const smsRules: SmsRule[] = [
@@ -52,8 +57,33 @@ export const smsRules: SmsRule[] = [
   // Real HDFC personal-loan EMI debit confirmation (as opposed to the "EMI Reminder"/"due on"
   // messages sent before the debit actually happens, which are deliberately NOT matched here —
   // matching those would record a spend that hasn't occurred yet).
+  // The loan number's last 4 digits name the loan, so two HDFC loans are two payees. Mirrors SmsRules.kt.
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "loan-emi-debited-numbered", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    category: "emi", merchantTemplate: "HDFC Bank loan ••%s",
+    pattern: /INR\s?([\d,]+\.?\d*)\s+debited from HDFC Bank\s+\S+\s+on\s+[\w-]+\.\s*Info:\s*EMI\s+\d*(\d{4})\b/i },
   { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "loan-emi-debited", txnType: "debit", amountGroup: 1, merchantFallback: "EMI", channel: "bank_transfer",
     pattern: /INR\s?([\d,]+\.?\d*)\s+debited from HDFC Bank\s+\S+\s+on\s+[\w-]+\.\s*Info:\s*EMI/i },
+  // "Info: ACH D- UNION BANK OF INDIA-A9Q…" — a mandate debit; a bank/lender payee is a loan EMI.
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "ach-lender", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer", category: "emi",
+    pattern: /INR\s?([\d,]+\.?\d*)\s+debited from HDFC Bank\s+\S+\s+on\s+[\w-]+\.\s*Info:\s*ACH\s*D-\s*([^-]*?\b(?:BANK|FINANCE|FINANCIAL|CAPITAL|LOANS?|HOUSING)\b[^-]*?)\s*-/i },
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "ach", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    pattern: /INR\s?([\d,]+\.?\d*)\s+debited from HDFC Bank\s+\S+\s+on\s+[\w-]+\.\s*Info:\s*ACH\s*D-\s*([^-]{2,50}?)\s*-/i },
+  // HDFC also sends "IMPS INR … sent" for the same transfer, so this is a transfer too.
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "imps-info", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer", category: "transfer",
+    pattern: /INR\s?([\d,]+\.?\d*)\s+debited from HDFC Bank\s+\S+\s+on\s+[\w-]+\.\s*Info:\s*IMPS-\d+-([^-]{2,50}?)-/i },
+  // IMPS / net-banking transfers to an account number — no payee name, and in a real export most
+  // went to the sender's own accounts, so they are transfers, never spend.
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "imps-sent", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "bank_transfer",
+    category: "transfer", merchantTemplate: "IMPS to A/c ••%s",
+    pattern: /IMPS\s+INR\s?([\d,]+\.?\d*)\s+sent from HDFC Bank A\/c\s+\S+\s+on\s+[\d-]+\s+To A\/c\s+[xX*]*\d*?(\d{4})\b/i },
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "online-transfer", txnType: "debit", amountGroup: 1, merchantFallback: "HDFC online transfer", channel: "bank_transfer", category: "transfer",
+    pattern: /Amt Deducted!\s*Rs\.?\s?([\d,]+\.?\d*)\s+from your HDFC Bank A\/c\s+\S+\s+for Money Transfer via HDFC Bank Online Banking/i },
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "received-imps", txnType: "credit", amountGroup: 1, merchantGroup: 2, merchantFallback: "HDFC Bank credit", channel: "bank_transfer",
+    pattern: /Received!\s*INR\s?([\d,]+\.?\d*)\s+in HDFC Bank A\/c\s+\S+\s+On\s+[\d-]+\s+For\s+(?:IMPS|NEFT|RTGS|UPI)?\s*-\s*([^-\n]{2,60}?)\s*-/i },
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "atm-withdrawn", txnType: "debit", amountGroup: 1, merchantFallback: "Cash withdrawal", channel: "card",
+    pattern: /Withdrawn\s+Rs\.?\s?([\d,]+\.?\d*)\s+From HDFC Bank Card\s+\S+\s+At\s+.+?\s+On\s+\d{4}-\d{2}-\d{2}/i },
+  { bankCode: "HDFCBK", bankName: "HDFC Bank", name: "smart-pay", txnType: "debit", amountGroup: 1, merchantFallback: "Bill payment (Smart Pay)", channel: "card",
+    pattern: /successfully debited your HDFC Bank Credit card ending\s+\d+\s+to pay your\s+.+?\s+bill for the amount Rs\.?\s?([\d,]+\.?\d*)/i },
 
   // ── ICICI Bank (credit card) ───────────────────────────────────────────────────
   { bankCode: "ICICIT", bankName: "ICICI Bank", name: "spent-using", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "card",
@@ -128,10 +158,11 @@ export const smsRules: SmsRule[] = [
   { bankCode: "IDFCFB", bankName: "IDFC FIRST Bank", name: "card-spent", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "card",
     pattern: /(?:INR|USD)\s?([\d,]+\.?\d*)\s+spent on your IDFC FIRST Bank Credit Card.*?at\s+(.+?)\s+on\s+\d{1,2}[\s-][A-Z]{3}[\s-]\d{4}/i },
   { bankCode: "IDFCFB", bankName: "IDFC FIRST Bank", name: "toll", txnType: "debit", amountGroup: 1, merchantFallback: "Toll", channel: "wallet",
-    pattern: /INR\s?([\d,]+\.?\d*)\s+toll paid from IDFC FIRST Bank Tag/i },
+    category: "tolls", pattern: /INR\s?([\d,]+\.?\d*)\s+toll paid from IDFC FIRST Bank Tag/i },
   { bankCode: "IDFCFB", bankName: "IDFC FIRST Bank", name: "account-credited", txnType: "credit", amountGroup: 1, merchantFallback: "IDFC FIRST Bank credit", channel: "bank_transfer",
     pattern: /A\/C\s+\S+\s+is credited with INR\s?([\d,]+\.?\d*)\s+on/i },
-  { bankCode: "IDFCFB", bankName: "IDFC FIRST Bank", name: "fastag-recharge", txnType: "debit", amountGroup: 1, merchantFallback: "FASTag recharge", channel: "wallet",
+  // A top-up, not spend — the tolls deducted from the tag are the spend.
+  { bankCode: "IDFCFB", bankName: "IDFC FIRST Bank", name: "fastag-recharge", txnType: "debit", amountGroup: 1, merchantFallback: "FASTag recharge", channel: "wallet", category: "transfer",
     pattern: /FASTag.*?[Cc]redited with Rs\.?\s?([\d,.]+)\s+(?:on|Ref)/i },
   { bankCode: "IDFCFB", bankName: "IDFC FIRST Bank", name: "spent-from-account", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "card",
     pattern: /Spent\s+Rs\.?([\d,]+\.?\d*)\s+from\s+A\/C\s+\S+\s+at\s+(.+?)\s+on/i },
@@ -186,6 +217,18 @@ export const smsRules: SmsRule[] = [
     pattern: /received payment of Rs\.?\s?([\d,]+\.?\d*)\s+via\s+\S+\s+&\s+the same has been credited to your SBI Credit Card/i },
 
   // ── Pluxee (meal card) ─────────────────────────────────────────────────────────
+  // ── Jupiter Edge CSB RuPay credit card ─────────────────────────────────────────
+  { bankCode: "JTEDGE", bankName: "Edge CSB Bank", name: "card-paid", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "card",
+    pattern: /₹\s?([\d,]+\.?\d*)\s+paid from your Edge CSB Bank RuPay Credit Card to\s+(.+?)(?:\s+\S+\s+[A-Z]{2}IN)?\s+on\s+\d{4}-\d{2}-\d{2}/i },
+  { bankCode: "JTEDGE", bankName: "Edge CSB Bank", name: "upi-on-card", txnType: "debit", amountGroup: 1, merchantFallback: "UPI payment (Edge CSB card)", channel: "card",
+    pattern: /Rs\.?\s?([\d,]+\.?\d*)\s+debited to your Edge CSB (?:Bank )?RuPay Credit Card/i },
+
+  // ── IDBI NETC FASTag ───────────────────────────────────────────────────────────
+  { bankCode: "WLIDBI", bankName: "IDBI FASTag", name: "fastag-parking", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "wallet", category: "tolls",
+    pattern: /FASTag linked vehicle no\.\s*\S+\s+has been debited with Rs\.?\s?([\d,]+\.?\d*)\/?-?\s+at\s+(.+?)\s+on\s+\d{2}-\d{2}-\d{4}/i },
+  { bankCode: "WLIDBI", bankName: "IDBI FASTag", name: "fastag-toll", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "wallet", category: "tolls",
+    pattern: /Rs\.?\s?([\d,]+\.?\d*)\s+toll debited for VRN-\S+\s+on\s+.*\s+at\s+(.+?)\s*\.\s*(?:Toll\s+)?Bal/i },
+
   { bankCode: "PLUXEE", bankName: "Pluxee", name: "spent", txnType: "debit", amountGroup: 1, merchantGroup: 2, channel: "wallet",
     pattern: /Rs\.?\s?([\d,.]+)\s+spent from Pluxee\s+Meal wallet.*?at\s+(.+?)\s*\.\s*Avl bal/i },
   { bankCode: "PLUXEE", bankName: "Pluxee", name: "wallet-credited", txnType: "credit", amountGroup: 1, merchantFallback: "Pluxee wallet top-up", channel: "wallet",
@@ -242,6 +285,7 @@ const NON_TRANSACTION_MARKERS = [
   "will be debited", "will be deducted", "will be credited", "due on", "is due", "due date",
   "scheduled", "declined", "failed", "unsuccessful", "not processed", "request for",
   "cashback of", "you can get", "apply now", "offer", "win ", "click", "eligible for",
+  "convert now", "convert here", "convert to emi", "convert your", "to convert", "split into", "emi conversion", "could not process", "autopay facility has been",
 ];
 
 function looksLikeCompletedTransaction(rawSms: string): boolean {
@@ -266,8 +310,23 @@ function applyRule(rule: SmsRule, rawSms: string) {
   if (!amountText) return null;
   const amount = parseFloat(amountText.replace(/,/g, ""));
   if (Number.isNaN(amount)) return null;
-  const merchant = (rule.merchantGroup ? match[rule.merchantGroup]?.trim() : null) || rule.merchantFallback || null;
-  return { amount, merchant: merchant ?? null, txnType: rule.txnType, channel: rule.channel, refund: rule.refund === true };
+  const captured = rule.merchantGroup ? match[rule.merchantGroup]?.trim() : undefined;
+  const named = captured && captured.toLowerCase() !== "null" ? captured : null;
+  const merchant = (named && rule.merchantTemplate ? rule.merchantTemplate.replace("%s", named) : named) || rule.merchantFallback || null;
+  return { amount, merchant, txnType: rule.txnType, channel: rule.channel, refund: rule.refund === true, category: rule.category ?? null };
+}
+
+// Mirrors InstrumentExtractor.kt's credit-card / account checks, for the generic-credit guard below.
+const CREDIT_CARD_SENDERS = ["RBLCRD", "BOBCRD", "AMEXIN", "SBICRD", "SBI_CARDS", "JTEDGE", "ONECRD", "SIBONE"];
+const ACCOUNT_NUMBER = /(?:\ba\/c|\bacct\b|\baccount\b|\bac\b)\.?\s*(?:no\.?|ending)?\s*[:\-]?\s*(?:[xX*.]*\d*[xX*.]+\d{3,}|[xX*.]{2,}\d{3,}|\d{4,})|\bbank\s+[xX*]{2,}\d{4}\b|\bfrom\s+[xX*]{2,}\d{4}\b/i;
+const GENERIC_MERCHANTS = new Set(["bank debit", "card spend", "bank credit", "money received", "emi"]);
+
+function creditTarget(bankSender: string, rawSms: string): "card" | "account" | null {
+  const sender = bankSender.toUpperCase();
+  if (/fastag|toll (?:paid|debited)|\bVRN-/i.test(rawSms)) return null;
+  if (sender.includes("PLUXEE") || /meal wallet|\b(?:via|from|your|in)\s+\w+\s+wallet\b|swiggy money/i.test(rawSms)) return null;
+  if (/credit\s*card|bobcard|amex card/i.test(rawSms) || CREDIT_CARD_SENDERS.some((c) => sender.includes(c))) return "card";
+  return ACCOUNT_NUMBER.test(rawSms) ? "account" : null;
 }
 
 export function tryParseWithRules(bankSender: string, rawSms: string) {
@@ -281,7 +340,18 @@ export function tryParseWithRules(bankSender: string, rawSms: string) {
   if (!isLikelyBusinessSender(bankSender) || !looksLikeCompletedTransaction(rawSms)) return null;
   for (const rule of genericSmsRules) {
     const parsed = applyRule(rule, rawSms);
-    if (parsed) return parsed;
+    if (!parsed) continue;
+    if (parsed.txnType !== "credit") return parsed;
+    // A generic "credited" is income only when it lands in a bank account. One on a credit card is a
+    // bill payment or refund (card rail -> "transfer"). One naming neither is a wallet credit, store
+    // cashback or a fee receipt — never income. Mirrors SmsRules.kt.
+    const target = creditTarget(bankSender, rawSms);
+    if (target === "card") {
+      const m = parsed.merchant;
+      const generic = !m || /^a\/c/i.test(m) || GENERIC_MERCHANTS.has(m.trim().toLowerCase());
+      return { ...parsed, channel: "card" as PaymentChannel, merchant: generic ? "Credit card credit" : m };
+    }
+    return target === "account" ? parsed : null;
   }
   return null;
 }
@@ -353,7 +423,9 @@ export function categoryForTxnType(
   merchant: string | null,
   categorizeMerchant: (merchant: string | null) => string | null,
   refund = false,
+  ruleCategory: string | null = null,
 ): string | null {
+  if (ruleCategory) return ruleCategory;
   if (txnType === "credit") {
     return channel === "card" || refund ? "transfer" : "income";
   }

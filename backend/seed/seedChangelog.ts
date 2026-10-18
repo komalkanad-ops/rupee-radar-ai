@@ -998,6 +998,21 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "Fixed Debt Freedom and loan suggestions failing on Android 13 and older." },
     ],
   },
+  {
+    version: "1.2.9",
+    releaseDate: "2026-10-18",
+    platforms: ["android"],
+    summary: "Money Review: fix what was counted, see UPI and each credit card separately, and add EMIs to Loans.",
+    highlights: [
+      { type: "FEATURE", platform: "android", text: "Money Review (Expenses ⋮ → Review & fix): finds card-bill payments and transfers between your own accounts counted as spending or income, payments recorded twice, and EMIs that never show up as a payment. Nothing changes until you confirm." },
+      { type: "FEATURE", platform: "android", text: "Repeating payments: EMIs, rent and subscriptions found in your SMS, with Add to Loans (enter the rate and amount or months; the rest is filled in) and Track as bill." },
+      { type: "FEATURE", platform: "android", text: "UPI by what paid for it (bank account, credit card or wallet), spending per credit card including UPI paid from the card, and every payee in one list to categorise." },
+      { type: "IMPROVEMENT", platform: "android", text: "More bank messages are read: IMPS and net-banking transfers, ATM withdrawals, FASTag tolls and parking, and UPI paid from a RuPay credit card. Transfers to an account number count as transfers, not spending." },
+      { type: "FIX", platform: "android", text: "Offers like \"convert your outstanding to EMI\", insurance premiums and card-bill reminders are no longer added as EMIs, and wallet cashback or fee receipts are no longer counted as income." },
+      { type: "IMPROVEMENT", platform: "android", text: "Importing your SMS backup again now corrects older entries (payee, card or account, direction) without adding anything twice." },
+      { type: "FIX", platform: "android", text: "Fixed a crash when importing a large SMS backup." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
