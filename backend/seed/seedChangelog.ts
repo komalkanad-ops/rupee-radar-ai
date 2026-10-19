@@ -1013,6 +1013,17 @@ const entries: Entry[] = [
       { type: "FIX", platform: "android", text: "Fixed a crash when importing a large SMS backup." },
     ],
   },
+  {
+    version: "1.2.10",
+    releaseDate: "2026-10-19",
+    platforms: ["android"],
+    summary: "Money moved between your own accounts is now recognised automatically, so it no longer counts as income.",
+    highlights: [
+      { type: "IMPROVEMENT", platform: "android", text: "When the same amount leaves one of your bank accounts and arrives in another within minutes, and the messages show it is your own money, both are filed as a transfer between your own accounts automatically. They no longer count as income or spending." },
+      { type: "FEATURE", platform: "android", text: "Money Review lists these transfers. Tap \"Not a transfer\" on any that were real income or spending — both halves go back and won't be matched again." },
+      { type: "FIX", platform: "android", text: "Importing your SMS backup again or Rescan all no longer turns a transfer you marked between your own accounts back into income." },
+    ],
+  },
 ];
 
 async function seedChangelog() {
